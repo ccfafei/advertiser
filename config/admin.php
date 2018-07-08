@@ -1,16 +1,16 @@
-<?php
+a<?php
 
 return [
 
     /*
      * Laravel-admin name.
      */
-    'name' => '广告管理后台',
+    'name' => '管理后台',
 
     /*
      * Logo in admin panel header.
      */
-    'logo' => '<b>广告管理后台</b>',
+    'logo' => '<b>管理后台</b>',
 
     /*
      * Mini-logo in admin panel header.
@@ -37,7 +37,7 @@ return [
     /*
      * Laravel-admin html title.
      */
-    'title' => '广告后台管理',
+    'title' => '后台管理',
 
     /*
      * Use `https`.

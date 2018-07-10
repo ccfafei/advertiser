@@ -11,11 +11,23 @@ use Encore\Admin\Layout\Row;
 
 class HomeController extends Controller
 {
-    public function index()
+    
+    public function index(){
+        return Admin::content(function (Content $content) {
+        
+            $content->header('首页');
+            $content->description('.....');
+        
+            $content->body(view('admin.charts.bar'));
+        });
+    }
+    
+    //系统信息
+    public function system()
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('首页');
+            $content->header('系统');
             $content->description('系统信息...');
 
             $content->row(Dashboard::title());
@@ -34,6 +46,7 @@ class HomeController extends Controller
                     $column->append(Dashboard::dependencies());
                 });
             });
+            
         });
     }
 }

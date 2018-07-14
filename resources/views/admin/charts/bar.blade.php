@@ -8,10 +8,10 @@ $(function () {
    var myChart = new Chart(ctx, {
        type: 'line',
        data: {
-           labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+           labels: ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六","星期日"],
            datasets: [{
-               label: '# of Votes',
-               data: [12, 19, 3, 5, 2, 3],
+               label: '利润波动图',
+               data: [21999, 19000, 30000, 35000, 41000, 30000,29000],
               
                borderWidth: 1
            }]

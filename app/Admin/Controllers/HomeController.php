@@ -16,7 +16,7 @@ class HomeController extends Controller
         return Admin::content(function (Content $content) {
         
             $content->header('首页');
-            $content->description('.....');
+            $content->description('');
         
             $content->body(view('admin.charts.bar'));
         });

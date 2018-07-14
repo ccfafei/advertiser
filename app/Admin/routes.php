@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Routing\Router;
+use App\Admin\Controllers\CustomersController;
 
 Admin::registerAuthRoutes();
 
@@ -11,7 +12,7 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
-    $router->resource('/movie', MovieController::class);
+    $router->resource('customer', CustomerController::class);
 
 
 });

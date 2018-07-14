@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Customer extends Model
 {
     protected $table = 'customer';   
-    protected $dateFormat = 'U';
+    protected $primaryKey = 'customer_id';
     public $timestamps = true;
     protected $dates = ['deleted_at'];
+    
+   
 }

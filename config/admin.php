@@ -152,6 +152,7 @@ return [
      */
     'version' => '1.0',
 
+
     /*
      * Settings for extensions.
      */

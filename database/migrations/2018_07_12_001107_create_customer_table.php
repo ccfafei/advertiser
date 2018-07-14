@@ -16,7 +16,7 @@ class CreateCustomerTable extends Migration
         Schema::create('customer', function (Blueprint $table) {
             $table->increments('customer_id');
             $table->string('company')->unique()->comment('公司名称');
-            $table->integer('develop_ts')->comment('开发日期');
+            $table->dateTime('develop_ts')->comment('开发日期');
             $table->string('name')->comment('联系人');
             $table->string('phone')->comment('电话');
             $table->string('qq')->comment('qq/微信');

@@ -2,6 +2,8 @@
 
 use Illuminate\Routing\Router;
 use App\Admin\Controllers\CustomersController;
+use App\Admin\Controllers\MediaCategoryController;
+use App\Models\MediaCategory;
 
 Admin::registerAuthRoutes();
 
@@ -13,6 +15,8 @@ Route::group([
 
     $router->get('/', 'HomeController@index');
     $router->resource('customer', CustomerController::class);
-
-
+    $router->resource('media/index', MediaController::class);
+    $router->resource('media/channel', ChannelController::class);
+    $router->resource('media/category',CategoryController::class);
+    $router->resource('media/leader',LeaderController::class);
 });

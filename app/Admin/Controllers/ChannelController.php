@@ -8,22 +8,23 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use App\Models\MediaChannel;
 
-class ExampleController extends Controller
+class ChannelController extends Controller
 {
-    use ModelForm;
+ use ModelForm;
 
     /**
      * Index interface.
-     *
+     *Customer
      * @return Content
      */
     public function index()
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('用户');
+            $content->description('列表');
 
             $content->body($this->grid());
         });
@@ -55,8 +56,8 @@ class ExampleController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('频道');
+            $content->description('创建');
 
             $content->body($this->form());
         });
@@ -69,12 +70,14 @@ class ExampleController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(YourModel::class, function (Grid $grid) {
-
-            $grid->id('ID')->sortable();
-
-            $grid->created_at();
-            $grid->updated_at();
+        return Admin::grid(MediaChannel::class, function (Grid $grid) {
+            
+            $grid->disableRowSelector();
+            $grid->channel_id('频道ID')->sortable();              
+            $grid->channel_name('频道名称')->sortable();                      
+            $grid->remark('备注');
+    
+           
         });
     }
 
@@ -85,12 +88,10 @@ class ExampleController extends Controller
      */
     protected function form()
     {
-        return Admin::form(YourModel::class, function (Form $form) {
-
-            $form->display('id', 'ID');
-
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+        return Admin::form(MediaChannel::class, function (Form $form) {
+            $form->display('channel_id','频道ID');
+            $form->text('channel_name','频道名称');
+            $form->text('remark','备注');
         });
     }
 }

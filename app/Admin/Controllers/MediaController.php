@@ -118,7 +118,8 @@ class MediaController extends Controller
             $grid->remark('备注');
              
         });
-    }
+    }    
+
     
     /**
      * Make a form builder.

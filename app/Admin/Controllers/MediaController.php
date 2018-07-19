@@ -8,10 +8,8 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use App\Admin\Controllers\Base;
 use App\Models\Media;
-use App\Models\MediaLeader;
-use App\Models\MediaCategory;
-use App\Models\MediaChannel;
 
 
 class MediaController extends Controller
@@ -81,9 +79,9 @@ class MediaController extends Controller
                 $actions->disableDelete();
             
             });
-            $leaders = $this->getLeader(); 
-            $channels = $this->getChannel(); 
-            $categorys = $this->getCategory();
+            $leaders = Base::getLeader(); 
+            $channels = Base::getChannel(); 
+            $categorys = Base::getCategory();
             $grid->media_id('媒体ID')->sortable();
             $grid->created_at('日期')->display(function($ts){
                 return date('Y-m-d',strtotime($ts));
@@ -132,9 +130,9 @@ class MediaController extends Controller
          
             $form->hidden('media_id','媒体ID');
             $form->text('media_name','媒体名称');
-            $form->select('leader','负责人')->options($this->getLeader());
-            $form->select('category','媒体分类')->options($this->getCategory());
-            $form->select('channel','频道')->options($this->getChannel());
+            $form->select('leader','负责人')->options(Base::getLeader());
+            $form->select('category','媒体分类')->options(Base::getCategory());
+            $form->select('channel','频道')->options(Base::getChannel());
             $form->number('price','单价');
             $form->text('collection','收录');
             $form->text('cases','案例');
@@ -144,39 +142,7 @@ class MediaController extends Controller
         });
     }
     
-    //获取频道列表
-    public function getChannel(){
-        $channels = MediaChannel::get();
-        $arr=[];
-        if($channels){
-            foreach($channels as $channel){
-                $arr[$channel->channel_id] = $channel->channel_name;
-            }            
-        }
-        return $arr;
-    }
+ 
     
-    //获取媒体分类
-    public function getCategory(){
-        $categorys = MediaCategory::get();
-        $arr=[];
-        if($categorys){
-            foreach($categorys as $category){
-                $arr[$category->category_id] = $category->category_name;
-            }
-        }
-        return $arr;
-    }
-    
-    //获取负责人getLeader
-    public function getLeader(){
-        $leaders = MediaLeader::get();
-        $arr=[];
-        if($leaders){
-            foreach($leaders as $leader){
-                $arr[$leader->leader_id] = $leader->leader_name;
-            }
-        }
-        return $arr;
-    }
+   
 }

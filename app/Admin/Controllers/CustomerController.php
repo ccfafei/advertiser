@@ -23,7 +23,7 @@ class CustomerController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('用户');
+            $content->header('客户资料');
             $content->description('列表');
 
             $content->body($this->grid());
@@ -40,8 +40,8 @@ class CustomerController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('客户资料');
+            $content->description('修改');
 
             $content->body($this->form()->edit($id));
         });
@@ -56,8 +56,8 @@ class CustomerController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('客户');
-            $content->description('新建');
+            $content->header('客户资料');
+            $content->description('录入');
 
             $content->body($this->form());
         });

@@ -9,9 +9,10 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Widgets\Box;
-use Encore\Admin\Widgets\Form;
-use Excel;
+use Encore\Admin\Form;
 use App\Admin\Controllers\Base;
+use App\Models\Trade;
+use Illuminate\Support\MessageBag;
 
 
 class TradeController extends Controller
@@ -27,134 +28,156 @@ class TradeController extends Controller
     {
         return Admin::content(function (Content $content) {
     
-            $content->header('媒体信息');
-            $content->description('列表');
-           
-            //$content->body($this->grid());
+            $content->header('业务流量');
+            $content->description('列表');           
+            $content->body($this->grid());
         });
     }
     
-    public function import(){
+    /**
+     * Edit interface.
+     *
+     * @param $id
+     * @return Content
+     */
+    public function edit($id)
+    {
+        return Admin::content(function (Content $content) use ($id) {
+    
+            $content->header('业务流量 ');
+            $content->description('编辑');
+    
+            $content->body($this->form()->edit($id));
+        });
+    }
+    
+    /**
+     * Create interface.
+     *
+     * @return Content
+     */
+    public function create()
+    {
         return Admin::content(function (Content $content) {
-            $content->header('业务报表');          
-            $content->body(view('admin.excel.import'));
+    
+            $content->header('业务流量');
+            $content->description('人工录入');
+    
+            $content->body($this->form());
         });
     }
     
-    public function check(Request $request){
-        return Admin::content(function (Content $content) use($request) {
-            $content->header('Excel数据确认');
-            if(!$request->hasFile('file')){
-                exit('上传文件为空！');
-            }
-            $error=0;
-            $file = $_FILES;
-            $excel_file_path = $file['file']['tmp_name'];
-            Excel::load($excel_file_path, function($reader) use(&$rows){
-                $reader = $reader->getSheet(0); 
-                $rows= $reader->toArray();
+    /**
+     * Make a grid builder.
+     *
+     * @return Grid
+     */
+    protected function grid()
+    {
+        return Admin::grid(Trade::class, function (Grid $grid) {
+    
+            $grid->disableRowSelector();
+            $grid->actions(function ($actions) {
+                $actions->disableDelete();    
+                if (!Admin::user()->can('trade.edit')) {
+                    $actions->disableEdit();
+                }
             });
-            $flag =0;
-            $result =[];
-            $headers=[];
-            //处理相关数据
-            foreach ($rows as $key=>$val){
-                
-                if($key==0){
-                    $headers =array_merge(['状态','序号'],$val);
-                }else{
-                    $result[$key]['error'] =[];
-                    $result[$key]['num'] =$key;
-                    //时间
-                    if (preg_match('/^(\[\$[A-Z]*-[0-9A-F]*\])*[hmsdy]/i', $val[0])) {
-                        $date=gmdate("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($val[0]));
-                    }else{
-                        $date=\PHPExcel_Style_NumberFormat::toFormattedString($val[0],\PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2	);
-                    }
-                    $result[$key]['trade_ts']=$date;
-                    if(strtotime($date)==false){
-                        $flag=1;
-                        array_push( $result[$key]['error'],1001);
-                    }
-                    
-                    //客户
-                    $result[$key]['customer_name']=$val[1];
-                    $customer = Base::getCustomer($val[1]);
-                    if(!empty($customer)){
-                        $result[$key]['customer_id']=$customer['customer_id'];
-                    }else{
-                        $flag=1;
-                        $result[$key]['customer_id']=0;
-                        array_push( $result[$key]['error'],1002);
-                    }
-                    
-                    //媒体
-                    $result[$key]['media_name']=$val[2];
-                    $media = Base::getMedia($val[2]);
-                    if(!empty($media)){
-                        $result[$key]['media_id']=$media['media_id'];
-                    }else{
-                        $flag=1;
-                        $result[$key]['media_id']=0;
-                        array_push( $result[$key]['error'],1003);
-                    }
-                   
-                    //标题
-                    $result[$key]['contribution']=$val[3];
-                   
-                    if(empty($val[3])){
-                      $flag=1;           
-                      array_push( $result[$key]['error'],1004);
-                    }
-                    
-                    //字数
-                    $result[$key]['words']=$val[4];
-                    
-                    //单价
-                    $result[$key]['price']=$val[5];
-                    
-                    //报价
-                    $result[$key]['customer_price']=$val[6];
-                    if((int)$val[6]<=0){
-                        $flag=1;
-                        array_push( $result[$key]['error'],1005);
-                    }
-                    
-                    //媒体款
-                    $result[$key]['media_price']=$val[7];
-                    if((int)$val[7]<=0){
-                        $flag=1;
-                        array_push( $result[$key]['error'],1006);
-                    }else{
-                        if((int)$val[7]>=(int)$val[6]){
-                            $flag=1;
-                            array_push( $result[$key]['error'],1007);
-                        } 
-                    }                    
-                   
-                    //利润
-                    $result[$key]['profit']=$val[8];
-                    if( $val[6]-$val[7] != $val[8] ){
-                        $flag=1;
-                        array_push( $result[$key]['error'],1008);
-                    }
-                    
-                    //是否回款
-                    $result[$key]['is_received']=$val[9];                    
-                    //是是否出款
-                    $result[$key]['is_paid']=$val[10];
-                }                
-            }
-            
-          
-           
-            $excelView = view('admin.excel.read',compact('result','headers','flag'))
-            ->render();
-            $content->row($excelView);
-           
-        });
+           // $grid->trade_id('ID')->sortable();
+            $grid->trade_ts('交易时间')->display(function ($time) {
+                return date('Y-m-d',strtotime($time));
+            })->sortable();
     
+            $grid->customer_name('客户名称')->sortable();
+    
+            $grid->media_name('媒体名称')->sortable();
+            $grid->contribution('稿件名称')->sortable();
+            $grid->words('字数');
+            $grid->price('单价');
+            $grid->customer_price('报价')->sortable();
+            $grid->media_price('媒体款')->sortable();
+            $grid->profit('媒体款')->sortable();
+            $grid->is_received('是否回款')->display(function ($is_received) {
+                return $is_received ? '是' : '否';
+            })->sortable();
+            
+            $grid->is_paid('是否出款')->display(function ($is_paid) {
+                return $is_paid ? '是' : '否';
+            })->sortable();
+            
+            $grid->is_check('审核')->display(function ($is_paid) {
+                switch ($is_paid){
+                    case 0:
+                        $checked = "未审核";
+                        break;
+                    case 1:
+                        $checked = "通过";
+                        break;
+                    case 2:
+                        $checked = "不通过";
+                        break;
+                    default:
+                        $checked = "未审核";    
+                }
+                
+                return $checked;
+            })->sortable();
+             
+        });
     }
+    
+    /**
+     * Make a form builder.
+     *
+     * @return Form
+     */
+    protected function form()
+    {
+        return Admin::form(Trade::class, function (Form $form) {
+    
+            $form->hidden('trade_id','交易ID');
+            $form->text('customer_name','客户名称');          
+            $form->text('media_name','媒体名称');           
+            $form->text('contribution','稿件名称');
+            $form->text('words','字数');
+            $form->text('price','单价');
+            $form->text('customer_price','报价');
+            $form->text('media_price','媒体款');  
+            $form->text('profit','利润');
+            $form->date('trade_ts','交易时间')->format("YYYY-MM-DD");                    
+            $form->textarea('remark','备注');
+            $form->hidden('created_at', 'Created At');
+            $form->hidden('updated_at', 'Updated At');
+            $form->hidden('customer_id','客户id');
+            $form->hidden('media_id','媒体id');
+            //保存前检查
+            $form->saving(function (Form $form) {
+                
+                $customers= Base::getCustomer($form->customer_name);
+                if(!$customers){
+                 $error = new MessageBag([
+                        'title'   => '出错啦:',
+                        'message' => '客户不存在,请先录入客户资料!',
+                    ]);                    
+                    return back()->with(compact('error'));
+                }
+              
+                
+                $medias = Base::getMedia($form->media_name);
+                if(!$medias){
+                    $error = new MessageBag([
+                        'title'   => '出错啦:',
+                        'message' => '该媒体不存在,请先录入媒体资料!',
+                    ]);
+                    return back()->with(compact('error'));
+                }
+            });
+          
+          //save...
+    });
+
+}
+      
 
 }
 

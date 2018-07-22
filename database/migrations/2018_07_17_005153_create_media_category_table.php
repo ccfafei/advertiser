@@ -16,7 +16,7 @@ class CreateMediaCategoryTable extends Migration
         Schema::create('media_category', function (Blueprint $table) {
             $table->increments('category_id');
             $table->string('category_name')->unique()->comment('分类名称名称');
-            $table->text('remark')->nullable()comment('备注');
+            $table->text('remark')->nullable()->comment('备注');
         });
     }
 

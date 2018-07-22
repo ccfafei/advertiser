@@ -16,17 +16,20 @@ class CreateTradeTable extends Migration
         Schema::create('trade', function (Blueprint $table) {
             $table->increments('trade_id');
             $table->integer('trade_ts')->comment('日期');
-            $table->string('media_name')->unique()->comment('媒体名称');
+			$table->string('customer_name')->index()->comment('客户名称');
+			$table->integer('customer_id')->comment('客户id');
+            $table->string('media_name')->index()->comment('媒体名称');
+			$table->integer('media_id')->comment('媒体id');
             $table->string('contribution')->comment('稿件名称');
             $table->integer('words')->comment('字数');
-            $table->decimal('price', 5, 2)->comment('单价');
-            $table->decimal('customer_price', 5, 2)->comment('报价');
-            $table->decimal('media_price', 5, 2)->comment('媒体款');
-            $table->decimal('profit', 5, 2)->comment('利润'); 
+            $table->decimal('price', 8, 3)->comment('单价');
+            $table->decimal('customer_price', 8, 3)->comment('报价');
+            $table->decimal('media_price', 8, 3)->comment('媒体款');
+            $table->decimal('profit', 8, 3)->comment('利润'); 
             $table->tinyInteger('is_received')->comment('是否回款');
             $table->tinyInteger('is_paid')->comment('是否出款'); 
             $table->tinyInteger('is_check')->comment('是否有效');
-            $table->text('remark')->comment('备注');
+            $table->text('remark')->nullable()->comment('备注');
             $table->timestamps();
     
         });

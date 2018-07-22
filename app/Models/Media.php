@@ -10,4 +10,6 @@ class Media extends Model
     protected $primaryKey = 'media_id';
     //protected $dateFormat = 'U';
     public $timestamps = true;
+    
+    
 }

@@ -24,7 +24,7 @@ class CreateCustomerTable extends Migration
             $table->string('is_cooperate')->comment('是否合作');
             $table->tinyInteger('type')->comment('类型');
             $table->tinyInteger('status')->comment('状态:0禁用，1启用');
-            $table->text('remark')->comment('备注');                  
+            $table->text('remark')->nullable()->comment('备注');                  
             $table->timestamps();
             $table->softDeletes();
         });

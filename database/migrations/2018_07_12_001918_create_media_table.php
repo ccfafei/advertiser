@@ -22,7 +22,7 @@ class CreateMediaTable extends Migration
             $table->string('collection')->comment('收录');
             $table->string('cases')->comment('案例');
             $table->tinyInteger('leader')->comment('负责人id');
-            $table->text('remark')->comment('备注');                  
+            $table->text('remark')->nullable()->comment('备注');                  
             $table->timestamps();
             $table->softDeletes();
         });

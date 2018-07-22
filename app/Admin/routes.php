@@ -19,6 +19,9 @@ Route::group([
     $router->resource('media/channel', ChannelController::class);
     $router->resource('media/category',CategoryController::class);
     $router->resource('media/leader',LeaderController::class);
-    $router->get('trade/import', 'TradeController@import');
-    $router->post('trade/check', 'TradeController@check');
+    $router->resource('trade',TradeController::class);
+    $router->get('exceltrade/import', 'ImportExcelController@import');
+    $router->post('exceltrade/check', 'ImportExcelController@check');
+   
+   
 });

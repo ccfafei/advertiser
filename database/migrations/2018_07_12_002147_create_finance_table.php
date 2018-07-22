@@ -22,7 +22,7 @@ class CreateFinanceTable extends Migration
             $table->string('bank_name')->comment('打款人/收款人');
             $table->string('company_name')->comment('公司名称');
             $table->tinyInteger('type')->comment('进款/出款');
-            $table->text('remark')->comment('备注');
+            $table->text('remark')->nullable()->comment('备注');
             $table->timestamps();
         });
     }

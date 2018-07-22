@@ -3,7 +3,21 @@
 
 	<div class="box">
 		<div class="box-header with-border">
-			<h3 class="box-title">文件上传</h3>
+			<h4>
+			   <font color="red">文件上传注意:</font>
+			</h4>
+			<h4>
+			     1.上传excel之前，请检查时间格式,请将时间格式转化为 2018-1-1这样的格式,如何转化?<a href="https://jingyan.baidu.com/article/363872ecd3f3426e4ba16f97.html"  target="_blank">点击查看</a>.
+			</h4>
+			<h4>
+			     2.检查价格方面的数字格式,请将价格转化为60或60.00 
+			</h4>
+			<h4>
+			     3.上传前请检查客户资料和媒体资料是否已经录入.
+			</h4>
+			<h4>
+			     4.上传成功后，如果没有任何问题，请保存数据.
+			</h4>
 			<div class="box-tools pull-right"></div>
 			<!-- /.box-tools -->
 		</div>

@@ -17,7 +17,7 @@ class ImportExcelController extends Controller
     //excel导入
     public function import(){
         return Admin::content(function (Content $content) {
-            $content->header('业务报表');          
+            $content->header('上传Excel报表');          
             $content->body(view('admin.excel.import'));
         });
     }

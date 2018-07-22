@@ -3,16 +3,13 @@
 namespace App\Admin\Controllers;
 
 use Illuminate\Http\Request;
-use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
-use Encore\Admin\Widgets\Box;
-use Encore\Admin\Widgets\Form;
 use Excel;
 use App\Admin\Controllers\Base;
 use App\Models\Trade;
-use Illuminate\Support\MessageBag;
+use Encore\Admin\Widgets\Alert;
 
 
 class ImportExcelController extends Controller
@@ -141,6 +138,32 @@ class ImportExcelController extends Controller
         });
     
     }
+    public function saveExcel(Request $request){
+     
+            $excel_data = $request->input('exceldata');
+            $rows = json_decode(base64_decode($excel_data),true);
+            foreach ($rows as $key=>$value){
+                unset($rows[$key]['error']);
+                unset($rows[$key]['num']);
+                if(empty($value['is_paid'])){
+                    $rows[$key]['is_paid']=0;
+                }
+                $rows[$key]['trade_ts']=strtotime($value['trade_ts']);
+            }
+        
+            //保存数据   
+            try{
+                $rs=Trade::insert($rows);
+                $data =['data'=>$rows,'status'=>1,'message'=>'保存成功'];
+                return response()->json($data);
+            }catch (\Exception $e){
+                $data =['data'=>$rows,'status'=>0,'message'=>'保存失败'];
+                return response()->json($data);
+            }
 
+    }
 }
+
+
+
 

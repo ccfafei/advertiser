@@ -22,6 +22,7 @@ Route::group([
     $router->resource('trade',TradeController::class);
     $router->get('exceltrade/import', 'ImportExcelController@import');
     $router->post('exceltrade/check', 'ImportExcelController@check');
+    $router->post('exceltrade/save', 'ImportExcelController@saveExcel');
    
    
 });

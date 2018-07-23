@@ -239,7 +239,7 @@ $(function () {
      //导出
      $("#export").on('click',function(){
     	 
-   	     thisurl =" {{url('/admin/trade/?&_export_=all')}}";
+   	     thisurl =" {{url('/admin/trade/?%5C_pjax=%23pjax-container&_export_=all')}}";
    	     window.open(thisurl);   	    
        });
     

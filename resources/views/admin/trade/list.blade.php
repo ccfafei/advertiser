@@ -239,8 +239,8 @@ $(function () {
      //导出
      $("#export").on('click',function(){
     	 
-   	     url =" <?php echo $url;?>";
-   	     window.open(url);   	    
+   	     thisurl =" {{url('/admin/trade/?_export_=all')}}";
+   	     window.open(thisurl);   	    
        });
     
      

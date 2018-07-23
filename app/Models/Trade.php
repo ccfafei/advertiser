@@ -24,17 +24,13 @@ class Trade extends Model
     //利润
     public function setProfitAttribute($value)
     {
-        $this->attributes['profit'] = is_int($value) ? 
+        $this->attributes['profit'] = isset($value) ? 
                 $value :  $this->attributes['customer_price']- $this->attributes['media_price'];
     }
     
     public function getProfitAttribute()
     {
-        if(is_int($this->attributes['profit'])){
-            return $this->attributes['profit'];
-        }else{
-           return (int)$this->attributes['customer_price']- (int)$this->attributes['media_price'];
-        }
+        return $this->attributes['profit'];
         
     }
     

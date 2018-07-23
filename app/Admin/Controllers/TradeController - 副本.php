@@ -8,6 +8,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Widgets\Box;
 use Encore\Admin\Form;
 use App\Admin\Controllers\Base;
 use App\Models\Trade;
@@ -23,72 +24,13 @@ class TradeController extends Controller
      *Customer
      * @return Content
      */
-    public function index(Request $request)
+    public function index()
     {
-
-        return Admin::content(function (Content $content) use($request) {
+        return Admin::content(function (Content $content) {
     
             $content->header('业务流量');
-            $content->description('列表'); 
-            $headers = ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','是否审核'];
-            $rows =[];
-            $where =[];
-            if($request->has('customer_name')){
-                $search_customer_name =$request->input('customer_name');
-                !empty($search_customer_name)&&$where['customer_name'] = $search_customer_name;
-            }
-            if($request->has('media_name')){
-                $search_media_name =$request->input('media_name');
-                !empty($search_media_name)&&$where['media_name'] = $search_media_name;
-            }
-            if($request->has('contribution')){
-                $search_contribution =$request->input('contribution');
-                !empty($search_contribution)&&$where['contribution'] = $search_contribution;
-            }
-            
-            if($request->has('contribution')){
-                $search_is_received=$request->input('is_received');
-                !empty($search_is_received)&&$where['is_received'] = $search_is_received;
-            }
-            if($request->has('is_paid')){
-                $search_is_paid=$request->input('is_paid');
-                !empty($search_is_paid)&&$where['is_paid'] = $search_is_paid;
-            }
-            if($request->has('is_paid')){
-                $search_is_paid=$request->input('is_paid');
-                !empty($search_is_paid)&&$where['is_paid'] = $search_is_paid;
-            }
-            
-            if($request->has('is_check')){
-                $search_is_check=$request->input('is_check');
-                !empty($search_is_check)&&$where['is_check'] = $search_is_check;
-            }
-            $search_start_day= empty($request->input('start_day'))?
-                                strtotime('-90 day 00:00:00'):strtotime($request->input('start_day'));
-            $search_end_day= empty($request->input('end_day'))? time():strtotime($request->input('end_day'));
-            if($search_end_day < $search_start_day&&$search_start_day<=time()){
-                $search_end_day = $search_start_day;
-            }
-            if(!empty($where)){
-                $results = Trade::whereBetween('trade_ts',[$search_start_day,$search_end_day])->where($where)->get();
-            }else{
-                $results = Trade::whereBetween('trade_ts',[$search_start_day,$search_end_day])->get();
-            }
-            if($results->isNotEmpty()){
-                $rows = $results->toArray();
-            }
-            $receiveds = config('trade.is_received');
-            $paids = config('trade.is_paid');
-            $checks = config('trade.is_check');
-            foreach ($rows as $key=>$items){
-                $rows[$key]['is_received'] = $receiveds[(int)$items['is_received']];
-                $rows[$key]['is_paid'] = $paids[(int)$items['is_paid']];
-                $rows[$key]['is_check'] = $checks[(int)$items['is_check']];
-            }
-            $exporturl = $this->grid()->exportUrl('all');
-            $url = $exporturl;
-            $listview = view('admin.trade.list',compact('rows','headers','receiveds','paids','checks','url'))->render();
-            $content->row($listview);
+            $content->description('列表');           
+            $content->body($this->grid());
         });
     }
     
@@ -156,22 +98,29 @@ class TradeController extends Controller
             $grid->media_price('媒体款')->sortable();
             $grid->profit('媒体款')->sortable();
             $grid->is_received('是否回款')->display(function ($is_received) {
-                $configs = config('trade.is_received');
-                $is_received = (int)$is_received;
-                return $configs[$is_received];
-
+                return $is_received ? '是' : '否';
             })->sortable();
             
             $grid->is_paid('是否出款')->display(function ($is_paid) {
-                $configs = config('trade.is_paid');
-                $is_paid = (int)$is_paid;
-                return $configs[$is_paid];
+                return $is_paid ? '是' : '否';
             })->sortable();
             
-            $grid->is_check('审核')->display(function ($is_check) {
-               $configs = config('trade.is_check');
-                $is_check = (int)$is_check;
-                return $configs[$is_check];
+            $grid->is_check('审核')->display(function ($is_paid) {
+                switch ($is_paid){
+                    case 0:
+                        $checked = "未审核";
+                        break;
+                    case 1:
+                        $checked = "通过";
+                        break;
+                    case 2:
+                        $checked = "不通过";
+                        break;
+                    default:
+                        $checked = "未审核";    
+                }
+                
+                return $checked;
             })->sortable();
              
         });
@@ -226,8 +175,9 @@ class TradeController extends Controller
           
           //save...
     });
-}
 
+}
+      
 
 }
 

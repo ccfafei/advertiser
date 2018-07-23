@@ -21,6 +21,7 @@ Route::group([
     $router->resource('media/leader',LeaderController::class);
     $router->resource('trade',TradeController::class);
     $router->resource('finance',FinanceController::class);
+    $router->post('trade/index', 'TradeController@index');
     $router->get('exceltrade/import', 'ImportExcelController@import');
     $router->post('exceltrade/check', 'ImportExcelController@check');
     $router->post('exceltrade/save', 'ImportExcelController@saveExcel');

@@ -1,24 +1,38 @@
 <style>
 <!--
 .mr_1{margin-right:10px;}
+.mr_2{margin-right:20px;}
+.mr_3{margin-right:30px;}
 .mt_1{margin-top:10px;}
 -->
 </style>
 <div class="box">
     <div class="box-header">
-    <form action="{{ url('/admin/trade/index') }}" method="post" id="formsearch"  name="form1" class="form-inline">
+    <form action="{{ url('/admin/trade/index') }}" method="post" id="formsearch" class="form-inline">
         <div class="form-group">
-              <label for="customerName" class="control-label">客户名称: </label>  
-              <input name="customer_name" id="customerName" class="form-control mr_1" placeholder="请输入客户名称" value="" />
-              <label for="mediaName" class="control-label">媒体名称: </label> 
-              <input name="media_name" id="mediaName"  class="form-control mr_1" placeholder="请输入媒体名称" value="" />
-              <label for="contributionTitle" class="control-label">稿件标题: </label> 
-              <input name="contribution" id ="contributionTitle" class="form-control mr_1" placeholder="请输入稿件名称" value=""  />
+           <label for="customerName" class="control-label">客户名称: </label>  
+           <div class="input-group mr_2">
+             <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+             <input name="customer_name" id="customerName" class="form-control mr_1" placeholder="请输入客户名称    " value="" />            
+           </div>          
+         
+          <label for="mediaName" class="control-label">媒体名称: </label> 
+          <div class="input-group mr_2">
+             <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+             <input name="media_name" id="mediaName" class="form-control mr_1" placeholder="请输入媒体名称       " value="" />            
+           </div>
+           
+          <label for="contributionTitle" class="control-label">稿件标题: </label> 
+          <div class="input-group  mr_2">
+             <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+             <input name="contribution" id="contributionTitle" class="form-control mr_1" placeholder="请输入媒体名称       " value="" />            
+           </div>
+           
         </div>
         <div class="clearfix mt_1"></div>
         <div class="form-group">
                 <label>开始时间: </label>
-                <div class="input-group date mr_1">
+                <div class="input-group date mr_2 mt_1">
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
@@ -35,25 +49,26 @@
               
         </div>
         <div class="clearfix mt_1" ></div>
-        <div class="form-group">  
+        <div class="form-group mt_1">  
 
                <label>是否审核: </label>
-                 <select name="is_check" class="form-control mr_1">
+                 <select name="is_check" class="form-control mr_2">
+                  <option value ="">请选择</option>
                      @foreach($checks as $ck=>$cv)
                       <option value ="{{$ck}}">{{$cv}}</option>
                      @endforeach
                  </select>
-                 <label class="mt_1">
+                 <label class="mt_1 mr_2">
                     <input type="checkbox" name="is_received" id="isReceived"  class="minimal" value="">&nbsp;是否回款  &nbsp;&nbsp;                            
                   </label>
 
-                  <label class="mt_1 mr_1">                 
+                  <label class="mt_1 mr_2">                 
                         <input type="checkbox" name="is_paid" id="isPaid"  class="minimal" value="">&nbsp;是否出款
                   </label>
                   
         </div> 
         <div class="form-group">  
-           <label>
+           <label class="mt_1 mr_2">
               <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search" ></i>搜索</button>
            </label>  
           &nbsp;&nbsp;
@@ -67,14 +82,17 @@
 
     </div>
     <!-- /.box-header -->
-    <div class="box-body table-responsive  ">
-        <table class="table table-hover table-bordered ">
+    <div class="box-body ">
+        <table id="example1" class="table table-bordered table-hover">
          <!-- ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','是否审核']; -->
+         <thead>
             <tr>
               @foreach($headers as $header)
-                <th class="bg-info">{{  $header }} </th>
+                <th>{{  $header }} </th>
               @endforeach 
             </tr>
+          <thead>
+          <tbody>
              @foreach($rows as $key=>$items)
             <tr>
                 <td>{{ $key+1 }}</td>             
@@ -82,8 +100,8 @@
                 <td>{{ $items['customer_name']}}</td>
                 <td>{{ $items['media_name'] }}</td>
                 <td>{{ $items['contribution'] }}</td>
-                <td>{{ $items['words'] }}</td>
-                <td>{{ $items['price']}}</td>
+                <td>{{(int)$items['words'] }}</td>
+                <td>{{ (int)$items['price']}}</td>
                 <td>{{ $items['customer_price']}}</td>                 
                 <td>{{ $items['media_price']}}</td>
                 <td>{{ $items['profit'] }}</td>
@@ -92,7 +110,7 @@
                 <td>{{ $items['is_check']}}</td>
             </tr>            
             @endforeach
-
+        </tbody>
         </table>
     </div>
     <div class="box-footer clearfix">
@@ -104,6 +122,25 @@
 <script>
     function LA() {}
     LA.token = "{{ csrf_token() }}";
+</script>
+
+<!-- DataTables -->
+<script>
+    $(function () {
+
+        $('#example1').DataTable({
+      	  "language": {
+              "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Chinese.json"
+          },    
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false,
+            'ordering':true, 
+        });
+    });
 </script>
 <script>
              
@@ -207,7 +244,7 @@ $(function () {
 	 //开始时间
 	 var starttime=$("#datepicker_start").val();
      if(starttime == ""){
-         var lastday = getBeforeDate(-10);
+         var lastday = getBeforeDate(-90);
          $("#datepicker_start").val(lastday);    
          $("#datepicker_start").datepicker("update", lastday);        
      }
@@ -242,7 +279,7 @@ $(function () {
    	     window.open('/admin/trade?%5C_pjax=%23pjax-container&_export_=all');   	    
        });
     
-     
+   
 });
 
-</script>  
+</script>

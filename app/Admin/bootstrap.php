@@ -23,8 +23,11 @@ use Encore\Admin\Facades\Admin;
 Encore\Admin\Form::forget(['map', 'editor']);
 
 Admin::css('/vendor/datatable/dataTables.bootstrap.css');
+Admin::css('/css/common.css');
+
+Admin::js('/js/common.js');
 Admin::js('/vendor/chartjs/Chart.min.js');
 Admin::js('/vendor/datatable/jquery.dataTables.min.js');
 Admin::js('/vendor/datatable/dataTables.sort.plungin.js');
 Admin::js('/vendor/datatable/dataTables.bootstrap.min.js');
-//Admin::js('/vendor/chartjs/utils.js');
+

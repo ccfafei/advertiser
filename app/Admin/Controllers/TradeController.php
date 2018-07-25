@@ -12,8 +12,8 @@ use Encore\Admin\Form;
 use App\Admin\Controllers\Base;
 use App\Models\Trade;
 use Illuminate\Support\MessageBag;
-
-
+use App\Admin\Extensions\Tools\TradeCheck;
+use App\Admin\Extensions\Tools\TradeSearch;
 class TradeController extends Controller
 {
     use ModelForm;
@@ -33,47 +33,22 @@ class TradeController extends Controller
             $headers = ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','是否审核'];
             $rows =[];
             $where =[];
-            if($request->has('customer_name')){
-                $search_customer_name =$request->input('customer_name');
-                !empty($search_customer_name)&&$where['customer_name'] = $search_customer_name;
+            $inputs = $request->only(['customer_name', 'media_name','contribution','is_received','is_paid','is_check']);
+            foreach ($inputs as $k=>$v){
+                if(!empty($v)) $where[$k] =$v;
             }
-            if($request->has('media_name')){
-                $search_media_name =$request->input('media_name');
-                !empty($search_media_name)&&$where['media_name'] = $search_media_name;
-            }
-            if($request->has('contribution')){
-                $search_contribution =$request->input('contribution');
-                !empty($search_contribution)&&$where['contribution'] = $search_contribution;
-            }
-            
-            if($request->has('contribution')){
-                $search_is_received=$request->input('is_received');
-                !empty($search_is_received)&&$where['is_received'] = $search_is_received;
-            }
-            if($request->has('is_paid')){
-                $search_is_paid=$request->input('is_paid');
-                !empty($search_is_paid)&&$where['is_paid'] = $search_is_paid;
-            }
-            if($request->has('is_paid')){
-                $search_is_paid=$request->input('is_paid');
-                !empty($search_is_paid)&&$where['is_paid'] = $search_is_paid;
-            }
-            
-            if($request->has('is_check')){
-                $search_is_check=$request->input('is_check');
-                !empty($search_is_check)&&$where['is_check'] = $search_is_check;
-            }
-            $search_start_day= empty($request->input('start_day'))?
-                                strtotime('-90 day 00:00:00'):strtotime($request->input('start_day'));
-            $search_end_day= empty($request->input('end_day'))? time():strtotime($request->input('end_day'));
+            $start_ts = $request->input('start_day');
+            $end_ts = $request->input('end_day');
+            $search_start_day= $start_ts?strtotime($start_ts):strtotime('-30 day 00:00:00');
+            $search_end_day= $end_ts?strtotime($end_ts):time();
             if($search_end_day < $search_start_day&&$search_start_day<=time()){
                 $search_end_day = $search_start_day;
             }
-            if(!empty($where)){
-                $results = Trade::whereBetween('trade_ts',[$search_start_day,$search_end_day])->where($where)->get();
-            }else{
-                $results = Trade::whereBetween('trade_ts',[$search_start_day,$search_end_day])->get();
-            }
+            $inputs['start_day'] = date('Y-m-d',$search_start_day);
+            $inputs['end_day'] = date('Y-m-d',$search_end_day);   
+            $mode=Trade::whereBetween('trade_ts',[$search_start_day,$search_end_day]);        
+            !empty($where)&&$mode =$mode->where($where);
+            $results=$mode->get();
             if($results->isNotEmpty()){
                 $rows = $results->toArray();
             }
@@ -87,7 +62,7 @@ class TradeController extends Controller
             }
             $exporturl = $this->grid()->exportUrl('all');
             $url = $exporturl;
-            $listview = view('admin.trade.list',compact('rows','headers','receiveds','paids','checks','url'))->render();
+            $listview = view('admin.trade.list',compact('rows','headers','checks','url','inputs'))->render();
             $content->row($listview);
         });
     }
@@ -104,6 +79,13 @@ class TradeController extends Controller
     
             $content->header('业务流量 ');
             $content->description('编辑');
+            if (!Admin::user()->can('trade.edit')) {
+                $error = new MessageBag([
+                    'title'   => '无权限',
+                    'message' => '无权限访问此页面!',
+                ]);
+                return back()->with(compact('error'));
+            }
     
             $content->body($this->form()->edit($id));
         });
@@ -125,6 +107,26 @@ class TradeController extends Controller
         });
     }
     
+    public function check(Request $request){
+        return Admin::content(function (Content $content) use ($request) {
+            $content->header('业务审核及修改');
+            $content->description('审核');
+           if($request->has('action')){
+               $this->grid()->model()->where('is_check', $request->input('action'));
+           }            
+          
+            $content->body($this->grid());
+        });
+    }
+    
+    public function checkUpdate(Request $request)
+    {
+        foreach (Trade::find($request->get('ids')) as $trade) {
+            $trade->is_check = $request->get('action');
+            $trade->save();
+        }
+    }
+    
     /**
      * Make a grid builder.
      *
@@ -133,14 +135,32 @@ class TradeController extends Controller
     protected function grid()
     {
         return Admin::grid(Trade::class, function (Grid $grid) {
-    
-            $grid->disableRowSelector();
+        
+            $grid->disableFilter();
+            $grid->disableCreation();
+            $grid->tools->disableRefreshButton();
+
             $grid->actions(function ($actions) {
-                $actions->disableDelete();    
+                $actions->disableDelete();
                 if (!Admin::user()->can('trade.edit')) {
                     $actions->disableEdit();
                 }
             });
+            
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                    $batch->add('审核通过', new TradeCheck(1));
+                    $batch->add('审核不通过', new TradeCheck(2));
+                
+                });
+            });
+            
+                $grid->tools(function ($tools) {
+                    $tools->append(new TradeSearch());
+                });
+            
+            
            // $grid->trade_id('ID')->sortable();
             $grid->trade_ts('交易时间')->display(function ($time) {
                 return date('Y-m-d',strtotime($time));

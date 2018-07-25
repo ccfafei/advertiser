@@ -19,12 +19,18 @@ Route::group([
     $router->resource('media/channel', ChannelController::class);
     $router->resource('media/category',CategoryController::class);
     $router->resource('media/leader',LeaderController::class);
-    $router->resource('trade',TradeController::class);
-    $router->resource('finance',FinanceController::class);
+    
+    Route::get('trade/create','TradeController@create');
+    Route::get('trade/{id}/edit','TradeController@show');
+    Route::get('trade/check','TradeController@check');
+    Route::get('trade/check/{id}/edit','TradeController@show'); 
     $router->post('trade/index', 'TradeController@index');
+    $router->post('trade/check/checkupdate', 'TradeController@checkUpdate');
+  
     $router->get('exceltrade/import', 'ImportExcelController@import');
     $router->post('exceltrade/check', 'ImportExcelController@check');
     $router->post('exceltrade/save', 'ImportExcelController@saveExcel');
+    $router->resource('finance',FinanceController::class);
    
    
 });

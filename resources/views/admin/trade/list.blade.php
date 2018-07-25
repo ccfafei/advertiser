@@ -1,11 +1,4 @@
-<style>
-<!--
-.mr_1{margin-right:10px;}
-.mr_2{margin-right:20px;}
-.mr_3{margin-right:30px;}
-.mt_1{margin-top:10px;}
--->
-</style>
+
 <div class="box">
     <div class="box-header">
     <form action="{{ url('/admin/trade/index') }}" method="post" id="formsearch" class="form-inline">
@@ -36,7 +29,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                  <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day">
+                  <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="">
                 </div>
              
                <label>结束时间: </label>
@@ -44,7 +37,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                   <input type="text" class="form-control" id="datepicker_end" name="end_day">
+                   <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
                 </div>
               
         </div>
@@ -55,7 +48,9 @@
                  <select name="is_check" class="form-control mr_2">
                   <option value ="">请选择</option>
                      @foreach($checks as $ck=>$cv)
-                      <option value ="{{$ck}}">{{$cv}}</option>
+                      <option value ="{{$ck}}">
+                        {{$cv}}
+                      </option>
                      @endforeach
                  </select>
                  <label class="mt_1 mr_2">
@@ -129,67 +124,22 @@
     $(function () {
 
         $('#example1').DataTable({
+       	 'paging'      : true,
+         'lengthChange': false,
+         'searching'   : false,
+         'ordering'    : true,
+         'info'        : true,
+         'autoWidth'   : false,
+         'ordering':true, 
       	  "language": {
-              "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Chinese.json"
-          },    
-            'paging'      : true,
-            'lengthChange': false,
-            'searching'   : false,
-            'ordering'    : true,
-            'info'        : true,
-            'autoWidth'   : false,
-            'ordering':true, 
+       		 "url": "/css/Chinese.json"	
+          }    
+           
         });
     });
 </script>
-<script>
-             
-//sweetalert定制化提醒
-function ajaxalert(title,msg,btn){
-	swal({
-    	title:title,
-        text:msg,
-        confirmButtonText:btn,
-        closeOnConfirm:true,
-        timer:5000,
-        html:true,
-    });
-}
 
-//当前日期
-function getNow(){
-   var d= new Date();       
-   year = d.getFullYear();
-   mon = d.getMonth() + 1;
-   day = d.getDate();
-   d2 = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
-   return d2;
-}
 
-//前几天日期
-function getBeforeDate(n) {
-   var n = n;
-   var d = new Date();
-   var year = d.getFullYear();
-   var mon = d.getMonth() + 1;
-   var day = d.getDate();
-   if(day <= n) {
-       if(mon > 1) {
-           mon = mon - 1;
-       } else {
-           year = year - 1;
-           mon = 12;
-       }
-   }
-   d.setDate(d.getDate() +n);
-   year = d.getFullYear();
-   mon = d.getMonth() + 1;
-   day = d.getDate();
-   s = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
-   return s;
-}
-
-</script>
 
 <script>
 $(function () {
@@ -226,29 +176,19 @@ $(function () {
                     monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],  
                     today: "今天",  
                     clear: "清除"  
-            };  
-    	
-	 $('#datepicker_start').datepicker({
-		 autoclose: true, //自动关闭  
-         format: 'yyyy-mm-dd',     //日期格式  
-         language: 'cn',           //语言  
-  
-	 });
+    }; 
 
-	 $('#datepicker_end').datepicker({
-		 autoclose: true, //自动关闭  
-         format: 'yyyy-mm-dd',     //日期格式  
-         language: 'cn',           //语言  
-	 });
-
+    $.fn.datepicker.defaults.language = 'cn';
+    $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+    $.fn.datepicker.defaults.autoclose = 'true';
+    
 	 //开始时间
 	 var starttime=$("#datepicker_start").val();
      if(starttime == ""){
-         var lastday = getBeforeDate(-90);
+         var lastday = getBeforeDate(-10);
          $("#datepicker_start").val(lastday);    
          $("#datepicker_start").datepicker("update", lastday);        
      }
-
      //结束时间
      var endtime=$("#datepicker_end").val();
      if(endtime == ""){

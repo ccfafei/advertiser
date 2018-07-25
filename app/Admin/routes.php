@@ -19,7 +19,7 @@ Route::group([
     $router->resource('media/channel', ChannelController::class);
     $router->resource('media/category',CategoryController::class);
     $router->resource('media/leader',LeaderController::class);
-    
+    Route::get('trade','TradeController@index');
     Route::get('trade/create','TradeController@create');
     Route::get('trade/{id}/edit','TradeController@show');
     Route::get('trade/check','TradeController@check');

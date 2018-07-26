@@ -21,7 +21,7 @@ class TradeController extends Controller
 
     /**
      * Index interface.
-     *Customer
+     *交易列表
      * @return Content
      */
     public function index(Request $request)
@@ -56,14 +56,25 @@ class TradeController extends Controller
             $receiveds = config('trade.is_received');
             $paids = config('trade.is_paid');
             $checks = config('trade.is_check');
+            $prices = $customer_prices = $media_prices = $profits = 0;
             foreach ($rows as $key=>$items){
                 $rows[$key]['is_received'] = $receiveds[(int)$items['is_received']];
                 $rows[$key]['is_paid'] = $paids[(int)$items['is_paid']];
                 $rows[$key]['is_check'] = $checks[(int)$items['is_check']];
+                $prices += $items['price'];//报价合计
+                $customer_prices += $items['customer_price'];//报价
+                $media_prices += $items['media_price'];//媒体款
+                $profits += $items['profit'];//利润
             }
+            $arrsum =[
+                'prices'=>$prices,
+                'customer_prices'=>$customer_prices,
+                'media_prices'=>$media_prices,
+                'profits'=>$profits,
+            ];
             $exporturl = $this->grid()->exportUrl('all');
             $url = $exporturl;
-            $listview = view('admin.trade.list',compact('rows','headers','checks','url','inputs'))->render();
+            $listview = view('admin.trade.list',compact('rows','headers','checks','url','inputs','arrsum'))->render();
             $content->row($listview);
         });
     }

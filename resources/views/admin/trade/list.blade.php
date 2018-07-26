@@ -96,7 +96,7 @@
                 <td>{{ $items['media_name'] }}</td>
                 <td>{{ $items['contribution'] }}</td>
                 <td>{{(int)$items['words'] }}</td>
-                <td>{{ (int)$items['price']}}</td>
+                <td>{{ (float)$items['price']}}</td>
                 <td>{{ $items['customer_price']}}</td>                 
                 <td>{{ $items['media_price']}}</td>
                 <td>{{ $items['profit'] }}</td>
@@ -105,7 +105,23 @@
                 <td>{{ $items['is_check']}}</td>
             </tr>            
             @endforeach
+        
         </tbody>
+            <tr>
+            <td><b>合计</b></td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td><b>{{ $arrsum['prices'] }}</b></td>
+            <td><b>{{ $arrsum['customer_prices'] }}</b></td>                 
+            <td><b>{{ $arrsum['media_prices'] }}</b></td>
+            <td><b>{{ $arrsum['profits'] }}</b></td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            </tr>
         </table>
     </div>
     <div class="box-footer clearfix">

@@ -22,7 +22,7 @@ Route::group([
     Route::get('trade','TradeController@index');
     Route::get('trade/create','TradeController@create');
     Route::get('trade/{id}/edit','TradeController@show');
-    Route::get('trade/check','TradeController@check');
+    Route::any('trade/check','TradeController@check');
     Route::get('trade/check/{id}/edit','TradeController@show'); 
     $router->post('trade/index', 'TradeController@index');
     $router->post('trade/check/checkupdate', 'TradeController@checkUpdate');

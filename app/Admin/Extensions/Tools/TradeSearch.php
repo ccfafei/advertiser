@@ -9,20 +9,11 @@ use Illuminate\Support\Facades\Request;
 class TradeSearch extends AbstractTool
 {
     
-
-    protected $action;
-    
-    public function __construct($action = 1)
-    {
-        $this->action = $action;
-    }
-
-
-
     public function render()
     {
 
         $options = [
+            'all'=>'请选择',
             '0'   => '未审核',
             '1'     => '审核通过',
             '2'     => '审核不通过',

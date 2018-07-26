@@ -14,6 +14,7 @@ use App\Models\Trade;
 use Illuminate\Support\MessageBag;
 use App\Admin\Extensions\Tools\TradeCheck;
 use App\Admin\Extensions\Tools\TradeSearch;
+use Illuminate\Support\Facades\Input;
 class TradeController extends Controller
 {
     use ModelForm;
@@ -107,14 +108,10 @@ class TradeController extends Controller
         });
     }
     
-    public function check(Request $request){
-        return Admin::content(function (Content $content) use ($request) {
+    public function check(){
+        return Admin::content(function (Content $content) {
             $content->header('业务审核及修改');
-            $content->description('审核');
-           if($request->has('action')){
-               $this->grid()->model()->where('is_check', $request->input('action'));
-           }            
-          
+            $content->description('审核');  
             $content->body($this->grid());
         });
     }
@@ -136,10 +133,12 @@ class TradeController extends Controller
     {
         return Admin::grid(Trade::class, function (Grid $grid) {
         
+            //关闭过滤
             $grid->disableFilter();
             $grid->disableCreation();
             $grid->tools->disableRefreshButton();
 
+            //修改权限
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
                 if (!Admin::user()->can('trade.edit')) {
@@ -147,6 +146,7 @@ class TradeController extends Controller
                 }
             });
             
+            //加自定义审核功能 
             $grid->tools(function ($tools) {
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();
@@ -154,14 +154,25 @@ class TradeController extends Controller
                     $batch->add('审核不通过', new TradeCheck(2));
                 
                 });
+              });
+            
+            //搜索功能 
+            $grid->tools(function ($tools) {
+                $tools->append(new TradeSearch());
             });
-            
-                $grid->tools(function ($tools) {
-                    $tools->append(new TradeSearch());
-                });
-            
-            
+       
+            $checked = Input::get('is_check',0);
+            if($checked !='all'){
+                $is_check = intval($checked);
+                $grid->model()->where('is_check',$is_check);
+              
+            }else{
+                $grid->model();
+            }
+     
+        
            // $grid->trade_id('ID')->sortable();
+            
             $grid->trade_ts('交易时间')->display(function ($time) {
                 return date('Y-m-d',strtotime($time));
             })->sortable();
@@ -194,6 +205,7 @@ class TradeController extends Controller
                 return $configs[$is_check];
             })->sortable();
              
+          
         });
     }
     

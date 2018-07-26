@@ -1,32 +1,25 @@
 
-<div class="form-inline pull-right mr_2"  >
+<div class="pull-right mr_2"  >
+<form class="form-inline" action="/admin/trade/check" method="post">
   <div class="form-group ">
-    <label for="name">审核筛选:</label>
+    <label for="name">筛选:</label>
     <select class="form-control" name="is_check" id="is_check">
-      @foreach($options as $option => $label)
+     @foreach($options as $option => $label)
         <option value ="{{$option}}">{{$label}}</option>
      @endforeach
     </select>
    
   </div>
+  </form>
 </div>
 <script>
 $(document).ready(function(){
 	 $("#is_check").change(function(){
-		 $.ajax({
-		        method: 'get',
-		        url: '/admin/trade/check',
-		        data: {
-		            _token:LA.token,
-		            action: $(this).val(),
-		        },
-		        success: function () {
-		            $.pjax.reload('#pjax-container');
-		            //toastr.success('操作成功');
-		        }
-		    });
-		    
-	 });
+		  check =$(this).val();
+		  $("#is_check option[value='"+check+"']").attr("selected", "selected");
+		  $('.form-inline').submit();
+      });
+		
 });
 
 

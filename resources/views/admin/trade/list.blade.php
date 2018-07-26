@@ -125,12 +125,11 @@
 
         $('#example1').DataTable({
        	 'paging'      : true,
-         'lengthChange': false,
+         'lengthChange': true,
          'searching'   : false,
          'ordering'    : true,
          'info'        : true,
-         'autoWidth'   : false,
-         'ordering':true, 
+         'autoWidth'   : true,
       	  "language": {
        		 "url": "/css/Chinese.json"	
           }    
@@ -197,13 +196,13 @@ $(function () {
      }
      
      //设置值
-     $('#isReceived').on('ifChecked', function(event){ 
-    	 $('#isReceived').val(1);
-   	 }); 
+//      $('#isReceived').on('ifChecked', function(event){ 
+//     	 $('#isReceived').val(1);
+//    	 }); 
 
-     $('#isPaid').on('ifChecked', function(event){ 
-    	 $('#isPaid').val(1);
-   	 }); 
+//      $('#isPaid').on('ifChecked', function(event){ 
+//     	 $('#isPaid').val(1);
+//    	 }); 
 
 
      //搜索提交 

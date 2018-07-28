@@ -1,5 +1,5 @@
              
-//sweetalert¶¨ÖÆ»¯ÌáĞÑ
+//sweetalertå®šåˆ¶åŒ–æé†’
 function ajaxalert(title,msg,btn){
 	swal({
     	title:title,
@@ -11,7 +11,7 @@ function ajaxalert(title,msg,btn){
     });
 }
 
-//µ±Ç°ÈÕÆÚ
+//å½“å‰æ—¥æœŸ
 function getNow(){
    var d= new Date();       
    year = d.getFullYear();
@@ -21,7 +21,7 @@ function getNow(){
    return d2;
 }
 
-//Ç°¼¸ÌìÈÕÆÚ
+//å‰å‡ å¤©æ—¥æœŸ
 function getBeforeDate(n) {   var n = n;
    var d = new Date();
    var year = d.getFullYear();

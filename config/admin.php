@@ -129,8 +129,9 @@ return [
     /*
      * @see https://adminlte.io/docs/2.4/layout
      */
-    'skin' => 'skin-blue-light',
-
+    'skin' => 'skin-purple',
+    //'skin' => 'skin-blue-light',
+    //hold-transition skin-blue sidebar-mini
     /*
     |---------------------------------------------------------|
     |LAYOUT OPTIONS | fixed                                   |
@@ -140,12 +141,13 @@ return [
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
      */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    //'layout' => ['sidebar-mini', 'sidebar-collapse'],
 
+    'layout' => ['sidebar-mini', 'sidebar-collapse'],
     /*
      * Background image in login page
      */
-    'login_background_image' => '',
+    'login_background_image' => '/images/login.jpg',
 
     /*
      * Version displayed in footer.

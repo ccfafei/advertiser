@@ -31,10 +31,20 @@ class TradeController extends Controller
     
             $content->header('业务流量');
             $content->description('列表'); 
-            $headers = ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','是否审核'];
+            $headers = ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','审核'];
             $rows =[];
             $where =[];
-            $inputs = $request->only(['customer_name', 'media_name','contribution','is_received','is_paid','is_check']);
+            $mode= new Trade();
+            $request->has('customer_name')&&
+                  $mode = $mode->where('customer_name','like','%'.$request->input('customer_name').'%');
+            
+            $request->has('media_name')&&
+                  $mode = $mode->where('media_name','like','%'.$request->input('media_name').'%');
+            
+            $request->has('contribution')&&
+                   $mode = $mode->where('contribution','like','%'.$request->input('contribution').'%');
+            
+            $inputs = $request->only(['is_received','is_paid','is_check']);
             foreach ($inputs as $k=>$v){
                 if(!empty($v)) $where[$k] =$v;
             }
@@ -47,20 +57,20 @@ class TradeController extends Controller
             }
             $inputs['start_day'] = date('Y-m-d',$search_start_day);
             $inputs['end_day'] = date('Y-m-d',$search_end_day);   
-            $mode=Trade::whereBetween('trade_ts',[$search_start_day,$search_end_day]);        
-            !empty($where)&&$mode =$mode->where($where);
+            
+            $mode = $mode->whereBetween('trade_ts',[$search_start_day,$search_end_day]);        
+            !empty($where) && $mode =$mode->where($where);
             $results=$mode->get();
             if($results->isNotEmpty()){
                 $rows = $results->toArray();
             }
-            $receiveds = config('trade.is_received');
-            $paids = config('trade.is_paid');
-            $checks = config('trade.is_check');
             $prices = $customer_prices = $media_prices = $profits = 0;
+            $checks = config('trade.is_check');
             foreach ($rows as $key=>$items){
-                $rows[$key]['is_received'] = $receiveds[(int)$items['is_received']];
-                $rows[$key]['is_paid'] = $paids[(int)$items['is_paid']];
-                $rows[$key]['is_check'] = $checks[(int)$items['is_check']];
+                $rows[$key]['trade_ts'] = date('Y-m-d',$items['trade_ts']);
+                $rows[$key]['is_received'] =  Base::dispayStyle('is_received',$items['is_received']);
+                $rows[$key]['is_paid'] = Base::dispayStyle('is_paid',$items['is_paid']);
+                $rows[$key]['is_check'] = Base::dispayStyle('is_check',$items['is_check']);
                 $prices += $items['price'];//报价合计
                 $customer_prices += $items['customer_price'];//报价
                 $media_prices += $items['media_price'];//媒体款
@@ -185,7 +195,7 @@ class TradeController extends Controller
            // $grid->trade_id('ID')->sortable();
             
             $grid->trade_ts('交易时间')->display(function ($time) {
-                return date('Y-m-d',strtotime($time));
+                return date('Y-m-d',$time);
             })->sortable();
     
             $grid->customer_name('客户名称')->sortable();
@@ -198,22 +208,15 @@ class TradeController extends Controller
             $grid->media_price('媒体款')->sortable();
             $grid->profit('媒体款')->sortable();
             $grid->is_received('是否回款')->display(function ($is_received) {
-                $configs = config('trade.is_received');
-                $is_received = (int)$is_received;
-                return $configs[$is_received];
-
+                return Base::dispayStyle('is_received', (int)$is_received);
             })->sortable();
             
             $grid->is_paid('是否出款')->display(function ($is_paid) {
-                $configs = config('trade.is_paid');
-                $is_paid = (int)$is_paid;
-                return $configs[$is_paid];
+                return Base::dispayStyle('is_paid', (int)$is_paid);
             })->sortable();
             
             $grid->is_check('审核')->display(function ($is_check) {
-               $configs = config('trade.is_check');
-                $is_check = (int)$is_check;
-                return $configs[$is_check];
+              return Base::dispayStyle('is_check', (int)$is_check);
             })->sortable();
              
           
@@ -238,7 +241,9 @@ class TradeController extends Controller
             $form->text('customer_price','报价');
             $form->text('media_price','媒体款');  
             $form->text('profit','利润');
-            $form->date('trade_ts','交易时间')->format("YYYY-MM-DD");                    
+            $form->display('trade_ts','交易时间')->with(function($value){
+                return date('Y-m-d',$value);
+            });                    
             $form->textarea('remark','备注');
             $form->hidden('created_at', 'Created At');
             $form->hidden('updated_at', 'Updated At');

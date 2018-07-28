@@ -100,9 +100,9 @@
                 <td>{{ $items['customer_price']}}</td>                 
                 <td>{{ $items['media_price']}}</td>
                 <td>{{ $items['profit'] }}</td>
-                <td>{{ $items['is_received']}}</td>
-                <td>{{ $items['is_paid']}}</td>
-                <td>{{ $items['is_check']}}</td>
+                <td>{!! $items['is_received'] !!}</td>
+                <td>{!! $items['is_paid'] !!}</td>
+                <td>{!! $items['is_check'] !!}</td>
             </tr>            
             @endforeach
         
@@ -114,10 +114,10 @@
             <td>-</td>
             <td>-</td>
             <td>-</td>
-            <td><b>{{ $arrsum['prices'] }}</b></td>
-            <td><b>{{ $arrsum['customer_prices'] }}</b></td>                 
-            <td><b>{{ $arrsum['media_prices'] }}</b></td>
-            <td><b>{{ $arrsum['profits'] }}</b></td>
+            <td><b>{{ $arrsum['prices'] }}元</b></td>
+            <td><b>{{ $arrsum['customer_prices'] }}元</b></td>                 
+            <td><b>{{ $arrsum['media_prices'] }}元</b></td>
+            <td><b>{{ $arrsum['profits'] }}元</b></td>
             <td>-</td>
             <td>-</td>
             <td>-</td>
@@ -134,52 +134,10 @@
     function LA() {}
     LA.token = "{{ csrf_token() }}";
 </script>
+<script type="text/javascript">
 
-<!-- DataTables -->
-<script>
-    $(function () {
-
-        $('#example1').DataTable({
-       	 'paging'      : true,
-         'lengthChange': true,
-         'searching'   : false,
-         'ordering'    : true,
-         'info'        : true,
-         'autoWidth'   : true,
-      	  "language": {
-       		 "url": "/css/Chinese.json"	
-          }    
-           
-        });
-    });
-</script>
-
-
-
-<script>
 $(function () {
-    
-	$('#isReceived').iCheck({checkboxClass:'icheckbox_minimal-blue'});
-	$('#isPaid').iCheck({checkboxClass:'icheckbox_minimal-blue'});
-	
-	$('#isReceived').on('ifChanged', function(event) {
-	    if (this.checked) {
-	        $('#isReceived').val('1');
-	    } else {
-	    	 $('#isReceived').val('0');
-	    }
-	});
-	
 
-	$('#isPaid').on('ifChanged', function(event) {
-	    if (this.checked) {
-	        $('#isPaid').val('1');
-	    } else {
-	    	 $('#isPaid').val('0');
-	    }
-	});
-	
-		
 
 	//datepicker
 	var nowtime = getNow();
@@ -197,10 +155,34 @@ $(function () {
     $.fn.datepicker.defaults.format = "yyyy-mm-dd";
     $.fn.datepicker.defaults.autoclose = 'true';
     
+	
+    //回款
+	$('#isReceived').iCheck({checkboxClass:'icheckbox_minimal-blue'});
+	$('#isPaid').iCheck({checkboxClass:'icheckbox_minimal-blue'});
+	
+	$('#isReceived').on('ifChanged', function(event) {
+	    if (this.checked) {
+	        $('#isReceived').val('1');
+	    } else {
+	    	 $('#isReceived').val('0');
+	    }
+	});
+	
+   //出款
+	$('#isPaid').on('ifChanged', function(event) {
+	    if (this.checked) {
+	        $('#isPaid').val('1');
+	    } else {
+	    	 $('#isPaid').val('0');
+	    }
+	});
+	
+		
+
 	 //开始时间
 	 var starttime=$("#datepicker_start").val();
      if(starttime == ""){
-         var lastday = getBeforeDate(-10);
+         var lastday = getBeforeDate(-30);
          $("#datepicker_start").val(lastday);    
          $("#datepicker_start").datepicker("update", lastday);        
      }
@@ -210,17 +192,6 @@ $(function () {
          $("#datepicker_end").val(nowtime);    
          $("#datepicker_end").datepicker("update", nowtime);        
      }
-     
-     //设置值
-//      $('#isReceived').on('ifChecked', function(event){ 
-//     	 $('#isReceived').val(1);
-//    	 }); 
-
-//      $('#isPaid').on('ifChecked', function(event){ 
-//     	 $('#isPaid').val(1);
-//    	 }); 
-
-
      //搜索提交 
      $("#search").on('click',function(){
     	 
@@ -231,10 +202,48 @@ $(function () {
      //导出
      $("#export").on('click',function(){
 
-   	     window.open('/admin/trade?%5C_pjax=%23pjax-container&_export_=all');   	    
+   	     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');   	    
        });
-    
-   
+       
 });
 
+//datatables
+$(function () {
+
+    $('#example1').DataTable({
+   	 'paging'      : true,
+     'lengthChange': true,
+     'searching'   : false,
+     'ordering'    : true,
+     'info'        : true,
+     'autoWidth'   : true,
+  	  "language": {
+	  		"sProcessing":   "处理中...",
+	  		"sLengthMenu":   "显示 _MENU_ 项结果",
+	  		"sZeroRecords":  "没有匹配结果",
+	  		"sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+	  		"sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
+	  		"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+	  		"sInfoPostFix":  "",
+	  		"sSearch":       "搜索:",
+	  		"sUrl":          "",
+	  		"sEmptyTable":     "表中数据为空",
+	  		"sLoadingRecords": "载入中...",
+	  		"sInfoThousands":  ",",
+	  		"oPaginate": {
+	  			"sFirst":    "首页",
+	  			"sPrevious": "上页",
+	  			"sNext":     "下页",
+	  			"sLast":     "末页"
+	  		},
+	  		"oAria": {
+	  			"sSortAscending":  ": 以升序排列此列",
+	  			"sSortDescending": ": 以降序排列此列"
+	  		}
+      }    
+       
+    });
+});
+
+//-->
 </script>

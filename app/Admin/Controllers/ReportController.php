@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Admin\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,66 +8,74 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
-use App\Models\Finance;
 use App\Models\Trade;
 use Illuminate\Support\Facades\DB;
-
+use App\Admin\Controllers\Base;
 
 class ReportController extends Controller
 {
-   use ModelForm;
-   
-   //待回款,按时间，客户名称汇总，汇总时该条记录必须被审核
-   public function getCustomerReceived(Request $request ){
-      return Admin::content(function (Content $content) use($request) {
-          $model = new Trade();
-          $model = $model->where(['is_check'=>1,'is_received'=>0]);
-          //客户姓名
-          if($request->has('customer_name')){
-              $customer_name = $request->input('customer_name');
-              $model = model->where('customer_name','like','%'.$customer_name.'%');
-          }
-          
-          //开始时间
-          if($request->has('start_day')){
-              $start_day= strtotime($request->input('start_day'));
-              $model = model->where('trade_ts','>=',$start_day);
-          }
-          
-          //结束时间
-          if($request->has('end_day')){
-              $end_day= strtotime($request->input('end_day'));
-              $model = model->where('trade_ts','>=',$end_day);
-          }
-          $model = $model->select(
-              DB::raw('FROM_UNIXTIME(trade_ts, '%Y-%m-%d') AS trade_ts '),
-              'customer_id',
-              'customer_name',
-              DB::raw('SUM(customer_price) AS customer_price '),
-              'is_received', 
-              'created_at'         
-             
-            )
-           ->groupBy('trade_ts','customer_name')
-           ->orderBy('trade_ts','desc')
-           ->get()
-           
-           if($model->isNotEmpty()){
-               $rows = $model->toArray();
-           }
-           $receiveds = config('trade.is_received');
-           $prices = $customer_prices = $media_prices = $profits = 0;
-           foreach ($rows as $key=>$items){
-               $rows[$key]['is_received'] = $receiveds[(int)$items['is_received']];
-               $customer_prices += $items['customer_price'];//报价
-           }
-           $arrsum =['customer_prices'=>$customer_prices];
-           $exporturl = $this->grid()->exportUrl('all');
-           $url = $exporturl;
-           $listview = view('admin.trade.list',compact('rows','headers','checks','url','inputs','arrsum'))->render();
-           $content->row($listview);
-      });
-   }
+    use ModelForm;
 
+    /**
+     * 10天数据汇总报表,经过确认，已经回款和回款数
+     */
+    public function getDayReport()
+    {
+        $start_day = strtotime('-10 day 00:00:00');
+        $end_day = strtotime(' 00:00:00');
+        $arr = range($start_day, $end_day, 86400);
+        $responses = Trade::select(DB::raw('FROM_UNIXTIME(trade_ts,"%Y-%m-%d") AS day '), DB::raw('SUM(customer_price) AS customer_price '), DB::raw('SUM(media_price) AS media_price '), DB::raw('SUM(customer_price-media_price) AS profit '))->whereBetween('trade_ts', [
+            $start_day,
+            $end_day
+        ])
+            ->where('is_check', 1)
+            ->where('is_received', 1)
+            ->where('is_paid', 1)
+            ->groupBy('day')
+            ->get();
+        
+        $newdata = [
+            'customer_price' => 0,
+            'media_price' => 0,
+            'profit' => 0
+        ];
+        $result = [];
+        if (collect($responses)->isNotEmpty()) {
+            $responses = $responses->toArray();
+            foreach ($responses as $k => $v) {
+                $v['day'] = strtotime($v['day']);
+                $responses[$k][$v['day']] = $v;
+            }
+        }
+        
+        foreach ($arr as $items) {
+            if (empty($responses[$items])) {
+                $newdata['day'] = $items;
+                $result[$items] = $newdata;
+            } else {
+                $result[$items] = $responses[$items];
+            }
+        }
+        $result = array_values($result);
+        
+        return $result;
+    }
+
+    /**
+     * 待办事务处理通知
+     */
+    public function getReportNotice()
+    {
+        $noCheck = Trade::where('is_check', 0)->orWhereNull('is_check')->count();
+        $noReceived = Trade::where('is_received', 0)->orWhereNull('is_received')->sum('customer_price');
+        $noPaid = Trade::where('is_paid',0)->orWhereNull('is_paid')->sum('media_price');
+       $data =[
+           'no_check'=>isset($noCheck)?$noCheck:0,
+           'no_received'=>isset($noReceived)?$noReceived:0,
+           'no_paid'=>isset($noPaid)?$noPaid:0,
+       ];
+       return $data;
+   }
+ 
     
 }

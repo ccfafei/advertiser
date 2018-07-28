@@ -18,7 +18,8 @@ class Trade extends Model
     
     public function getTradeTsAttribute()
     {
-        return date('Y-m-d', $this->attributes['trade_ts']);
+        return  $this->attributes['trade_ts'];
+        
     }
     
     //利润

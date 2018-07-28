@@ -67,4 +67,46 @@ class Base{
         }
         return $arr;
     }
+    
+
+    /**
+     * 审核状态，进出款状态 ，在表格中显示不同样式
+     * @param unknown $key 配置文件对应的key
+     * @param unknown $status 对应状态码 0,1
+     */
+    public static function dispayStyle($key,$status){
+        $sytles ="";
+        $cfg = config('trade.'.$key);
+        $status = (int)$status;
+        if( $cfg === false)  return  $sytles = $status;
+        if(empty($cfg[$status]))  return  $sytles = $status;
+        
+        switch ($status){
+            case 0 :
+                $lableColor = 'bg-red';
+                break;
+            case 1 :
+                $lableColor = 'bg-green';
+                break;
+            case 2 :
+                $lableColor = 'bg-yellow';
+                break;
+            case 3 :
+                $lableColor = 'bg-blue';
+                break;
+            default:
+                $lableColor = '';
+                break;
+        }
+        return $sytles = "<lable class='label {$lableColor}'> {$cfg[$status]} </lable>";              
+    }
+    
+    /**
+     * 
+     * @param int $date unix时间戳
+     */
+    public function getWeek($date){
+        
+    }
+    
 }

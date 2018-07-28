@@ -67,9 +67,7 @@
 		<!-- LINE CHART -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">10天业绩波动图</h3>
-
-            </div>
+                        </div>
             <div class="box-body">
               <div class="chart">
                 <canvas id="canvas" style="heigth:250px;width:90%"></canvas>
@@ -125,7 +123,7 @@ var data = {
 				responsive: true,
 				title: {
 					display: true,
-					text: '波动图'
+					text: '最近10天业务波动图'
 				},
 				scales: {
 					xAxes: [{

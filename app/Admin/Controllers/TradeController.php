@@ -159,7 +159,7 @@ class TradeController extends Controller
             //修改权限
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
-                if (Admin::user()->can('trade.edit')) {
+                if (!Admin::user()->can('trade.edit')) {
                     $actions->disableEdit();
                 }
             });
@@ -168,7 +168,7 @@ class TradeController extends Controller
             $grid->tools(function ($tools) {
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();
-                    if (!Admin::user()->can('trade.edit')) {
+                    if (Admin::user()->can('trade.edit')) {
                         $batch->add('审核通过', new TradeCheck(1));
                         $batch->add('审核不通过', new TradeCheck(2));
                     }

@@ -24,7 +24,12 @@ class ReportController extends Controller
         $start_day = strtotime('-10 day 00:00:00');
         $end_day =  time();
         $arr = range($start_day, strtotime(' 00:00:00'), 86400);
-        $responses = Trade::select(DB::raw('FROM_UNIXTIME(trade_ts,"%Y-%m-%d") AS day '), DB::raw('SUM(customer_price) AS customer_price '), DB::raw('SUM(media_price) AS media_price '), DB::raw('SUM(customer_price-media_price) AS profit '))->whereBetween('trade_ts', [
+        $responses=[];
+        
+       /*
+        $responses['customer_price'] = Trade::select(DB::raw('FROM_UNIXTIME(trade_ts,"%Y-%m-%d") AS day '),
+             DB::raw('SUM(customer_price) AS customer_price '), DB::raw('SUM(media_price) AS media_price '), 
+            DB::raw('SUM(customer_price-media_price) AS profit '))->whereBetween('trade_ts', [
             $start_day,
             $end_day
         ])
@@ -33,7 +38,11 @@ class ReportController extends Controller
             ->where('is_paid', 1)
             ->groupBy('day')
             ->get();
-        
+        */
+        $arr1 = $this->getDaySum('customer_price','is_received',$start_day,$end_day);
+        $arr2 = $this->getDaySum('media_price','is_paid',$start_day,$end_day);
+        $responses = $arr1+$arr2;
+
         $newdata = [
             'customer_price' => 0,
             'media_price' => 0,
@@ -42,7 +51,6 @@ class ReportController extends Controller
         $result = [];
         $newresponse=[];
         if (collect($responses)->isNotEmpty()) {
-            $responses = $responses->toArray();
             foreach ($responses as $k => $v) {
                 $v['day'] = strtotime($v['day']);
                 $newresponse[$v['day']] = $v;
@@ -54,9 +62,12 @@ class ReportController extends Controller
             if (empty($newresponse[$items])) {
                 $newdata['day'] = $items;
                 $result[$items] = $newdata;
-            } else {
-               
-                $result[$items] = $newresponse[$items];
+            } else { 
+                $result[$items] ['customer_price']= empty($newresponse[$items]['customer_price'])?
+                                0:$newresponse[$items]['customer_price'];
+                $result[$items] ['media_price']= empty($newresponse[$items]['media_price'])?
+                                0:$newresponse[$items]['media_price'];
+                $result[$items]['profit'] =  $result[$items] ['customer_price']-$result[$items] ['media_price'];
             }
         }
         $result = array_values($result);
@@ -78,6 +89,27 @@ class ReportController extends Controller
            'no_paid'=>isset($noPaid)?$noPaid:0,
        ];
        return $data;
+   }
+   
+   public function getDaySum($field,$check,$start_day,$end_day){
+       $responses = Trade::select(
+           DB::raw('FROM_UNIXTIME(trade_ts,"%Y-%m-%d") AS day '),
+           DB::raw("SUM({$field}) AS {$field} ")
+       )->whereBetween('trade_ts', [
+           $start_day,
+           $end_day
+       ])
+       ->where('is_check', 1)
+       ->where("{$check}", 1)
+       ->groupBy('day')
+       ->get();
+       if(!empty($responses)){
+           $responses = $responses->toArray();
+       }else{
+            $responses = [];
+       }
+       
+       return $responses;
    }
  
     

@@ -15,6 +15,7 @@ use Illuminate\Support\MessageBag;
 use App\Admin\Extensions\Tools\TradeCheck;
 use App\Admin\Extensions\Tools\TradeSearch;
 use Illuminate\Support\Facades\Input;
+use Encore\Admin\Auth\Permission;
 class TradeController extends Controller
 {
     use ModelForm;
@@ -101,13 +102,7 @@ class TradeController extends Controller
     
             $content->header('业务流量 ');
             $content->description('编辑');
-            if (!Admin::user()->can('trade.edit')) {
-                $error = new MessageBag([
-                    'title'   => '无权限',
-                    'message' => '无权限访问此页面!',
-                ]);
-                return back()->with(compact('error'));
-            }
+            Permission::check('trade.edit');
     
             $content->body($this->form()->edit($id));
         });
@@ -133,12 +128,14 @@ class TradeController extends Controller
         return Admin::content(function (Content $content) {
             $content->header('业务审核及修改');
             $content->description('审核');  
+            Permission::check('trade.edit');
             $content->body($this->grid());
         });
     }
     
-    public function checkUpdate(Request $request)
+    protected function checkUpdate(Request $request)
     {
+        Permission::check('trade.edit');        
         foreach (Trade::find($request->get('ids')) as $trade) {
             $trade->is_check = $request->get('action');
             $trade->save();
@@ -162,7 +159,7 @@ class TradeController extends Controller
             //修改权限
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
-                if (!Admin::user()->can('trade.edit')) {
+                if (Admin::user()->can('trade.edit')) {
                     $actions->disableEdit();
                 }
             });
@@ -171,8 +168,10 @@ class TradeController extends Controller
             $grid->tools(function ($tools) {
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();
-                    $batch->add('审核通过', new TradeCheck(1));
-                    $batch->add('审核不通过', new TradeCheck(2));
+                    if (!Admin::user()->can('trade.edit')) {
+                        $batch->add('审核通过', new TradeCheck(1));
+                        $batch->add('审核不通过', new TradeCheck(2));
+                    }
                 
                 });
               });

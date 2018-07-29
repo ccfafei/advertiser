@@ -12,7 +12,7 @@ use Encore\Admin\Controllers\ModelForm;
 use App\Models\Trade;
 use Illuminate\Support\Facades\DB;
 use App\Admin\Controllers\Base;
-
+use Encore\Admin\Auth\Permission;
 
 class PaidReportController extends Controller
 {
@@ -21,6 +21,7 @@ class PaidReportController extends Controller
    //按时间，媒体名称,出款状态汇总，汇总时该条记录必须被审核
    public function getMediaReceived(Request $request ){
       return Admin::content(function (Content $content) use($request) {
+          Permission::check('report.check');
           $content->header('媒体出款报表');
           $content->description('付款');
           $model = new Trade();
@@ -110,7 +111,7 @@ class PaidReportController extends Controller
     */
    public function paidUpdate(Request $request)
    {
-      
+       Permission::check('report.check');
        foreach (Trade::find($request->get('ids')) as $trade) {
            $trade->is_paid = $request->get('action');
            $trade->save();

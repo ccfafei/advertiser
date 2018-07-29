@@ -12,7 +12,7 @@ use Encore\Admin\Controllers\ModelForm;
 use App\Models\Trade;
 use Illuminate\Support\Facades\DB;
 use App\Admin\Controllers\Base;
-
+use Encore\Admin\Auth\Permission;
 
 class ReceiveReportController extends Controller
 {
@@ -21,6 +21,7 @@ class ReceiveReportController extends Controller
    //回款,按时间，客户名称,回款状态汇总，汇总时该条记录必须被审核
    public function getCustomerReceived(Request $request ){
       return Admin::content(function (Content $content) use($request) {
+          Permission::check('report.check');
           $content->header('客户回款报表');
           $content->description('收款');
           $model = new Trade();
@@ -110,7 +111,7 @@ class ReceiveReportController extends Controller
     */
    public function receiveUpdate(Request $request)
    {
-      
+       Permission::check('report.check');      
        foreach (Trade::find($request->get('ids')) as $trade) {
            $trade->is_received = $request->get('action');
            $trade->save();

@@ -9,7 +9,7 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use App\Models\Finance;
-
+use Encore\Admin\Auth\Permission;
 class FinanceController extends Controller
 {
  use ModelForm;
@@ -39,7 +39,7 @@ class FinanceController extends Controller
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-
+            Permission::check('finance.all');
             $content->header('财务报表');
             $content->description('修改');
 
@@ -58,6 +58,7 @@ class FinanceController extends Controller
 
             $content->header('账务记录');
             $content->description('录入');
+            Permission::check('finance.all');
 
             $content->body($this->form());
         });

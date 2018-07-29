@@ -22,7 +22,7 @@ class ReportController extends Controller
     public function getDayReport()
     {
         $start_day = strtotime('-10 day 00:00:00');
-        $end_day = strtotime(' 00:00:00');
+        $end_day = strtotime(' +1 day 00:00:00');
         $arr = range($start_day, $end_day, 86400);
         $responses = Trade::select(DB::raw('FROM_UNIXTIME(trade_ts,"%Y-%m-%d") AS day '), DB::raw('SUM(customer_price) AS customer_price '), DB::raw('SUM(media_price) AS media_price '), DB::raw('SUM(customer_price-media_price) AS profit '))->whereBetween('trade_ts', [
             $start_day,

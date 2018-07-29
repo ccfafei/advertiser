@@ -63,6 +63,7 @@ class ReportController extends Controller
                 $newdata['day'] = $items;
                 $result[$items] = $newdata;
             } else { 
+                $result[$items]['day'] =$items;
                 $result[$items] ['customer_price']= empty($newresponse[$items]['customer_price'])?
                                 0:$newresponse[$items]['customer_price'];
                 $result[$items] ['media_price']= empty($newresponse[$items]['media_price'])?

@@ -41,8 +41,8 @@ class ReportController extends Controller
         */
         $arr1 = $this->getDaySum('customer_price','is_received',$start_day,$end_day);
         $arr2 = $this->getDaySum('media_price','is_paid',$start_day,$end_day);
-        $responses = $arr1+$arr2;
-
+        
+        $responses = array_merge_recursive($arr1,$arr2);
         $newdata = [
             'customer_price' => 0,
             'media_price' => 0,
@@ -53,7 +53,8 @@ class ReportController extends Controller
         if (collect($responses)->isNotEmpty()) {
             foreach ($responses as $k => $v) {
                 $v['day'] = strtotime($v['day']);
-                $newresponse[$v['day']] = $v;
+                !empty($v['customer_price'])&&$newresponse[$v['day']]['customer_price'] = $v['customer_price'];
+                !empty($v['media_price'])&&$newresponse[$v['day']]['media_price'] = $v['media_price'];
             }
         }
 

@@ -133,9 +133,9 @@ var data = {
 						display: true,
 						ticks: {
                             beginAtZero: true,
-                            steps: 100,
-                            stepValue: 50,
-                            max: 1000
+                            steps: 50,
+                            stepValue: 10,
+                            //max: 10000
                         }
 					}]
 				}

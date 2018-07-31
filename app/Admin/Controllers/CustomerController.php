@@ -90,6 +90,20 @@ class CustomerController extends Controller
             $grid->is_cooperate('是否合作')->display(function ($is_cooperate) {
                     return $is_cooperate ? '是' : '否';
             })->sortable();
+            $grid->leader('负责人');
+            
+            $grid->filter(function($filter){          
+                // 去掉默认的id过滤器
+                $filter->disableIdFilter();
+                // 在这里添加字段过滤器
+                $filter->like('company', '客户姓名');
+                $filter->between('develop_ts', '开发时间')->datetime();
+                $filter->like('name', '联系人');
+                $filter->equal('phone', '电话');
+                $filter->like('qq', 'qq/微信');
+                $filter->equal('project', '项目');
+            
+            });
            
         });
     }
@@ -111,6 +125,14 @@ class CustomerController extends Controller
                 $form->mobile('phone','电话');
                 $form->text('qq','微信/QQ');  
                 $form->date('develop_ts','开发时间')->format("YYYY-MM-DD");
+                if(!Admin::user()->isAdministrator()){
+                    $form->hidden('leader','负责人')->default(function($user){
+                        return $user= Admin::user()->username;
+                    });
+                }else{
+                    $form->text('leader','负责人');
+                }
+               
             
             })->tab('其它信息', function ($form) {
                 $form->text('project','项目');       

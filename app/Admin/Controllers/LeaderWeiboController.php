@@ -8,9 +8,9 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
-use App\Models\MediaCategory;
+use App\Models\WeiboLeader;
 
-class CategoryController extends Controller
+class LeaderWeiboController extends Controller
 {
     use ModelForm;
 
@@ -22,10 +22,10 @@ class CategoryController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-        
-            $content->header('分类媒体');
-            $content->description('管理');
-        
+    
+            $content->header('负责人');
+            $content->description('列表');
+    
             $content->body($this->grid());
         });
     }
@@ -40,7 +40,7 @@ class CategoryController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
     
-            $content->header('媒体分类');
+            $content->header('负责人');
             $content->description('编辑');
     
             $content->body($this->form()->edit($id));
@@ -56,7 +56,7 @@ class CategoryController extends Controller
     {
         return Admin::content(function (Content $content) {
     
-            $content->header('媒体分类');
+            $content->header(' 负责人');
             $content->description('创建');
     
             $content->body($this->form());
@@ -70,19 +70,19 @@ class CategoryController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(MediaCategory::class, function (Grid $grid) {
+        return Admin::grid(WeiboLeader::class, function (Grid $grid) {
     
             $grid->disableRowSelector();
-            $grid->category_id('分类ID')->sortable();
-            $grid->category_name('分类名称')->sortable();
-            $grid->remark('备注');
-            
+            $grid->leader_id('ID')->sortable();
+            $grid->leader_name('负责人')->sortable();
             $grid->filter(function($filter){
                 // 在这里添加字段过滤器
-                $filter->like('category_name', '分类名称');
-
+                $filter->disableIdFilter();
+                $filter->like('leader_name', '负责人');
+            
             
             });
+            $grid->remark('备注');
     
              
         });
@@ -95,9 +95,9 @@ class CategoryController extends Controller
      */
     protected function form()
     {
-        return Admin::form(MediaCategory::class, function (Form $form) {
-            $form->display('category_id','分类ID');
-            $form->text('category_name','分类名称');
+        return Admin::form(WeiboLeader::class, function (Form $form) {
+            $form->display('leader_id','ID');
+            $form->text('leader_name','负责人');
             $form->text('remark','备注');
         });
     }

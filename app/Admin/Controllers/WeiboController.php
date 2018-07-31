@@ -10,11 +10,11 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use App\Admin\Controllers\Base;
-use App\Models\Media;
+use App\Models\Weibo;
 use Illuminate\Support\Facades\DB;
 
 
-class MediaController extends Controller
+class WeiboController extends Controller
 {
     use ModelForm;
 
@@ -40,7 +40,7 @@ class MediaController extends Controller
             //搜索结果
             $rows =[];
             $arrsum =[];
-            $mode= new Media(); 
+            $mode= new Weibo(); 
            
             $start_ts = $request->input('start_day');
             $end_ts = $request->input('end_day');
@@ -49,25 +49,23 @@ class MediaController extends Controller
             if($search_end_day < $search_start_day&&$search_start_day<=time()){
                 $search_end_day = $search_start_day;
             } 
-            $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(media_ts)'),'>=',$search_start_day);
+            $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(weibo_ts)'),'>=',$search_start_day);
            
-            $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(media_ts)'),'<=',$search_end_day);
+            $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(weibo_ts)'),'<=',$search_end_day);
             
-            $request->has('media_name')&&
-            $mode = $mode->where('media_name','like','%'.$request->input('media_name').'%');
+            $request->has('weibo_name')&&
+            $mode = $mode->where('weibo_name','like','%'.$request->input('weibo_name').'%');
 
            
-            $request->has('category')&&$request->input('category')!='all'&&
-            $mode = $mode->where('category',$request->input('category'));
-     
-            $request->has('channel')&&$request->input('channel')!='all'&&
-            $mode = $mode->where('channel',$request->input('channel'));
+            $request->has('weibo_category')&&$request->input('weibo_category')!='all'&&
+            $mode = $mode->where('weibo_category',$request->input('weibo_category'));
+
             
             $request->has('leader')&&$request->input('leader')!='all'&&
             $mode = $mode->where('leader',$request->input('leader'));
             
-            $request->has('price')&&!empty($request->input('price'))&&
-            $mode = $mode->where('price',trim($request->input('price')));
+            $request->has('pridirect_pricece')&&!empty($request->input('price'))&&
+            $mode = $mode->where('pridirect_pricece',trim($request->input('price')));
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             
@@ -118,46 +116,42 @@ class MediaController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Media::class, function (Grid $grid) {
+        return Admin::grid(Weibo::class, function (Grid $grid) {
     
             $grid->disableRowSelector();
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
             
             });
-            $leaders = Base::getLeader(); 
-            $channels = Base::getChannel(); 
-            $categorys = Base::getCategory();
-            $grid->media_id('媒体ID')->sortable();
-            $grid->created_at('日期')->display(function($ts){
+            $leaders = Base::getWeiboLeader(); 
+   
+            $categorys = Base::getWeiboCategory();
+            $grid->weibo_id('微博ID')->sortable();
+            $grid->weibo_ts('开发日期')->display(function($ts){
                 return date('Y-m-d',strtotime($ts));
             })->sortable();
-            $grid->media_name('媒体名称')->sortable();
-            
-            $grid->leader('负责人')->display(function($id) use($leaders){
-                $name ='';
-                if($leaders){
-                    $name =$leaders[$id];
-                }              
-                return $name;
-            })->sortable();
-            
-            $grid->category('媒体分类')->display(function($id) use($categorys){
+            $grid->weibo_name('微博名称')->sortable();
+
+            $grid->Weibo_category('微博分类')->display(function($id) use($categorys){
                 $name ='';
                 if($categorys){
                     $name =$categorys[$id];
                 }              
                 return $name;
             })->sortable();
-            $grid->channel('频道')->display(function($id) use($channels){
+      
+            $grid->fans('粉丝数')->sortable();
+            $grid->direct_price('直发价')->sortable();
+            $grid->forward_price('转发价格')->sortable();
+            $grid->direct_microtask('微任务直发')->sortable();
+            $grid->forward_microtask('微任务转发')->sortable();
+            $grid->leader('负责人')->display(function($id) use($leaders){
                 $name ='';
-                if($channels){
-                    $name =$channels[$id];
-                }              
+                if($leaders){
+                    $name =$leaders[$id];
+                }
                 return $name;
             })->sortable();
-            $grid->price('单价')->sortable();
-            $grid->collection('收录');
             $grid->cases('案例');            
             $grid->remark('备注');
              
@@ -172,15 +166,17 @@ class MediaController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Media::class, function (Form $form) {
+        return Admin::form(Weibo::class, function (Form $form) {
          
-            $form->hidden('media_id','媒体ID');
-            $form->text('media_name','媒体名称');
-            $form->select('leader','负责人')->options(Base::getLeader());
-            $form->select('category','媒体分类')->options(Base::getCategory());
-            $form->select('channel','频道')->options(Base::getChannel());
-            $form->number('price','单价');
-            $form->text('collection','收录');
+            $form->hidden('weibo_id','微博ID');
+            $form->text('weibo_name','微博名称');
+            $form->select('leader','负责人')->options(Base::getWeiboLeader());
+            $form->select('weibo_category','微博分类')->options(Base::getWeiboCategory());
+            $form->number('fans','粉丝数')
+            $form->number('direct_price','直发价');
+            $form->number('forward_price','转发价');
+            $form->text('direct_microtask','微任务直发');
+            $form->text('forward_microtask','微任务转发');
             $form->text('cases','案例');
             $form->textarea('remark','备注');
             $form->display('created_at', '创建时间');

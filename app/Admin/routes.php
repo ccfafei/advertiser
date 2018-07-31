@@ -13,16 +13,30 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
 
-    //客户及媒体
+    //客户
     $router->get('/', 'HomeController@index');
     $router->resource('customer', CustomerController::class);
-    $router->resource('media/index', MediaController::class);
+
+    //网络媒体
+    Route::get('media', 'MediaController@index');
+    Route::any('media/index', 'MediaController@index');
+    Route::get('media/create', 'MediaController@create');
+    Route::get('media/{id}/edit', 'MediaController@show'); 
     $router->resource('media/channel', ChannelController::class);
     $router->resource('media/category',CategoryController::class);
     $router->resource('media/leader',LeaderController::class);
+    
+    //微博
+    Route::get('weibo', 'WeiboController@index');
+    Route::any('weibo/index', 'WeiboController@index');    
+    Route::get('weibo/create', 'WeiboController@create');
+    Route::get('weibo/{id}/edit', 'WeiboController@show');
+    $router->resource('weibo/category', CategoryWeiboController::class);
+    $router->resource('weibo/leader', LeaderWeiboController::class);
+    
 
     //业务流量数据
-    $router->get('trade', 'TradeController@index');
+    Route::get('trade', 'TradeController@index');
     Route::get('trade/create','TradeController@create');
     Route::get('trade/{id}/edit','TradeController@show');
     Route::any('trade/check','TradeController@check');

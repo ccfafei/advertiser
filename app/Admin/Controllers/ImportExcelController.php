@@ -149,6 +149,7 @@ class ImportExcelController extends Controller
                     $rows[$key]['is_paid']=0;
                 }
                 $rows[$key]['trade_ts']=strtotime($value['trade_ts']);
+                $rows[$key]['leader']=Admin::user()->username;
             }
         
             //保存数据   

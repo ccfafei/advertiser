@@ -90,7 +90,12 @@ class CustomerController extends Controller
             $grid->is_cooperate('是否合作')->display(function ($is_cooperate) {
                     return $is_cooperate ? '是' : '否';
             })->sortable();
-            $grid->leader('负责人');
+            if(!Admin::user()->isAdministrator()){
+                $grid->model()->where('leader',Admin::user()->username);
+            }else{
+                $grid->leader('负责人');
+            }
+            
             
             $grid->filter(function($filter){          
                 // 去掉默认的id过滤器

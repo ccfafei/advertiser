@@ -79,9 +79,9 @@ class CategoryController extends Controller
             
             $grid->filter(function($filter){
                 // 在这里添加字段过滤器
+                $filter->disableIdFilter();
                 $filter->like('category_name', '分类名称');
-
-            
+           
             });
     
              

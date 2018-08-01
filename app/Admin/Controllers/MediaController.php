@@ -71,6 +71,7 @@ class MediaController extends Controller
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             
+           $exporturl = $this->grid()->exportUrl('all');
             $listview = view('admin.media.list',
                 compact('rows','headers','arrsum','category','channel','leader'))
             ->render();

@@ -18,45 +18,41 @@ Route::group([
     $router->resource('customer', CustomerController::class);
 
     //网络媒体
-    Route::get('media', 'MediaController@index');
-    Route::any('media/index', 'MediaController@index');
-    Route::get('media/create', 'MediaController@create');
-    Route::get('media/{id}/edit', 'MediaController@show'); 
-    $router->resource('media/channel', ChannelController::class);
-    $router->resource('media/category',CategoryController::class);
-    $router->resource('media/leader',LeaderController::class);
+    $router->resource('media', MediaController::class);
+    Route::post('media/index', 'MediaController@index')->name('media.search');
+    $router->resource('mediachannel', ChannelController::class);
+    $router->resource('mediacategory',CategoryController::class);
+    $router->resource('medialeader',LeaderController::class);
     
     //微博
-    Route::get('weibo', 'WeiboController@index');
-    Route::any('weibo/index', 'WeiboController@index');    
-    Route::get('weibo/create', 'WeiboController@create');
-    Route::get('weibo/{id}/edit', 'WeiboController@show');
-    $router->resource('weibo/category', CategoryWeiboController::class);
-    $router->resource('weibo/leader', LeaderWeiboController::class);
+    Route::post('weibo/index', 'WeiboController@index')->name('weibo.search');
+    $router->resource('weibo', WeiboController::class);
+    $router->resource('weibocategory', CategoryWeiboController::class);
+    $router->resource('weiboleader', LeaderWeiboController::class);
     
 
     //业务流量数据
-    Route::get('trade', 'TradeController@index');
-    Route::get('trade/create','TradeController@create');
-    Route::get('trade/{id}/edit','TradeController@show');
-    Route::any('trade/check','TradeController@check');
-    Route::get('trade/check/{id}/edit','TradeController@show'); 
-    $router->post('trade/index', 'TradeController@index');
-    $router->post('trade/check/checkupdate', 'TradeController@checkUpdate');
+    Route::get('trade', 'TradeController@index')->name('trade.index');
+    Route::get('trade/create','TradeController@create')->name('trade.create');
+    Route::get('trade/{id}/edit','TradeController@show')->name('trade.edit');
+    Route::any('trade/check','TradeController@check')->name('trade.check');
+    Route::get('trade/check/{id}/edit','TradeController@show')->name('trade.update'); 
+    $router->post('trade/index', 'TradeController@index')->name('trade.search');
+    $router->post('trade/check/checkupdate', 'TradeController@checkUpdate')->name('trade.checkupdate');
   
     //excel导入
-    $router->get('exceltrade/import', 'ImportExcelController@import');
-    $router->post('exceltrade/check', 'ImportExcelController@check');
-    $router->post('exceltrade/save', 'ImportExcelController@saveExcel');
+    $router->get('exceltrade/import', 'ImportExcelController@import')->name('excel.import');
+    $router->post('exceltrade/check', 'ImportExcelController@check')->name('excel.check');
+    $router->post('exceltrade/save', 'ImportExcelController@saveExcel')->name('excel.save');
     
     //财务及相关报表
     $router->resource('finance',FinanceController::class);       
-    Route::any('report/receive','ReceiveReportController@getCustomerReceived');
-    Route::post('report/receiveupdate','ReceiveReportController@receiveUpdate');
-    Route::get('report/tradedetails','ReceiveReportController@getTadeDetails');   
-    Route::any('report/paid','PaidReportController@getMediaReceived');
-    Route::post('report/paidupdate','PaidReportController@paidUpdate');
-    Route::get('report/day','ReportController@getDayReport');
-    Route::get('report/notice','ReportController@getReportNotice');
+    Route::any('report/receive','ReceiveReportController@getCustomerReceived')->name('report.receive');
+    Route::post('report/receiveupdate','ReceiveReportController@receiveUpdate')->name('receive.update');
+    Route::get('report/tradedetails','ReceiveReportController@getTadeDetails')->name('report.trade');   
+    Route::any('report/paid','PaidReportController@getMediaReceived')->name('report.paid');
+    Route::post('report/paidupdate','PaidReportController@paidUpdate')->name('paid.update');
+    Route::get('report/day','ReportController@getDayReport')->name('report.day');
+    Route::get('report/notice','ReportController@getReportNotice')->name('report.notice');
      
 });

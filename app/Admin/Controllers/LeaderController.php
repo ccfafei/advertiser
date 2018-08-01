@@ -76,7 +76,12 @@ class LeaderController extends Controller
             $grid->leader_id('ID')->sortable();
             $grid->leader_name('负责人')->sortable();
             $grid->remark('备注');
-    
+            $grid->filter(function($filter){
+                // 在这里添加字段过滤器
+                $filter->disableIdFilter();
+                $filter->like('leader_name', '负责人');
+                 
+            });
              
         });
     }

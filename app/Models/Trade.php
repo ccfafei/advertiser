@@ -18,7 +18,11 @@ class Trade extends Model
     
     public function getTradeTsAttribute()
     {
-        return  $this->attributes['trade_ts'];
+        $ts =  $this->attributes['trade_ts'];
+        if(is_int($ts)){
+            $ts = date('Y-m-d',$ts);
+        }
+        return $ts;
         
     }
     

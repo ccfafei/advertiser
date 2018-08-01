@@ -61,6 +61,11 @@ class TradeController extends Controller
             
             $mode = $mode->whereBetween('trade_ts',[$search_start_day,$search_end_day]);        
             !empty($where) && $mode =$mode->where($where);
+            //只能看自己的业务
+            if(!Admin::user()->isAdministrator()){
+               $mode=  $mode->where('leader',Admin::user()->username);
+            }
+           
             $results=$mode->get();
             if($results->isNotEmpty()){
                 $rows = $results->toArray();
@@ -68,7 +73,7 @@ class TradeController extends Controller
             $prices = $customer_prices = $media_prices = $profits = 0;
             $checks = config('trade.is_check');
             foreach ($rows as $key=>$items){
-                $rows[$key]['trade_ts'] = date('Y-m-d',$items['trade_ts']);
+                $rows[$key]['trade_ts'] = $items['trade_ts'];
                 $rows[$key]['is_received'] =  Base::dispayStyle('is_received',$items['is_received']);
                 $rows[$key]['is_paid'] = Base::dispayStyle('is_paid',$items['is_paid']);
                 $rows[$key]['is_check'] = Base::dispayStyle('is_check',$items['is_check']);
@@ -190,11 +195,18 @@ class TradeController extends Controller
                 $grid->model();
             }
      
-        
+            //只能看自己的业务
+            if(!Admin::user()->isAdministrator()){
+                $grid->model()->where('leader', Admin::user()->username);
+            }
+            
            // $grid->trade_id('ID')->sortable();
             
             $grid->trade_ts('交易时间')->display(function ($time) {
-                return date('Y-m-d',$time);
+                if(is_int($time)){
+                    $time = date('Y-m-d',$time);
+                }
+                return $time;
             })->sortable();
     
             $grid->customer_name('客户名称')->sortable();
@@ -240,14 +252,20 @@ class TradeController extends Controller
             $form->text('customer_price','报价');
             $form->text('media_price','媒体款');  
             $form->text('profit','利润');
-            $form->display('trade_ts','交易时间')->with(function($value){
-                return date('Y-m-d',$value);
-            });                    
+            $form->date('trade_ts','交易时间')->format('YYYY-MM-DD');
+            if(!Admin::user()->isAdministrator()){
+                $form->hidden('leader','负责人')->default(function($user){
+                    return $user= Admin::user()->username;
+                });
+            }else{
+                $form->text('leader','负责人');
+            }                   
             $form->textarea('remark','备注');
             $form->hidden('created_at', 'Created At');
             $form->hidden('updated_at', 'Updated At');
             $form->hidden('customer_id','客户id');
             $form->hidden('media_id','媒体id');
+            
             //保存前检查
             $form->saving(function (Form $form) {
                 

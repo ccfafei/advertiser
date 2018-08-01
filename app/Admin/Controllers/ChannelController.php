@@ -76,6 +76,13 @@ class ChannelController extends Controller
             $grid->channel_id('频道ID')->sortable();              
             $grid->channel_name('频道名称')->sortable();                      
             $grid->remark('备注');
+            $grid->filter(function($filter){
+                // 在这里添加字段过滤器
+                $filter->disableIdFilter();
+                $filter->like('channel_name', '频道名称');
+                 
+            });
+            
     
            
         });

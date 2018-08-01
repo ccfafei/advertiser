@@ -28,14 +28,14 @@ class WeiboController extends Controller
        
         return Admin::content(function (Content $content) use($request) {
     
-            $content->header('网络媒体');
+            $content->header('微博媒体');
             $content->description('列表'); 
-            $headers = ['开发日期','媒体名称','媒体分类','频道','单价','收录','案例','负责人','操作'];
+            $headers = ['开发日期','微博名称','微博分类','粉丝数','直发价','转发价','案例','微任务直发','微任务转发','负责人','操作'];
           
             //获取各个分类
-            $category=Base::getCategory();
-            $channel = Base::getChannel();
-            $leader = Base::getLeader();
+            $category=Base::getWeiboCategory();
+         
+            $leader = Base::getWeiboLeader();
             
             //搜索结果
             $rows =[];
@@ -69,8 +69,10 @@ class WeiboController extends Controller
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             
-            $listview = view('admin.media.list',
-                compact('rows','headers','arrsum','category','channel','leader'))
+            $exporturl = urlencode($this->grid()->exportUrl('all'));
+            
+            $listview = view('admin.weibo.list',
+                compact('rows','headers','arrsum','category','channel','leader','exporturl'))
             ->render();
             $content->row($listview);
         });
@@ -102,7 +104,7 @@ class WeiboController extends Controller
     {
         return Admin::content(function (Content $content) {
     
-            $content->header('媒体信息');
+            $content->header('微博信息');
             $content->description('创建');
     
             $content->body($this->form());
@@ -172,7 +174,7 @@ class WeiboController extends Controller
             $form->text('weibo_name','微博名称');
             $form->select('leader','负责人')->options(Base::getWeiboLeader());
             $form->select('weibo_category','微博分类')->options(Base::getWeiboCategory());
-            $form->number('fans','粉丝数')
+            $form->number('fans','粉丝数');
             $form->number('direct_price','直发价');
             $form->number('forward_price','转发价');
             $form->text('direct_microtask','微任务直发');

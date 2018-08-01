@@ -1,7 +1,7 @@
 
 <div class="box">
     <div class="box-header">
-        <form action="{{ url('/admin/media/index')}}" method="post" class="form-inline">
+        <form action="{{ url('/admin/media/index')}}" method="post" id="media_search" class="form-inline">
             <div class="form-group">
              <label>开发日期: </label>
                 <div class="input-group date">
@@ -101,25 +101,12 @@
                 <td>{!! $channel[$row['channel']] !!}</td>              
                 <td>{!! $row['price'] !!}</td>
                 <td>{!! $row['collection'] !!}</td>
-                <td><a href="{!! $row['cases'] !!}" target="">查看</a></td>
+                <td><a href="{!! $row['cases'] !!}" target="_blank">查看</a></td>
                 <td>{!! $leader[$row['leader']] !!}</td>
-                <td><a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}">修改</a></td>
+                <td><a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a></td>
              </tr>
              @endforeach
        </tbody>
-            <tr>
-            <td><b>合计</b></td>
-            
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            
-            </tr>
         
         </table>
     </div>
@@ -194,14 +181,14 @@ $(function () {
      //搜索提交 
      $("#search").on('click',function(){
     	 
- 	    $("#formsearch").submit();
+ 	    $("#media_search").submit();
  	    
      });
 
      //导出
      $("#export").on('click',function(){
 
-   	     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');   	    
+   	     window.open("/admin/media/?%5C_pjax=%23pjax-container&_export_=all");   	    
        });
        
 });
@@ -216,11 +203,15 @@ $(function () {
      'ordering'    : true,
      'info'        : true,
      'autoWidth'   : true,
+     "columnDefs": [ {
+         "targets": [ 6,8],
+         "orderable": false
+       } ],
   	  "language": {
 	  		"sProcessing":   "处理中...",
 	  		"sLengthMenu":   "显示 _MENU_ 项结果",
 	  		"sZeroRecords":  "没有匹配结果",
-	  		"sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+	  		"sInfo":         "从 _START_ 至 _END_ ，共 _TOTAL_ 条",
 	  		"sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
 	  		"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
 	  		"sInfoPostFix":  "",

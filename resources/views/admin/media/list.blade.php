@@ -97,8 +97,8 @@
          
                 <td>{!! $row['media_ts'] !!}</td>
                 <td>{!! $row['media_name'] !!}</td>
-                <td>{!! $category[$row['category']] !!}</td>
-                <td>{!! $channel[$row['channel']] !!}</td>              
+                <td><?php if (!empty($row['category'])){ echo $category[$row['category']];}?></td>
+                <td><?php if (!empty($row['channel'])){ echo $channel[$row['channel']];}?></td>              
                 <td>{!! $row['price'] !!}</td>
                 <td>{!! $row['collection'] !!}</td>
                 <td><a href="{!! $row['cases'] !!}" target="_blank">查看</a></td>

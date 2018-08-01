@@ -49,9 +49,9 @@ class MediaController extends Controller
             if($search_end_day < $search_start_day&&$search_start_day<=time()){
                 $search_end_day = $search_start_day;
             } 
-            $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(media_ts)'),'>=',$search_start_day);
+            $mode = $mode->where(DB::RAW('UNIX_TIMESTAMP(media_ts)'),'>=',$search_start_day);
            
-            $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(media_ts)'),'<=',$search_end_day);
+            $mode = $mode->where(DB::RAW('UNIX_TIMESTAMP(media_ts)'),'<=',$search_end_day);
             
             $request->has('media_name')&&
             $mode = $mode->where('media_name','like','%'.$request->input('media_name').'%');

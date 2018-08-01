@@ -69,7 +69,10 @@ class MediaController extends Controller
             $request->has('price')&&!empty($request->input('price'))&&
             $mode = $mode->where('price',trim($request->input('price')));
             $rows = $mode->get();
-            if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
+            if(collect($rows)->isNotEmpty()){
+                $rows=$rows->toArray();
+                
+            }
             
            $exporturl = $this->grid()->exportUrl('all');
             $listview = view('admin.media.list',

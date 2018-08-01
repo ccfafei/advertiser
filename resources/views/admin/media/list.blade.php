@@ -97,12 +97,28 @@
          
                 <td>{!! $row['media_ts'] !!}</td>
                 <td>{!! $row['media_name'] !!}</td>
-                <td><?php if (!empty($row['category'])){ echo $category[$row['category']];}?></td>
-                <td><?php if (!empty($row['channel'])){ echo $channel[$row['channel']];}?></td>              
+                <td>
+                  <?php
+                   if (!empty($row['category'])&&!empty($category)){
+                      echo $category[$row['category']];
+                  }else{
+                      
+                  }?>
+                </td>
+                <td>
+                    <?php 
+                    if (!empty($row['channel'])&&!empty($channel)){ 
+                        echo $channel[$row['channel']];
+                    }?>
+                </td>              
                 <td>{!! $row['price'] !!}</td>
                 <td>{!! $row['collection'] !!}</td>
                 <td><a href="{!! $row['cases'] !!}" target="_blank">查看</a></td>
-                <td><?php if (!empty($row['leader'])){ echo $leader[$row['leader']];}?></td>
+                <td>
+                <?php if (!empty($row['leader'])&&!empty($leader)){
+                    echo $leader[$row['leader']];
+                }?>
+                td>
                 <td><a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a></td>
              </tr>
              @endforeach

@@ -58,7 +58,6 @@
                 <th>金额</th>
                 <th>是否回款</th>
                 <th>交易明细</th>
-                <th>回款确认</th>
             </tr>
           <thead>
           <tbody>
@@ -73,11 +72,7 @@
                 class="btn btn-primary"  data-toggle="modal">查看明细</a></td>
                 <td>
                 <input name="trade_ids" type="hidden" value="{{$items['trade_ids']}}" />
-                @if($items['status']==0)
-                <button type="button" class="btn btn-success mr_2" onClick="updateReceive([{!! $items['trade_ids'] !!}],1);">确认已回款</button> 
-                @else
-                <button type="button" class="btn btn-warning" onClick="updateReceive([{!! $items['trade_ids'] !!}],0)">确认未回款</button>
-                @endif
+               
                 </td>
             </tr>            
             @endforeach

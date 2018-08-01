@@ -32,16 +32,7 @@
                </select>
         </div>
         <div class="clearfix mt_1" ></div>
-        <div class="form-group">  
-            
-           <label class="mt_1 mr_2">
-              <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search" ></i>搜索</button>
-           </label>  
-          &nbsp;&nbsp;
-           <label  class="mt_1">
-              <button type="button" class="btn btn-primary"  id="export"><i class="fa  fa-download"></i>导出</button>
-           </label>
-        </div>
+        
           
     </form>
      
@@ -58,7 +49,6 @@
                 <th>金额</th>
                 <th>是否出款</th>
                 <th>交易明细</th>
-                <th>回款确认</th>
             </tr>
           <thead>
           <tbody>
@@ -73,11 +63,7 @@
                 class="btn btn-primary"  data-toggle="modal">查看明细</a></td>
                 <td>
                 <input name="trade_ids" type="hidden" value="{{$items['trade_ids']}}" />
-                @if($items['status']==0)
-                <button type="button" class="btn btn-success mr_2" onClick="updatePaid([{!! $items['trade_ids'] !!}],1);">确认已出款</button> 
-                @else
-                <button type="button" class="btn btn-warning" onClick="updatePaid([{!! $items['trade_ids'] !!}],0)">确认未出款</button>
-                @endif
+              
                 </td>
             </tr>            
             @endforeach

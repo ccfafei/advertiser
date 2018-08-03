@@ -1,7 +1,12 @@
-
+	<style>
+	.pagechange{
+	     float:right;
+		 margin-left: 30px;
+	}
+	</style>
 <div class="box">
     <div class="box-header">
-    <form action="{{ url('/admin/trade/index') }}" method="post" id="formsearch" class="form-inline">
+     <form action="{{ url('/admin/trade/check') }}" method="post" id="formsearch" class="form-inline">
         <div class="form-group">
            <label for="customerName" class="control-label">客户名称: </label>  
            <div class="input-group mr_2">
@@ -71,14 +76,54 @@
               <button type="button" class="btn btn-primary"  id="export"><i class="fa  fa-download"></i>导出</button>
            </label>
         </div>
-          
-    </form>
+      
+      </form>
      
-
     </div>
-    <!-- /.box-header -->
-    <div class="box-body ">
-        <table id="example1" class="table table-bordered table-hover">
+    <div style="width:100%;height:1px; background:#E0E0E0;"></div>
+        <div class="box-body ">
+         <div class="form-inline">  
+             <input type="checkbox" class="grid-select-all" />&nbsp;&nbsp;&nbsp;
+                <div class="btn-group">
+                    <a class="btn btn-warning">审核</a>
+                    <button type="button" class="btn btn-warning dropdown-toggle mr_2" data-toggle="dropdown">
+                         <span class="caret"></span>
+                         <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu ml_1" role="menu">
+                         <li><a href="#" class="grid-check" data="1">通过</a></li>
+                         <li><a href="#" class="grid-check" data="2">不通过</a></li>                   
+                    </ul>
+                 </div>
+                  <div class="btn-group">   
+                    <a class="btn btn-info ml_1">  回款</a>
+                    <button type="button" class="btn btn-info dropdown-toggle mr_2" data-toggle="dropdown">
+                         <span class="caret"></span>
+                         <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                          <li><a href="#" class="grid-receive" data="1">已回款</a></li>
+                          <li><a href="#" class="grid-receive" data="0">未回款</a></li>
+                          
+                    </ul>
+                 </div>
+                 <div class="btn-group">   
+                    <a class="btn btn-success">出款</a>
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                         <span class="caret"></span>
+                         <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                          <li><a href="#" class="grid-paid" data="1">已出款</a></li>
+                          <li><a href="#" class="grid-paid" data="0">未出款</a></li>
+                          
+                    </ul>
+                    
+                </div>
+                 <span class="pagechange"></span>
+        <div>             
+
+        <table id="dataTables" class="table table-bordered table-hover" style="width:100%">
          <!-- ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','是否审核']; -->
          <thead>
             <tr>
@@ -90,7 +135,7 @@
           <tbody>
              @foreach($rows as $key=>$items)
             <tr>
-                
+            <td> <input type="checkbox" class="grid-row-checkbox" data-id="{{$items['trade_id']}}" /></td>
                 <td>{{ $key+1 }}</td>             
                 <td>{{ $items['trade_ts'] }}</td>
                 <td>{{ $items['customer_name']}}</td>
@@ -123,12 +168,12 @@
             <td>-</td>
             <td>-</td>
             </tr>
+            
         </table>
     </div>
-    <div class="box-footer clearfix">
-      
-    </div>
-    <!-- /.box-body -->
+</div>
+
+    
 </div>
 
 <script>
@@ -178,6 +223,7 @@ $(function () {
 	    }
 	});
 	
+
 		
 
 	 //开始时间
@@ -205,22 +251,66 @@ $(function () {
 
    	     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');   	    
        });
+
+  	//选择审核，回款,出款处理等
+     $('.grid-row-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+ 	    if (this.checked) {
+ 	        $(this).closest('tr').css('background-color', '#ffffd5');
+ 	    } else {
+ 	        $(this).closest('tr').css('background-color', '');
+ 	    }
+ 	});
+
+ 	var selectedRows = function () {
+ 	    var selected = [];
+ 	    $('.grid-row-checkbox:checked').each(function(){
+ 	        selected.push($(this).data('id'));
+ 	    });
+
+ 	    return selected;
+ 	}
+  	
+    $('.grid-select-all').iCheck({checkboxClass:'icheckbox_minimal-blue'});
+  	$('.grid-select-all').on('ifChanged', function(event) {
+  	    if (this.checked) {
+  	        $('.grid-row-checkbox').iCheck('check');
+  	    } else {
+  	        $('.grid-row-checkbox').iCheck('uncheck');
+  	    }
+  	});
+
+  	
+  	//审核操作
+  	optionOnCheck('.grid-check',selectedRows,"{!! url('/admin/trade/checkupdate') !!}");
+
+  	//回款操作
+  	optionOnCheck('.grid-receive',selectedRows,"{!! url('/admin/trade/receiveupdate') !!}");
+
+  	//出款操作
+  	optionOnCheck('.grid-paid',selectedRows,"{!! url('/admin/trade/paidupdate') !!}");
+  	
        
 });
 
 //datatables
 $(function () {
 
-    $('#example1').DataTable({
-   	 'paging'      : true,
-     'lengthChange': true,
+    $('#dataTables').DataTable({
+   	 
+     "paging": true,//开启表格分页
      'searching'   : false,
      'ordering'    : true,
      'info'        : true,
-     'autoWidth'   : false,
-  	  "language": {
+     "lengthChange": true,
+     'autoWidth'   : true,
+     "columnDefs": [ {
+         "targets": [0,13],
+         "orderable": false
+       } ],
+       "dom": '<"pagechange"l>tip<"clear">',
+  	  "oLanguage": {    	  	  
 	  		"sProcessing":   "处理中...",
-	  		"sLengthMenu":   "显示 _MENU_ 项结果",
+	  		"sLengthMenu": "每页显示 _MENU_ 条记录", 	  		
 	  		"sZeroRecords":  "没有匹配结果",
 	  		"sInfo":         "从 _START_ 到 _END_ ，共 _TOTAL_ 条",
 	  		"sInfoEmpty":    "共0条",
@@ -246,5 +336,44 @@ $(function () {
     });
 });
 
-//-->
+
+function optionOnCheck(divclass,func,posturl){
+  	$(divclass).on('click', function() {
+      //func = function(){return e();}
+  		 ids = func().join();
+	      if(ids ==="") {
+	    	ajaxalert('错误:','请选择数据','关闭');
+	    	return false;
+	  	   }  
+	  	   var status = $(this).attr('data');
+console.log(ids);
+
+	  	   //alert(status);	 
+      $.ajax({
+          method: 'post',
+          url:posturl,
+          data: {
+             ids:ids,
+             action:status,
+              _token:'{{ csrf_token() }}'
+          },
+          success: function (data) {
+              console.log(data);
+              if(data.status==0){
+            	  ajaxalert('成功:',data.msg,'关闭');
+            	  
+              }else{
+            	  ajaxalert('错误:',data.msg,'关闭');
+             }
+             
+              $.pjax.reload('#pjax-container');
+              
+          }
+      });
+	  
+	});
+
+	
+}
 </script>
+    

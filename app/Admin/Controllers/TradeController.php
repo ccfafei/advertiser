@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Admin\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,103 +15,127 @@ use App\Admin\Extensions\Tools\TradeCheck;
 use App\Admin\Extensions\Tools\TradeSearch;
 use Illuminate\Support\Facades\Input;
 use Encore\Admin\Auth\Permission;
+
 class TradeController extends Controller
 {
     use ModelForm;
 
     /**
      * Index interface.
-     *交易列表
+     * 交易列表
+     * 
      * @return Content
      */
     public function index(Request $request)
     {
-
-        return Admin::content(function (Content $content) use($request) {
-    
+        return Admin::content(function (Content $content) use($request)
+        {
+            
             $content->header('业务流量');
-            $content->description('列表'); 
-            $headers = ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','审核'];
-            $rows =[];
-            $where =[];
-            $mode= new Trade();
-            $request->has('customer_name')&&
-                  $mode = $mode->where('customer_name','like','%'.$request->input('customer_name').'%');
+            $content->description('列表');
+            $headers = [
+                '序号',
+                '日期',
+                '客户名称',
+                '媒体名称',
+                '稿件标题',
+                '字数',
+                '单价',
+                '报价',
+                '媒体款',
+                '利润',
+                '是否回款',
+                '是否出款',
+                '审核'
+            ];
+            $rows = [];
+            $where = [];
+            $mode = new Trade();
+            $request->has('customer_name') && $mode = $mode->where('customer_name', 'like', '%' . $request->input('customer_name') . '%');
             
-            $request->has('media_name')&&
-                  $mode = $mode->where('media_name','like','%'.$request->input('media_name').'%');
+            $request->has('media_name') && $mode = $mode->where('media_name', 'like', '%' . $request->input('media_name') . '%');
             
-            $request->has('contribution')&&
-                   $mode = $mode->where('contribution','like','%'.$request->input('contribution').'%');
+            $request->has('contribution') && $mode = $mode->where('contribution', 'like', '%' . $request->input('contribution') . '%');
             
-            $inputs = $request->only(['is_received','is_paid','is_check']);
-            foreach ($inputs as $k=>$v){
-                if(!empty($v)) $where[$k] =$v;
+            $inputs = $request->only([
+                'is_received',
+                'is_paid',
+                'is_check'
+            ]);
+            foreach ($inputs as $k => $v) {
+                if (! empty($v))
+                    $where[$k] = $v;
             }
             $start_ts = $request->input('start_day');
             $end_ts = $request->input('end_day');
-            $search_start_day= $start_ts?strtotime($start_ts):strtotime('-30 day 00:00:00');
-            $search_end_day= $end_ts?strtotime($end_ts):time();
-            if($search_end_day < $search_start_day&&$search_start_day<=time()){
+            $search_start_day = $start_ts ? strtotime($start_ts) : strtotime('-30 day 00:00:00');
+            $search_end_day = $end_ts ? strtotime($end_ts) : time();
+            if ($search_end_day < $search_start_day && $search_start_day <= time()) {
                 $search_end_day = $search_start_day;
             }
-            $inputs['start_day'] = date('Y-m-d',$search_start_day);
-            $inputs['end_day'] = date('Y-m-d',$search_end_day);   
+            $inputs['start_day'] = date('Y-m-d', $search_start_day);
+            $inputs['end_day'] = date('Y-m-d', $search_end_day);
             
-            $mode = $mode->whereBetween('trade_ts',[$search_start_day,$search_end_day]);        
-            !empty($where) && $mode =$mode->where($where);
-            //只能看自己的业务
-            if(!Admin::user()->isAdministrator()){
-               $mode=  $mode->where('leader',Admin::user()->username);
+            $mode = $mode->whereBetween('trade_ts', [
+                $search_start_day,
+                $search_end_day
+            ]);
+            ! empty($where) && $mode = $mode->where($where);
+            // 只能看自己的业务
+            if (! Admin::user()->isAdministrator()) {
+                $mode = $mode->where('leader', Admin::user()->username);
             }
-           
-            $results=$mode->get();
-            if($results->isNotEmpty()){
+            
+            $results = $mode->get();
+            if ($results->isNotEmpty()) {
                 $rows = $results->toArray();
             }
             $prices = $customer_prices = $media_prices = $profits = 0;
             $checks = config('trade.is_check');
-            foreach ($rows as $key=>$items){
+            foreach ($rows as $key => $items) {
                 $rows[$key]['trade_ts'] = $items['trade_ts'];
-                $rows[$key]['is_received'] =  Base::dispayStyle('is_received',$items['is_received']);
-                $rows[$key]['is_paid'] = Base::dispayStyle('is_paid',$items['is_paid']);
-                $rows[$key]['is_check'] = Base::dispayStyle('is_check',$items['is_check']);
-                $prices += $items['price'];//报价合计
-                $customer_prices += $items['customer_price'];//报价
-                $media_prices += $items['media_price'];//媒体款
-                $profits += $items['profit'];//利润
+                $rows[$key]['is_received'] = Base::dispayStyle('is_received', $items['is_received']);
+                $rows[$key]['is_paid'] = Base::dispayStyle('is_paid', $items['is_paid']);
+                $rows[$key]['is_check'] = Base::dispayStyle('is_check', $items['is_check']);
+                $prices += $items['price']; // 报价合计
+                $customer_prices += $items['customer_price']; // 报价
+                $media_prices += $items['media_price']; // 媒体款
+                $profits += $items['profit']; // 利润
             }
-            $arrsum =[
-                'prices'=>$prices,
-                'customer_prices'=>$customer_prices,
-                'media_prices'=>$media_prices,
-                'profits'=>$profits,
+            $arrsum = [
+                'prices' => $prices,
+                'customer_prices' => $customer_prices,
+                'media_prices' => $media_prices,
+                'profits' => $profits
             ];
             $exporturl = $this->grid()->exportUrl('all');
             $url = $exporturl;
-            $listview = view('admin.trade.list',compact('rows','headers','checks','url','inputs','arrsum'))->render();
+            $listview = view('admin.trade.list', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum'))->render();
             $content->row($listview);
         });
     }
-    
+
     /**
      * Edit interface.
      *
-     * @param $id
+     * @param
+     *            $id
      * @return Content
      */
     public function edit($id)
     {
-        return Admin::content(function (Content $content) use ($id) {
-    
+        return Admin::content(function (Content $content) use($id)
+        {
+            
             $content->header('业务流量 ');
             $content->description('编辑');
             Permission::check('trade.edit');
-    
-            $content->body($this->form()->edit($id));
+            
+            $content->body($this->form()
+                ->edit($id));
         });
     }
-    
+
     /**
      * Create interface.
      *
@@ -120,32 +143,183 @@ class TradeController extends Controller
      */
     public function create()
     {
-        return Admin::content(function (Content $content) {
-    
+        return Admin::content(function (Content $content)
+        {
+            
             $content->header('业务流量');
             $content->description('人工录入');
-    
+            
             $content->body($this->form());
         });
     }
-    
-    public function check(){
-        return Admin::content(function (Content $content) {
+
+    public function check(Request $request)
+    {
+        return Admin::content(function (Content $content) use($request)
+        {
             $content->header('业务审核及修改');
-            $content->description('审核');  
-            Permission::check('trade.edit');
-            $content->body($this->grid());
+            $content->description('审核');
+            // Permission::check('trade.edit');
+            $headers = [
+                '',
+                '序号',
+                '日期',
+                '客户名称',
+                '媒体名称',
+                '稿件标题',
+                '字数',
+                '单价',
+                '报价',
+                '媒体款',
+                '利润',
+                '是否回款',
+                '是否出款',
+                '审核'
+            ];
+            
+            $rows = [];
+            $where = [];
+            $mode = new Trade();
+            $request->has('customer_name') && $mode = $mode->where('customer_name', 'like', '%' . $request->input('customer_name') . '%');
+            
+            $request->has('media_name') && $mode = $mode->where('media_name', 'like', '%' . $request->input('media_name') . '%');
+            
+            $request->has('contribution') && $mode = $mode->where('contribution', 'like', '%' . $request->input('contribution') . '%');
+            
+            $inputs = $request->only([
+                'is_received',
+                'is_paid',
+                'is_check'
+            ]);
+            foreach ($inputs as $k => $v) {
+                if (! empty($v))
+                    $where[$k] = $v;
+            }
+            $start_ts = $request->input('start_day');
+            $end_ts = $request->input('end_day');
+            $search_start_day = $start_ts ? strtotime($start_ts) : strtotime('-30 day 00:00:00');
+            $search_end_day = $end_ts ? strtotime($end_ts) : time();
+            if ($search_end_day < $search_start_day && $search_start_day <= time()) {
+                $search_end_day = $search_start_day;
+            }
+            $inputs['start_day'] = date('Y-m-d', $search_start_day);
+            $inputs['end_day'] = date('Y-m-d', $search_end_day);
+            
+            $mode = $mode->whereBetween('trade_ts', [
+                $search_start_day,
+                $search_end_day
+            ]);
+            ! empty($where) && $mode = $mode->where($where);
+            
+            $results = $mode->get();
+            
+            if ($results->isNotEmpty()) {
+                $rows = $results->toArray();
+            }
+            
+            $prices = $customer_prices = $media_prices = $profits = 0;
+            $checks = config('trade.is_check');
+            foreach ($rows as $key => $items) {
+                $rows[$key]['trade_ts'] = $items['trade_ts'];
+                $rows[$key]['is_received'] = Base::dispayStyle('is_received', $items['is_received']);
+                $rows[$key]['is_paid'] = Base::dispayStyle('is_paid', $items['is_paid']);
+                $rows[$key]['is_check'] = Base::dispayStyle('is_check', $items['is_check']);
+                $prices += $items['price']; // 报价合计
+                $customer_prices += $items['customer_price']; // 报价
+                $media_prices += $items['media_price']; // 媒体款
+                $profits += $items['profit']; // 利润
+            }
+            $arrsum = [
+                'prices' => $prices,
+                'customer_prices' => $customer_prices,
+                'media_prices' => $media_prices,
+                'profits' => $profits
+            ];
+            
+            $listview = view('admin.trade.check', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum'))->render();
+            $content->row($listview);
         });
     }
-    
+
+    /**
+     * 审核数据
+     * @param Request $request
+     * @return multitype:number string multitype:
+     */
     protected function checkUpdate(Request $request)
     {
-        Permission::check('trade.edit');        
-        foreach (Trade::find($request->get('ids')) as $trade) {
-            $trade->is_check = $request->get('action');
-            $trade->save();
-        }
+        return $this->optionsCheck($request,'is_check');
     }
+
+    
+    /**
+     * 修改出款id状态
+     * @param Request $request
+     */
+    public function paidUpdate(Request $request)
+    {
+        return $this->optionsCheck($request,'is_paid');
+    }
+    
+    /**
+     * 修改回款id状态
+     * @param Request $request
+     */
+    protected function receiveUpdate(Request $request)
+    {
+        return $this->optionsCheck($request,'is_received');
+      
+    }
+    
+    /**
+     * 更新数据公用方法
+     * @param Request $request
+     * @param unknown $field
+     * @return multitype:number string multitype:
+     */
+    public function optionsCheck(Request $request,$field){
+        if (! Permission::check('trade.check')) {
+            return $reponses = [
+                'status' => 1,
+                'msg' => '无权访问!',
+                'data' => []
+            ];
+        }
+        $params = $request->get('ids');
+        $ids = explode(',',$params);
+        //return $ids;
+        $action = $request->get('action');
+        if (empty($ids)) {
+            return $reponses = [
+                'status' => 1,
+                'msg' => '您未选数据!',
+                'data' => []
+            ];
+        }
+        
+        $ids = is_array($ids) ? $ids : [
+            $ids
+        ];
+        foreach (Trade::find($ids) as $trade) {
+            $trade->$field = $action;
+            try {
+                $trade->save();
+            } catch (\Exception $e) {
+                return $reponses = [
+                    'status' => 1,
+                    'msg' => '更数据数据失败!',
+                    'data' => []
+                ];
+            }
+        }
+        
+        return $reponses = [
+            'status' => 0,
+            'msg' => '更新数据成功!',
+            'data' => []
+        ];
+    }
+     
     
     /**
      * Make a grid builder.

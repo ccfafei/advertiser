@@ -38,7 +38,10 @@ Route::group([
     Route::any('trade/check','TradeController@check')->name('trade.check');
     Route::get('trade/check/{id}/edit','TradeController@show')->name('trade.update'); 
     $router->post('trade/index', 'TradeController@index')->name('trade.search');
-    $router->post('trade/check/checkupdate', 'TradeController@checkUpdate')->name('trade.checkupdate');
+    Route::post('trade/checkupdate', 'TradeController@checkUpdate')->name('trade.checkupdate');
+    Route::post('trade/receiveupdate','TradeControllerController@receiveUpdate')->name('receive.update');
+    Route::post('trade/paidupdate','TradeController@paidUpdate')->name('paid.update');
+    
   
     //excel导入
     $router->get('exceltrade/import', 'ImportExcelController@import')->name('excel.import');
@@ -48,10 +51,8 @@ Route::group([
     //财务及相关报表
     $router->resource('finance',FinanceController::class);       
     Route::any('report/receive','ReceiveReportController@getCustomerReceived')->name('report.receive');
-    Route::post('report/receiveupdate','ReceiveReportController@receiveUpdate')->name('receive.update');
     Route::get('report/tradedetails','ReceiveReportController@getTadeDetails')->name('report.trade');   
     Route::any('report/paid','PaidReportController@getMediaReceived')->name('report.paid');
-    Route::post('report/paidupdate','PaidReportController@paidUpdate')->name('paid.update');
     Route::get('report/day','ReportController@getDayReport')->name('report.day');
     Route::get('report/notice','ReportController@getReportNotice')->name('report.notice');
      

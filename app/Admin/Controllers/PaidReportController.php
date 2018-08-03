@@ -21,7 +21,7 @@ class PaidReportController extends Controller
    //按时间，媒体名称,出款状态汇总，汇总时该条记录必须被审核
    public function getMediaReceived(Request $request ){
       return Admin::content(function (Content $content) use($request) {
-          Permission::check('report.check');
+          Permission::check('report.view');
           $content->header('媒体出款报表');
           $content->description('付款');
           $model = new Trade();
@@ -105,19 +105,7 @@ class PaidReportController extends Controller
       });
    }
 
-   /**
-    * 修改交易id状态
-    * @param Request $request
-    */
-   public function paidUpdate(Request $request)
-   {
-       Permission::check('report.check');
-       foreach (Trade::find($request->get('ids')) as $trade) {
-           $trade->is_paid = $request->get('action');
-           $trade->save();
-       }
-   }
-   
+
    /**
     * 根据条件查询交易ids
     * @param array $data

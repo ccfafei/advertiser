@@ -159,7 +159,8 @@ class TradeController extends Controller
         {
             $content->header('业务审核及修改');
             $content->description('审核');
-            // Permission::check('trade.edit');
+            Permission::check('trade.edit');
+            Permission::check('trade.check');
             $headers = [
                 '',
                 '序号',

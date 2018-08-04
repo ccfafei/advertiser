@@ -135,15 +135,20 @@ class ReceiveReportController extends Controller
            return response()->json(['status'=>0,'data'=>$trades]);
        }
        $trades = Trade::find($ids);
+      
        if(collect($trades)->isNotEmpty()){
            $trades = $trades->toArray();
+       }else{
+        return response()->json(['status'=>0,'data'=>$trades]);
+            
        }
        foreach ($trades as $key=>$items){
-           $trades[$key]['trade_ts'] = date('Y-m-d',$items['trade_ts']);
+           $trades[$key]['trade_ts'] = $items['trade_ts'];
            $trades[$key]['is_received'] =  Base::dispayStyle('is_received',$items['is_received']);
            $trades[$key]['is_paid'] = Base::dispayStyle('is_paid',$items['is_paid']);
            $trades[$key]['is_check'] = Base::dispayStyle('is_check',$items['is_check']);
        }
+       // 1;
        return response()->json(['status'=>1,'data'=>$trades]);
    }
     

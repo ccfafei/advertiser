@@ -175,7 +175,8 @@ class TradeController extends Controller
                 '利润',
                 '是否回款',
                 '是否出款',
-                '审核'
+                '审核',
+                '操作'
             ];
             
             $rows = [];

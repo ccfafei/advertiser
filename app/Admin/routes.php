@@ -39,7 +39,7 @@ Route::group([
     Route::get('trade/check/{id}/edit','TradeController@show')->name('trade.update'); 
     $router->post('trade/index', 'TradeController@index')->name('trade.search');
     Route::post('trade/checkupdate', 'TradeController@checkUpdate')->name('trade.checkupdate');
-    Route::post('trade/receiveupdate','TradeControllerController@receiveUpdate')->name('receive.update');
+    Route::post('trade/receiveupdate','TradeController@receiveUpdate')->name('receive.update');
     Route::post('trade/paidupdate','TradeController@paidUpdate')->name('paid.update');
     
   

@@ -80,7 +80,8 @@
       </form>
      
     </div>
-    <div style="width:100%;height:1px; background:#E0E0E0;"></div>
+
+    <div style="width:100%;height:2px; background:#E0E0E0;"></div>
         <div class="box-body ">
          <div class="form-inline">  
              <input type="checkbox" class="grid-select-all" />&nbsp;&nbsp;&nbsp;
@@ -342,7 +343,7 @@ function optionOnCheck(divclass,func,posturl){
       //func = function(){return e();}
   		 ids = func().join();
 	      if(ids ==="") {
-	    	ajaxalert('错误:','请选择数据','关闭');
+	    	ajaxalert('错误!','请选择数据!','关闭');
 	    	return false;
 	  	   }  
 	  	   var status = $(this).attr('data');
@@ -360,10 +361,10 @@ console.log(ids);
           success: function (data) {
               console.log(data);
               if(data.status==0){
-            	  ajaxalert('成功:',data.msg,'关闭');
+            	  ajaxalert('成功!',data.msg,'关闭');
             	  
               }else{
-            	  ajaxalert('错误:',data.msg,'关闭');
+            	  ajaxalert('错误!',data.msg,'关闭');
              }
              
               $.pjax.reload('#pjax-container');

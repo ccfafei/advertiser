@@ -52,7 +52,7 @@
                 <td>{{ $row['contribution'] }}</td>
                   <td>
                   <?php
-                 $link = preg_match('/^http(s)?:\\/\\/.+/',$items['project'])?$items['project']:'http://'.$items['project'];
+                 $link = preg_match('/^http(s)?:\\/\\/.+/',$row['project'])?$row['project']:'http://'.$row['project'];
                  echo '<a href="'.$link.'" target="_blank">查看</a>'; 
                  ?>                
                 

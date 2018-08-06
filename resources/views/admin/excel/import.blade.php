@@ -23,7 +23,7 @@
 		</div>
 		<!-- /.box-header -->
 		<div class="box-body" style="display: block;">
-			<form method="post" action="/admin/exceltrade/check" class="form-horizontal"
+			<form method="post" action="{!! url('/admin/exceltrade/check') !!}" class="form-horizontal"
 				accept-charset="UTF-8" 
 				enctype="multipart/form-data">
 				<div class="box-body fields-group">

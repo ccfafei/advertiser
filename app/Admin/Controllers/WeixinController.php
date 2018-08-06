@@ -10,7 +10,7 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use App\Admin\Controllers\Base;
-use App\Models\weixin;
+use App\Models\Weixin;
 use Illuminate\Support\Facades\DB;
 
 

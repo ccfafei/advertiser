@@ -113,12 +113,17 @@
                 </td>              
                 <td>{!! $row['price'] !!}</td>
                 <td>{!! $row['collection'] !!}</td>
-                <td><a href="{!! $row['cases'] !!}" target="_blank">查看</a></td>
+                <td>
+                <?php
+                 $link = preg_match('/^http(s)?:\\/\\/.+/',$row['cases'])?$row['cases']:'http://'.$row['cases'];
+                 echo '<a href="'.$link.'" target="_blank">查看</a>'; 
+                 ?>
+                 </td>
                 <td>
                 <?php if (!empty($row['leader'])&&!empty($leader)){
                     echo $leader[$row['leader']];
                 }?>
-                td>
+                <td>
                 <td><a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a></td>
              </tr>
              @endforeach

@@ -88,7 +88,12 @@
                  <td>{!! $row['fans'] !!}</td>      
                 <td>{!! $row['direct_price'] !!}</td>
                 <td>{!! $row['forward_price'] !!}</td>
-                <td><a href="{!! $row['cases'] !!}" target="_blank">查看</a></td>
+                <td>
+                   <?php
+                     $link = preg_match('/^http(s)?:\\/\\/.+/',$row['cases'])?$row['cases']:'http://'.$row['cases'];
+                     echo '<a href="'.$link.'" target="_blank">查看</a>'; 
+                   ?>
+                </td>
                 <td>{!! $row['direct_microtask'] !!}</td>
                 <td>{!! $row['forward_microtask'] !!}</td>
                 <td>{!! $leader[$row['leader']] !!}</td>

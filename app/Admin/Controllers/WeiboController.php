@@ -64,8 +64,8 @@ class WeiboController extends Controller
             $request->has('leader')&&$request->input('leader')!='all'&&
             $mode = $mode->where('leader',$request->input('leader'));
             
-            $request->has('pridirect_pricece')&&!empty($request->input('price'))&&
-            $mode = $mode->where('pridirect_pricece',trim($request->input('price')));
+            $request->has('direct_price')&&!empty($request->input('price'))&&
+            $mode = $mode->where('direct_price',trim($request->input('price')));
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             

@@ -19,6 +19,22 @@ use Encore\Admin\Auth\Permission;
 class TradeController extends Controller
 {
     use ModelForm;
+    private $trade_header =[
+                '序号',
+                '日期',
+                '客户名称',
+                '媒体名称',
+                '稿件标题',
+                '链接',
+                '字数',
+                '单价',
+                '报价',
+                '媒体款',
+                '利润',
+                '是否回款',
+                '是否出款',
+                '审核'
+            ];
 
     /**
      * Index interface.
@@ -33,21 +49,7 @@ class TradeController extends Controller
             
             $content->header('业务流量');
             $content->description('列表');
-            $headers = [
-                '序号',
-                '日期',
-                '客户名称',
-                '媒体名称',
-                '稿件标题',
-                '字数',
-                '单价',
-                '报价',
-                '媒体款',
-                '利润',
-                '是否回款',
-                '是否出款',
-                '审核'
-            ];
+            $headers = $this->trade_header;
             $rows = [];
             $where = [];
             $mode = new Trade();
@@ -161,23 +163,7 @@ class TradeController extends Controller
             $content->description('审核');
             Permission::check('trade.edit');
             Permission::check('trade.check');
-            $headers = [
-                '',
-                '序号',
-                '日期',
-                '客户名称',
-                '媒体名称',
-                '稿件标题',
-                '字数',
-                '单价',
-                '报价',
-                '媒体款',
-                '利润',
-                '是否回款',
-                '是否出款',
-                '审核',
-                '操作'
-            ];
+            $headers = $this->trade_header;            
             
             $rows = [];
             $where = [];
@@ -389,6 +375,11 @@ class TradeController extends Controller
     
             $grid->media_name('媒体名称')->sortable();
             $grid->contribution('稿件名称')->sortable();
+            $grid->contribution('链接')->display(function ($project) {
+                $link = preg_match('/^http(s)?:\\/\\/.+/',$project)?$project:'http://'.$project;
+                return '<a href="'.$link.'" target="_blank">查看</a>';
+                
+            });
             $grid->words('字数');
             $grid->price('单价');
             $grid->customer_price('报价')->sortable();
@@ -423,6 +414,7 @@ class TradeController extends Controller
             $form->text('customer_name','客户名称');          
             $form->text('media_name','媒体名称');           
             $form->text('contribution','稿件名称');
+            $form->text('project','项目链接');
             $form->text('words','字数');
             $form->text('price','单价');
             $form->text('customer_price','报价');

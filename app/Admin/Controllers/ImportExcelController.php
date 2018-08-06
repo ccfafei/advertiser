@@ -91,43 +91,45 @@ class ImportExcelController extends Controller
                       $flag=1;           
                       array_push( $result[$key]['error'],1004);
                     }
+                    //项目链接
+                    $result[$key]['project']=$val[4];
                     
                     //字数
-                    $result[$key]['words']=$val[4];
+                    $result[$key]['words']=$val[5];
                     
                     //单价
-                    $result[$key]['price']=$val[5];
+                    $result[$key]['price']=$val[6];
                     
                     //报价
-                    $result[$key]['customer_price']=$val[6];
-                    if((int)$val[6]<=0){
+                    $result[$key]['customer_price']=$val[7];
+                    if((int)$val[7]<=0){
                         $flag=1;
                         array_push( $result[$key]['error'],1005);
                     }
                     
                     //媒体款
-                    $result[$key]['media_price']=$val[7];
-                    if((int)$val[7]<=0){
+                    $result[$key]['media_price']=$val[8];
+                    if((int)$val[8]<=0){
                         $flag=1;
                         array_push( $result[$key]['error'],1006);
                     }else{
-                        if((int)$val[7]>=(int)$val[6]){
+                        if((int)$val[8]>=(int)$val[7]){
                             $flag=1;
                             array_push( $result[$key]['error'],1007);
                         } 
                     }                    
                    
                     //利润
-                    $result[$key]['profit']=$val[8];
-                    if( $val[6]-$val[7] != $val[8] ){
+                    $result[$key]['profit']=$val[9];
+                    if( $val[7]-$val[8] != $val[9] ){
                         $flag=1;
                         array_push( $result[$key]['error'],1008);
                     }
                     
                     //是否回款
-                    $result[$key]['is_received']=$val[9];                    
+                    $result[$key]['is_received']=$val[10];                    
                     //是是否出款
-                    $result[$key]['is_paid']=$val[10];
+                    $result[$key]['is_paid']=$val[11];
                 }                
             }          
  

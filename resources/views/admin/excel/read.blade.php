@@ -50,6 +50,13 @@
                <td>{{ $row['customer_name']}}</td>
                 <td>{{ $row['media_name'] }}</td>
                 <td>{{ $row['contribution'] }}</td>
+                  <td>
+                  <?php
+                 $link = preg_match('/^http(s)?:\\/\\/.+/',$items['project'])?$items['project']:'http://'.$items['project'];
+                 echo '<a href="'.$link.'" target="_blank">查看</a>'; 
+                 ?>                
+                
+                </td>
                 <td>{{ $row['words'] }}</td>
                  <td>{{ $row['price']}}</td>
                 <td>{{ $row['customer_price']}}</td>                 

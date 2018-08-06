@@ -142,6 +142,13 @@
                 <td>{{ $items['customer_name']}}</td>
                 <td>{{ $items['media_name'] }}</td>
                 <td>{{ $items['contribution'] }}</td>
+                 <td>
+                  <?php
+                 $link = preg_match('/^http(s)?:\\/\\/.+/',$items['project'])?$items['project']:'http://'.$items['project'];
+                 echo '<a href="'.$link.'" target="_blank">查看</a>'; 
+                 ?>                
+                
+                </td>
                 <td>{{(int)$items['words'] }}</td>
                 <td>{{ (float)$items['price']}}</td>
                 <td>{{ $items['customer_price']}}</td>                 

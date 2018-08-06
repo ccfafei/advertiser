@@ -123,7 +123,7 @@
                 <?php if (!empty($row['leader'])&&!empty($leader)){
                     echo $leader[$row['leader']];
                 }?>
-                <td>
+                </td>
                 <td><a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a></td>
              </tr>
              @endforeach

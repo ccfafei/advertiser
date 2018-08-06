@@ -86,7 +86,10 @@ class CustomerController extends Controller
                       
             $grid->qq('联系人')->sortable();
             $grid->phone('电话')->sortable();
-            $grid->project('项目')->sortable();
+            $grid->project('项目')->display(function ($project) {
+                $link = preg_match('/^http(s)?:\\/\\/.+/',$project)?$project:'http://'.$project;
+                return '<a href="'.$link.'" target="_blank">查看</a>';
+            })->sortable();
             $grid->is_cooperate('是否合作')->display(function ($is_cooperate) {
                     return $is_cooperate ? '是' : '否';
             })->sortable();

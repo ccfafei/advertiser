@@ -30,7 +30,12 @@ Route::group([
     $router->resource('weibocategory', CategoryWeiboController::class);
     $router->resource('weiboleader', LeaderWeiboController::class);
     
-
+    //微信
+    Route::post('weixin/index', 'WeixinController@index')->name('weixin.search');
+    $router->resource('weixin', WeixinController::class);
+    $router->resource('weixincategory', CategoryWeixinController::class);
+    $router->resource('weixinleader', LeaderWeixinController::class);
+    
     //业务流量数据
     Route::get('trade', 'TradeController@index')->name('trade.index');
     Route::get('trade/create','TradeController@create')->name('trade.create');

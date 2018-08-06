@@ -9,7 +9,8 @@ use App\Models\MediaCategory;
 use App\Models\MediaChannel;
 use App\Models\WeiboCategory;
 use App\Models\WeiboLeader;
-
+use App\Models\WeixinCategory;
+use App\Models\WeixinLeader;
 class Base{
     
     //通过客户名获取相关信息
@@ -118,6 +119,31 @@ class Base{
     //获取负责人getLeader
     public static function getWeiboLeader(){
         $leaders = WeiboLeader::get();
+        $arr=[];
+        if($leaders){
+            foreach($leaders as $leader){
+                $arr[$leader->leader_id] = $leader->leader_name;
+            }
+        }
+        return $arr;
+    }
+    
+    
+    //获取微信分类
+    public static function getWeixinCategory(){
+        $categorys = WeixinCategory::get();
+        $arr=[];
+        if($categorys){
+            foreach($categorys as $category){
+                $arr[$category->category_id] = $category->category_name;
+            }
+        }
+        return $arr;
+    }
+    
+    //获取负责人getLeader
+    public static function getWeixinLeader(){
+        $leaders =WeixinLeader::get();
         $arr=[];
         if($leaders){
             foreach($leaders as $leader){

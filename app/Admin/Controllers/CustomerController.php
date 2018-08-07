@@ -82,10 +82,10 @@ class CustomerController extends Controller
                     return date('Y-m-d',strtotime($time));
             })->sortable();
             
-            $grid->company('公司名称')->sortable();
-                      
-            $grid->qq('联系人')->sortable();
+            $grid->company('公司名称')->sortable();                      
+            $grid->name('联系人')->sortable();
             $grid->phone('电话')->sortable();
+            $grid->qq('QQ/微信')->sortable();
             $grid->project('项目')->display(function ($project) {
                 $link = preg_match('/^http(s)?:\\/\\/.+/',$project)?$project:'http://'.$project;
                 return '<a href="'.$link.'" target="_blank">查看</a>';

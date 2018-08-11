@@ -23,6 +23,8 @@ Route::group([
     $router->resource('mediachannel', ChannelController::class);
     $router->resource('mediacategory',CategoryController::class);
     $router->resource('medialeader',LeaderController::class);
+    $router->get('excelmedia/import', 'ImportMediaExcelController@import')->name('excel.import');
+    $router->post('excelmedia/save', 'ImportMediaExcelController@save')->name('excel.save');
     
     //微博
     Route::post('weibo/index', 'WeiboController@index')->name('weibo.search');

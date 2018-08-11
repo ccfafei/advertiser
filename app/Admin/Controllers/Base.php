@@ -104,7 +104,7 @@ class Base{
         return $sytles = "<lable class='label {$lableColor}'> {$cfg[$status]} </lable>";              
     }
     
-      //获取媒体分类
+      //获取微博分类
     public static function getWeiboCategory(){
         $categorys = WeiboCategory::get();
         $arr=[];
@@ -116,7 +116,7 @@ class Base{
         return $arr;
     }
     
-    //获取负责人getLeader
+    //获取微博负责人getLeader
     public static function getWeiboLeader(){
         $leaders = WeiboLeader::get();
         $arr=[];
@@ -141,7 +141,7 @@ class Base{
         return $arr;
     }
     
-    //获取负责人getLeader
+    //获取微信负责人getLeader
     public static function getWeixinLeader(){
         $leaders =WeixinLeader::get();
         $arr=[];

@@ -18,25 +18,33 @@
                       </div>
                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
                 </div>
+                
+          <label  class="control-label">区域: </label> 
+          <div class="input-group mr_2">
+             <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+             <input name="area" id="mediaArea" class="form-control mr_1" placeholder="请输入区域       " value="" />            
+           </div>
+           
           <label for="mediaName" class="control-label">媒体名称: </label> 
           <div class="input-group mr_2">
              <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
              <input name="media_name" id="mediaName" class="form-control mr_1" placeholder="请输入媒体名称       " value="" />            
            </div>
            
-          <label for="contributionTitle" class="control-label">媒体分类: </label> 
-          <div class="input-group  mr_2">
-         
-              <select name="category" class="form-control mr_2">
-                  <option value ="all">请选择</option>
-                   @foreach($category as $k=>$v)
-                   <option value="{!! $k !!}">{!! $v !!}</option>
-                   @endforeach
-              </select>
-           </div>  
+
         </div>
         <div class="clearfix mt_2" ></div>
         <div class="form-group">
+            <label for="contributionTitle" class="control-label">媒体分类: </label>
+            <div class="input-group  mr_2">
+
+                <select name="category" class="form-control mr_2">
+                    <option value ="all">请选择</option>
+                    @foreach($category as $k=>$v)
+                        <option value="{!! $k !!}">{!! $v !!}</option>
+                    @endforeach
+                </select>
+            </div>
             <label for="" class="control-label">频道: </label> 
               <div class="input-group  mr_2">
                   <select name="channel" class="form-control mr_2">
@@ -57,11 +65,11 @@
                   </select>
               </div>
               
-              <label for="" class="control-label">单价: </label> 
+              <label for="" class="control-label">收录: </label>
               <div class="input-group mr_2">
                  <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                 <input name="price" id="price" class="form-control mr_1" placeholder="请输入单价       " value="" />            
-               </div>               
+                 <input name="collection" id="collection" class="form-control mr_1" placeholder="" value="请输入收录" />
+               </div>
 
                <label class="mt_1 mr_2">
                   <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search" ></i>搜索</button>
@@ -96,6 +104,7 @@
               <tr>
          
                 <td>{!! $row['media_ts'] !!}</td>
+                 <td>{!! $row['area'] !!}</td>
                 <td>{!! $row['media_name'] !!}</td>
                 <td>
                   <?php
@@ -124,6 +133,7 @@
                     echo $leader[$row['leader']];
                 }?>
                 </td>
+                  <td>{!! $row['remark'] !!}</td>
                 <td><a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a></td>
              </tr>
              @endforeach

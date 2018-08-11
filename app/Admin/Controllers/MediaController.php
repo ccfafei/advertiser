@@ -30,7 +30,7 @@ class MediaController extends Controller
     
             $content->header('网络媒体');
             $content->description('列表'); 
-            $headers = ['开发日期','媒体名称','媒体分类','频道','单价','收录','案例','负责人','操作'];
+            $headers = ['开发日期','区域','媒体名称','媒体分类','频道','单价','收录','案例','负责人','媒体备注','操作'];
           
             //获取各个分类
             $category=Base::getCategory();
@@ -136,6 +136,7 @@ class MediaController extends Controller
             $grid->created_at('日期')->display(function($ts){
                 return date('Y-m-d',strtotime($ts));
             })->sortable();
+            $grid->erea('区域')->sortable();
             $grid->media_name('媒体名称')->sortable();
             
             $grid->leader('负责人')->display(function($id) use($leaders){
@@ -178,8 +179,10 @@ class MediaController extends Controller
     {
         return Admin::form(Media::class, function (Form $form) {
          
-            $form->hidden('media_id','媒体ID');
+            $form->hidden('media_id','媒体ID');            
+            $form->hidden('media_ts','开发时间');
             $form->text('media_name','媒体名称');
+            $form->text('area','区域');
             $form->select('leader','负责人')->options(Base::getLeader());
             $form->select('category','媒体分类')->options(Base::getCategory());
             $form->select('channel','频道')->options(Base::getChannel());

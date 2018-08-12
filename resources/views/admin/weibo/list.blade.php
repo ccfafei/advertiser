@@ -97,6 +97,7 @@
                 <td>{!! $row['direct_microtask'] !!}</td>
                 <td>{!! $row['forward_microtask'] !!}</td>
                 <td>{!! $leader[$row['leader']] !!}</td>
+                  <td>{!! $row['remark'] !!}</td>
                 <td><a href="{!! url('/admin/weibo/'.$row['weibo_id'].'/edit') !!}"><i class="fa fa-edit"></i></a></td>
              </tr>
              @endforeach

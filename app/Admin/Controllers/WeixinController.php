@@ -30,7 +30,7 @@ class WeixinController extends Controller
     
             $content->header('微信媒体');
             $content->description('列表'); 
-            $headers = ['开发日期','微信名称','行业分类','ID','粉丝数','头条','次条','第三条','预估阅读数','案例','负责人','操作'];
+            $headers = ['开发日期','微信名称','行业分类','ID','粉丝数','头条','次条','第三条','预估阅读数','案例','负责人','备注','操作'];
           
             //获取各个分类
             $category=Base::getweixinCategory();

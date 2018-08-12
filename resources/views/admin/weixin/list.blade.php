@@ -99,6 +99,7 @@
                 </td>
                
                 <td>{!! $leader[$row['leader']] !!}</td>
+                  <td>{!! $row['remark'] !!}</td>
                 <td><a href="{!! url('/admin/weixin/'.$row['weixin_id'].'/edit') !!}"><i class="fa fa-edit"></i></a></td>
              </tr>
              @endforeach

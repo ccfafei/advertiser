@@ -30,7 +30,7 @@ class WeiboController extends Controller
     
             $content->header('微博媒体');
             $content->description('列表'); 
-            $headers = ['开发日期','微博名称','微博分类','粉丝数','直发价','转发价','案例','微任务直发','微任务转发','负责人','操作'];
+            $headers = ['开发日期','微博名称','微博分类','粉丝数','直发价','转发价','案例','微任务直发','微任务转发','负责人','备注','操作'];
           
             //获取各个分类
             $category=Base::getWeiboCategory();
@@ -88,7 +88,7 @@ class WeiboController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
     
-            $content->header('媒体信息');
+            $content->header('微博信息');
             $content->description('编辑');
     
             $content->body($this->form()->edit($id));

@@ -23,20 +23,25 @@ Route::group([
     $router->resource('mediachannel', ChannelController::class);
     $router->resource('mediacategory',CategoryController::class);
     $router->resource('medialeader',LeaderController::class);
-    $router->get('excelmedia/import', 'ImportMediaExcelController@import')->name('excel.import');
-    $router->post('excelmedia/save', 'ImportMediaExcelController@save')->name('excel.save');
+    $router->get('excelmedia/import', 'ImportMediaExcelController@import')->name('excel.media.import');
+    $router->post('excelmedia/save', 'ImportMediaExcelController@save')->name('excel.media.save');
     
     //微博
     Route::post('weibo/index', 'WeiboController@index')->name('weibo.search');
     $router->resource('weibo', WeiboController::class);
     $router->resource('weibocategory', CategoryWeiboController::class);
     $router->resource('weiboleader', LeaderWeiboController::class);
-    
+    $router->get('excelweibo/import', 'ImportWeiboExcelController@import')->name('excel.weibo.import');
+    $router->post('excelweibo/save', 'ImportWeiboExcelController@save')->name('excel.weibo.save');
+
+
     //微信
     Route::post('weixin/index', 'WeixinController@index')->name('weixin.search');
     $router->resource('weixin', WeixinController::class);
     $router->resource('weixincategory', CategoryWeixinController::class);
     $router->resource('weixinleader', LeaderWeixinController::class);
+    $router->get('excelweixin/import', 'ImportWeixinExcelController@import')->name('excel.weixin.import');
+    $router->post('excelweixin/save', 'ImportWeixinExcelController@save')->name('excel.weixin.save');
     
     //业务流量数据
     Route::get('trade', 'TradeController@index')->name('trade.index');

@@ -4,6 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Models\Customer;
 use App\Models\Media;
+use App\Models\Weibo;
+use App\Models\Weixin;
 use App\Models\MediaLeader;
 use App\Models\MediaCategory;
 use App\Models\MediaChannel;
@@ -103,8 +105,19 @@ class Base{
         }
         return $sytles = "<lable class='label {$lableColor}'> {$cfg[$status]} </lable>";              
     }
-    
-      //获取微博分类
+
+    //微博信息获取
+    public static function getWeibo($weibo_name){
+        $weibo=[];
+        $weibo = Weibo::where('weibo_name',$weibo_name)->first();
+        if($weibo) {
+            $weibo =$weibo->toArray();
+        }
+        return $weibo;
+    }
+
+
+    //获取微博分类
     public static function getWeiboCategory(){
         $categorys = WeiboCategory::get();
         $arr=[];
@@ -115,7 +128,16 @@ class Base{
         }
         return $arr;
     }
-    
+
+    //微信 信息获取
+    public static function getWeixin($weixin_name){
+        $weixin=[];
+        $weixin = Weixin::where('weixin_name',$weixin_name)->first();
+        if($weixin) {
+            $weixin =$weixin->toArray();
+        }
+        return $weixin;
+    }
     //获取微博负责人getLeader
     public static function getWeiboLeader(){
         $leaders = WeiboLeader::get();

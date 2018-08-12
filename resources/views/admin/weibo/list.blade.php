@@ -211,7 +211,7 @@ $(function () {
                     extend: 'excel',
                     className: 'excelbutton dt-button btn btn-warning',
                     'text': 'Excel导出',
-                    'title': '网络媒体列表',
+                    'title': '微博列表',
                 }
             ]
         },
@@ -244,10 +244,10 @@ $(function () {
 	  			"sNext":     "下页",
 	  			"sLast":     "末页"
 	  		},
-	  		
-	  		
-      }    
-       
+
+
+      }
+
     });
 });
 

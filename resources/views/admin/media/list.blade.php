@@ -256,7 +256,7 @@
                         extend: 'excel',
                         className: 'excelbutton dt-button btn btn-warning',
                         'text': 'Excel导出',
-                        'title': '微博列表',
+                        'title': '网络媒体列表',
                     }
                 ]
             },

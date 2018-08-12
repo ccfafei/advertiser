@@ -1,13 +1,14 @@
 <style>
-    .dataTables_wrapper .dataTables_length{
-        display:inline-block;
-        float:left;
+    .dataTables_wrapper .dataTables_length {
+        display: inline-block;
+        float: left;
         margin-top: 10px;
         margin-bottom: 5px;
     }
+
     .dataTables_wrapper .dt-button {
-        display:inline-block;
-        float:right;
+        display: inline-block;
+        float: right;
 
     }
 </style>
@@ -136,7 +137,7 @@
 
             <div>
 
-                <table id="dataTables" class="table table-bordered table-hover" style="width:100%">
+                <table id="dataTables" class="table table-bordered table-hover display nowrap" style="width:100%">
                     <!-- ['序号','日期','客户名称','媒体名称','稿件标题','字数','单价','报价','媒体款','利润','是否回款',	'是否出款','是否审核']; -->
                     <thead>
                     <tr>
@@ -332,6 +333,7 @@
                         }
                     ]
                 },
+                "scrollX": true,
                 "paging": true,//开启表格分页
                 'searching': false,
                 'ordering': true,

@@ -1,3 +1,14 @@
+<style>
+    .dataTables_wrapper .dataTables_length{
+        display:inline-block;
+        float:left;
+        margin-bottom: 5px;
+    }
+    .dataTables_wrapper .dt-button {
+        display:inline-block;
+        float:right;
+    }
+</style>
 <div class="box">
     <div class="box-header">
         <form action="{{ url('/admin/media/index')}}" method="post" id="media_search" class="form-inline">
@@ -77,15 +88,18 @@
                     <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
                 </label>
                 &nbsp;&nbsp;
-                <label class="mt_1">
-                    <a href="/admin/media/create" class="btn  btn-success">
-                        <i class="fa fa-save"></i>&nbsp;&nbsp;新增
-                    </a>
-                </label>
-                &nbsp;&nbsp;
-                <label class="mt_1">
-                    <button type="button" class="btn btn-warning" id="export"><i class="fa  fa-download"></i>导出</button>
-                </label>
+
+             <label class="mt_1">
+                 <a href="/admin/media/create" class="btn  btn-success">
+                     <i class="fa fa-save"></i>&nbsp;&nbsp;新增
+                 </a>
+             </label>
+             &nbsp;&nbsp;
+                <!--
+                             <label class="mt_1">
+                                 <button type="button" class="btn btn-warning excel-export" id="export"><i class="fa  fa-download"></i>导出</button>
+                             </label>
+                             -->
             </div>
         </form>
     </div>
@@ -224,10 +238,10 @@
         });
 
         //导出
-        $("#export").on('click', function () {
-
-            window.open("/admin/media/?%5C_pjax=%23pjax-container&_export_=all");
-        });
+        // $("#export").on('click', function () {
+        //
+        //     window.open("/admin/media/?%5C_pjax=%23pjax-container&_export_=all");
+        // });
 
     });
 
@@ -235,17 +249,31 @@
     $(function () {
 
         $('#example1').DataTable({
+            'dom': 'lBtip',
+            buttons: {
+                buttons: [
+                    {
+                        extend: 'excel',
+                        className: 'excelbutton dt-button btn btn-warning',
+                        'text': 'Excel导出',
+                        'title': '微博列表',
+                    }
+                ]
+            },
+
             'paging': true,
+            'extend':true,
             'lengthChange': true,
             'searching': false,
             'ordering': true,
             'info': true,
             'autoWidth': true,
-            "columnDefs": [{
+            'columnDefs': [{
                 "targets": [6, 8],
                 "orderable": false
             }],
-            "language": {
+
+            'language': {
                 "sProcessing": "处理中...",
                 "sLengthMenu": "显示 _MENU_ 项结果",
                 "sZeroRecords": "没有匹配结果",

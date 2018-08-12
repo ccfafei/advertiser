@@ -163,8 +163,9 @@ class TradeController extends Controller
             $content->description('审核');
             Permission::check('trade.edit');
             Permission::check('trade.check');
-            $headers = $this->trade_header;            
-            
+            $headers =$this->trade_header;
+            array_unshift($headers,'选择');
+            array_push($headers,'操作');
             $rows = [];
             $where = [];
             $mode = new Trade();

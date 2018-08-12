@@ -1,4 +1,14 @@
-
+<style>
+    .dataTables_wrapper .dataTables_length{
+        display:inline-block;
+        float:left;
+        margin-bottom: 5px;
+    }
+    .dataTables_wrapper .dt-button {
+        display:inline-block;
+        float:right;
+    }
+</style>
 <div class="box">
     <div class="box-header">
         <form action="{{ url('/admin/weixin/index')}}" method="post" id="weixin_search" class="form-inline">
@@ -60,9 +70,11 @@
                 </a>
                </label>
                 &nbsp;&nbsp;
+            <!--
                <label  class="mt_1">
                   <button type="button" class="btn btn-warning"  id="export"><i class="fa  fa-download"></i>导出</button>
                </label>
+               -->
         </div>  
         </form>  
       </div>          
@@ -174,6 +186,17 @@ $(function () {
 $(function () {
 
     $('#example1').DataTable({
+        'dom': 'lBtip',
+        buttons: {
+            buttons: [
+                {
+                    extend: 'excel',
+                    className: 'excelbutton dt-button btn btn-warning',
+                    'text': 'Excel导出',
+                    'title': '网络媒体列表',
+                }
+            ]
+        },
    	 'paging'      : true,
      'lengthChange': true,
      'searching'   : false,

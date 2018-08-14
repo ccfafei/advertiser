@@ -59,7 +59,7 @@ class MediaController extends Controller
            
             $request->has('category')&&$request->input('category')!='all'&&
             $mode = $mode->where('category',$request->input('category'));
-     
+
             $request->has('channel')&&$request->input('channel')!='all'&&
             $mode = $mode->where('channel',$request->input('channel'));
             
@@ -71,7 +71,7 @@ class MediaController extends Controller
 
             $request->has('collection')&&
             $mode = $mode->where('collection','like','%'.$request->input('collection').'%');
-
+            var_dump($request->input());
 
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){

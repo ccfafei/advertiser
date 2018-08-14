@@ -53,7 +53,7 @@ class WeiboController extends Controller
            
             $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(weibo_ts)'),'<=',$search_end_day);
             
-            $request->has('weibo_name')&&
+            $request->has('weibo_name')&&!empty($request->input('weibo_name'))&&
             $mode = $mode->where('weibo_name','like','%'.$request->input('weibo_name').'%');
 
            
@@ -64,8 +64,7 @@ class WeiboController extends Controller
             $request->has('leader')&&$request->input('leader')!='all'&&
             $mode = $mode->where('leader',$request->input('leader'));
             
-            $request->has('direct_price')&&!empty($request->input('price'))&&
-            $mode = $mode->where('direct_price',trim($request->input('price')));
+
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             

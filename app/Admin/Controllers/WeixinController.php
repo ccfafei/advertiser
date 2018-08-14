@@ -53,7 +53,7 @@ class WeixinController extends Controller
            
             $mode = $mode->where(DB::raw('UNIX_TIMESTAMP(weixin_ts)'),'<=',$search_end_day);
             
-            $request->has('weixin_name')&&
+            $request->has('weixin_name')&&!empty($request->input('weixin_name'))&&
             $mode = $mode->where('weixin_name','like','%'.$request->input('weixin_name').'%');
 
            
@@ -64,8 +64,7 @@ class WeixinController extends Controller
             $request->has('leader')&&$request->input('leader')!='all'&&
             $mode = $mode->where('leader',$request->input('leader'));
             
-            $request->has('direct_price')&&!empty($request->input('price'))&&
-            $mode = $mode->where('direct_price',trim($request->input('price')));
+
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             

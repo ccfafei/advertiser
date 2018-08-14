@@ -170,7 +170,7 @@
                             <td>{!! $items['is_received'] !!}</td>
                             <td>{!! $items['is_paid'] !!}</td>
                             <td>{!! $items['is_check'] !!}</td>
-                            <td><a href="{!! url('/admin/trade/'. $items['trade_id'].'/edit') !!}"><i
+                            <td><a href="{!! url('/admin/trade/check/'. $items['trade_id'].'/edit') !!}"><i
                                             class="fa fa-edit"></i></a></td>
                         </tr>
                     @endforeach

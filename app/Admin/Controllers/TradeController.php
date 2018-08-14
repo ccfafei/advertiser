@@ -439,7 +439,7 @@ class TradeController extends Controller
             $form->hidden('created_at', 'Created At');
             $form->hidden('updated_at', 'Updated At');
             $form->hidden('customer_id','客户id');
-            $form->hidden('media_id','媒体id');
+           // $form->hidden('media_id','媒体id');
             
             //保存前检查
             $form->saving(function (Form $form) {

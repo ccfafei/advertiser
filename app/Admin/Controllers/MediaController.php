@@ -40,8 +40,8 @@ class MediaController extends Controller
             //搜索结果
             $rows =[];
             $arrsum =[];
-            $mode= new Media(); 
-           
+            $mode= new Media();
+           // DB::connection()->enableQueryLog();
             $start_ts = $request->input('start_day');
             $end_ts = $request->input('end_day');
             $search_start_day= $start_ts?strtotime($start_ts):strtotime('-30 day 00:00:00');
@@ -53,12 +53,12 @@ class MediaController extends Controller
            
             $mode = $mode->where(DB::RAW('UNIX_TIMESTAMP(media_ts)'),'<=',$search_end_day);
             
-            $request->has('media_name')&&
+            $request->has('media_name')&&!empty($request->input('media_name'))&&
             $mode = $mode->where('media_name','like','%'.$request->input('media_name').'%');
 
-           
+
             $request->has('category')&&$request->input('category')!='all'&&
-            $mode = $mode->where('category',$request->input('category'));
+            $mode = $mode->where('category',trim($request->input('category')));
 
             $request->has('channel')&&$request->input('channel')!='all'&&
             $mode = $mode->where('channel',$request->input('channel'));
@@ -66,19 +66,18 @@ class MediaController extends Controller
             $request->has('leader')&&$request->input('leader')!='all'&&
             $mode = $mode->where('leader',$request->input('leader'));
 
-            $request->has('area')&&
+            $request->has('area')&&$request->input('area')&&
             $mode = $mode->where('area','like','%'.$request->input('area').'%');
 
-            $request->has('collection')&&
+            $request->has('collection')&&$request->input('collection')&&
             $mode = $mode->where('collection','like','%'.$request->input('collection').'%');
-            var_dump($request->input());
 
             $rows = $mode->get();
+           // dump(DB::getQueryLog());
             if(collect($rows)->isNotEmpty()){
                 $rows=$rows->toArray();
-                
             }
-            
+
            $exporturl = $this->grid()->exportUrl('all');
             $listview = view('admin.media.list',
                 compact('rows','headers','arrsum','category','channel','leader'))

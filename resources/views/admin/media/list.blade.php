@@ -74,12 +74,12 @@
                 <label class="control-label">区域: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                    <input name="area" id="mediaArea" class="form-control mr_1" placeholder="请输入区域       " value=""/>
+                    <input name="area" id="mediaArea" class="form-control mr_1" placeholder="请输入区域" value=""/>
                 </div>
                 <label for="" class="control-label">收录: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                    <input name="collection" id="collection" class="form-control mr_1" placeholder="" value="请输入收录"/>
+                    <input name="collection" id="collection" class="form-control mr_1" placeholder="请输入收录" value=""/>
                 </div>
             </div>
             <div class="clearfix mt_2"></div>

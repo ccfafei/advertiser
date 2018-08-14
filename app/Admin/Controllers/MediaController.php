@@ -65,9 +65,14 @@ class MediaController extends Controller
             
             $request->has('leader')&&$request->input('leader')!='all'&&
             $mode = $mode->where('leader',$request->input('leader'));
-            
-            $request->has('price')&&!empty($request->input('price'))&&
-            $mode = $mode->where('price',trim($request->input('price')));
+
+            $request->has('area')&&
+            $mode = $mode->where('area','like','%'.$request->input('area').'%');
+
+            $request->has('collection')&&
+            $mode = $mode->where('collection','like','%'.$request->input('collection').'%');
+
+
             $rows = $mode->get();
             if(collect($rows)->isNotEmpty()){
                 $rows=$rows->toArray();
@@ -179,16 +184,17 @@ class MediaController extends Controller
     {
         return Admin::form(Media::class, function (Form $form) {
          
-            $form->hidden('media_id','媒体ID');            
-            $form->hidden('media_ts','开发时间');
-            $form->text('media_name','媒体名称');
+            $form->hidden('media_id','媒体ID');
+           // $form->date('media_ts','开发时间');
+            $form->text('media_name','媒体名称')->rules('required',['不能为空']);
             $form->text('area','区域');
-            $form->select('leader','负责人')->options(Base::getLeader());
-            $form->select('category','媒体分类')->options(Base::getCategory());
-            $form->select('channel','频道')->options(Base::getChannel());
+            $form->select('leader','负责人')->options(Base::getLeader())->rules('required',['不能为空']);
+            $form->select('category','媒体分类')->options(Base::getCategory())->rules('required',['不能为空']);
+            $form->select('channel','频道')->options(Base::getChannel())->rules('required',['不能为空']);
             $form->number('price','单价');
-            $form->text('collection','收录');
-            $form->text('cases','案例');
+            $form->text('collection','收录')->rules('required',['不能为空']);
+            $form->text('cases','案例')->rules('required',['不能为空']);
+            $form->date('media_ts','开发时间')->format('YYYY-MM-DD')->rules('required',['不能为空']);
             $form->textarea('remark','备注');
             $form->display('created_at', '创建时间');
             $form->display('updated_at', '修改时间');

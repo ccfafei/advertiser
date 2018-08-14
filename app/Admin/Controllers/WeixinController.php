@@ -172,17 +172,18 @@ class WeixinController extends Controller
         return Admin::form(weixin::class, function (Form $form) {
          
             $form->hidden('weixin_id','自增id');
-            $form->text('weixin_name','微信名称');
+            $form->text('weixin_name','微信名称')->rules('required',['不能为空']);
            
-            $form->select('leader','负责人')->options(Base::getWeixinLeader());
-            $form->select('weixin_category','行业分类')->options(Base::getWeixinCategory());
-            $form->text('ID','ID');
+            $form->select('leader','负责人')->options(Base::getWeixinLeader())->rules('required',['不能为空']);
+            $form->select('weixin_category','行业分类')->options(Base::getWeixinCategory())->rules('required',['不能为空']);
+            $form->text('ID','ID')->rules('required',['不能为空']);
             $form->number('fans','粉丝数');
             $form->text('headline','头条');
             $form->text('secondline','次条');
             $form->text('thirdline','第三条');
             $form->text('readers','预估阅读数');
-            $form->text('cases','案例');
+            $form->text('cases','案例')->rules('required',['不能为空']);
+            $form->date('weixin_ts','开发时间')->format('YYYY-MM-DD')->rules('required',['不能为空']);
             $form->textarea('remark','备注');
             $form->display('created_at', '创建时间');
             $form->display('updated_at', '修改时间');

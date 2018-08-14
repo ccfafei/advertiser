@@ -171,15 +171,16 @@ class WeiboController extends Controller
         return Admin::form(Weibo::class, function (Form $form) {
          
             $form->hidden('weibo_id','微博ID');
-            $form->text('weibo_name','微博名称');
-            $form->select('leader','负责人')->options(Base::getWeiboLeader());
-            $form->select('weibo_category','微博分类')->options(Base::getWeiboCategory());
+            $form->text('weibo_name','微博名称')->rules('required',['不能为空']);
+            $form->select('leader','负责人')->options(Base::getWeiboLeader())->rules('required',['不能为空']);
+            $form->select('weibo_category','微博分类')->options(Base::getWeiboCategory())->rules('required',['不能为空']);
             $form->number('fans','粉丝数');
             $form->number('direct_price','直发价');
             $form->number('forward_price','转发价');
             $form->text('direct_microtask','微任务直发');
             $form->text('forward_microtask','微任务转发');
             $form->text('cases','案例');
+            $form->date('weibo_ts','开发时间')->format('YYYY-MM-DD')->rules('required',['不能为空']);
             $form->textarea('remark','备注');
             $form->display('created_at', '创建时间');
             $form->display('updated_at', '修改时间');

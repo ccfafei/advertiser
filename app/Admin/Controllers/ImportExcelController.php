@@ -75,6 +75,7 @@ class ImportExcelController extends Controller
                     
                     //媒体
                     $result[$key]['media_name']=$val[2];
+                    /*
                     $media = Base::getMedia($val[2]);
                     if(!empty($media)){
                         $result[$key]['media_id']=$media['media_id'];
@@ -83,6 +84,7 @@ class ImportExcelController extends Controller
                         $result[$key]['media_id']=0;
                         array_push( $result[$key]['error'],1003);
                     }
+                    */
                    
                     //标题
                     $result[$key]['contribution']=$val[3];
@@ -102,13 +104,16 @@ class ImportExcelController extends Controller
                     
                     //报价
                     $result[$key]['customer_price']=$val[7];
+                    /*
                     if((int)$val[7]<=0){
                         $flag=1;
                         array_push( $result[$key]['error'],1005);
                     }
+                    */
                     
                     //媒体款
                     $result[$key]['media_price']=$val[8];
+                    /*
                     if((int)$val[8]<=0){
                         $flag=1;
                         array_push( $result[$key]['error'],1006);
@@ -116,8 +121,9 @@ class ImportExcelController extends Controller
                         if((int)$val[8]>=(int)$val[7]){
                             $flag=1;
                             array_push( $result[$key]['error'],1007);
-                        } 
-                    }                    
+                        }
+                    }
+                  */
                    
                     //利润
                     $result[$key]['profit']=$val[9];

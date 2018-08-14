@@ -53,12 +53,15 @@ class TradeController extends Controller
             $rows = [];
             $where = [];
             $mode = new Trade();
-            $request->has('customer_name') && $mode = $mode->where('customer_name', 'like', '%' . $request->input('customer_name') . '%');
-            
-            $request->has('media_name') && $mode = $mode->where('media_name', 'like', '%' . $request->input('media_name') . '%');
-            
-            $request->has('contribution') && $mode = $mode->where('contribution', 'like', '%' . $request->input('contribution') . '%');
-            
+            $request->has('customer_name') &&!empty($request->input('customer_name'))&&
+            $mode = $mode->where('customer_name', 'like', '%' . $request->input('customer_name') . '%');
+
+            $request->has('media_name') && !empty($request->input('media_name'))&&
+            $mode = $mode->where('media_name', 'like', '%' . $request->input('media_name') . '%');
+
+            $request->has('contribution') &&!empty($request->input('contribution'))&&
+            $mode = $mode->where('contribution', 'like', '%' . $request->input('contribution') . '%');
+
             $inputs = $request->only([
                 'is_received',
                 'is_paid',
@@ -450,7 +453,7 @@ class TradeController extends Controller
                     return back()->with(compact('error'));
                 }
               
-                
+                /*
                 $medias = Base::getMedia($form->media_name);
                 if(!$medias){
                     $error = new MessageBag([
@@ -459,6 +462,7 @@ class TradeController extends Controller
                     ]);
                     return back()->with(compact('error'));
                 }
+                */
             });
           
           //save...

@@ -44,7 +44,7 @@
                 <label for="contributionTitle" class="control-label">行业分类: </label>
                 <div class="input-group  mr_2">
 
-                    <select name="category" class="form-control mr_2">
+                    <select name="weixin_category" class="form-control mr_2">
                         <option value="all">请选择</option>
                         @foreach($category as $k=>$v)
                             <option value="{!! $k !!}">{!! $v !!}</option>

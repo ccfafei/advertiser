@@ -40,6 +40,7 @@ class WeiboController extends Controller
             //搜索结果
             $rows =[];
             $arrsum =[];
+            // DB::connection()->enableQueryLog();
             $mode= new Weibo(); 
            
             $start_ts = $request->input('start_day');
@@ -66,7 +67,7 @@ class WeiboController extends Controller
             
 
             $rows = $mode->get();
-            dump($request->all());
+            // dump(DB::getQueryLog());
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             
             $exporturl = urlencode($this->grid()->exportUrl('all'));

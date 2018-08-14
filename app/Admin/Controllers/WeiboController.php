@@ -66,6 +66,7 @@ class WeiboController extends Controller
             
 
             $rows = $mode->get();
+            dump($request->all());
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             
             $exporturl = urlencode($this->grid()->exportUrl('all'));

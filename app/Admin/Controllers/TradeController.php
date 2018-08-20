@@ -452,14 +452,14 @@ class TradeController extends Controller
             //保存前检查
             $form->saving(function (Form $form) {
                 
-                $customers= Base::getCustomer($form->customer_name);
-                if(!$customers){
-                 $error = new MessageBag([
-                        'title'   => '出错啦:',
-                        'message' => '客户不存在,请先录入客户资料!',
-                    ]);                    
-                    return back()->with(compact('error'));
-                }
+//                $customers= Base::getCustomer($form->customer_name);
+//                if(!$customers){
+//                 $error = new MessageBag([
+//                        'title'   => '出错啦:',
+//                        'message' => '客户不存在,请先录入客户资料!',
+//                    ]);
+//                    return back()->with(compact('error'));
+//                }
               
                 /*
                 $medias = Base::getMedia($form->media_name);

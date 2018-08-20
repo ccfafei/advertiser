@@ -33,7 +33,8 @@ class TradeController extends Controller
                 '利润',
                 '是否回款',
                 '是否出款',
-                '审核'
+                '审核',
+                '负责人',
             ];
 
     /**
@@ -62,6 +63,9 @@ class TradeController extends Controller
             $request->has('contribution') &&!empty($request->input('contribution'))&&
             $mode = $mode->where('contribution', 'like', '%' . $request->input('contribution') . '%');
 
+            $request->has('leader') &&!empty($request->input('leader'))&&
+            $mode = $mode->where('leader', 'like', '%' . $request->input('leader') . '%');
+
             $inputs = $request->only([
                 'is_received',
                 'is_paid',
@@ -88,7 +92,7 @@ class TradeController extends Controller
             ! empty($where) && $mode = $mode->where($where);
             // 只能看自己的业务
             if (! Admin::user()->isAdministrator()) {
-                $mode = $mode->where('leader', Admin::user()->username);
+                $mode = $mode->where('leader', Admin::user()->name);
             }
             
             $results = $mode->get();
@@ -180,7 +184,11 @@ class TradeController extends Controller
             
             $request->has('contribution') &&!empty($request->input('contribution'))&&
             $mode = $mode->where('contribution', 'like', '%' . $request->input('contribution') . '%');
-            
+
+            $request->has('leader') &&!empty($request->input('leader'))&&
+            $mode = $mode->where('leader', 'like', '%' . $request->input('leader') . '%');
+
+
             $inputs = $request->only([
                 'is_received',
                 'is_paid',
@@ -366,7 +374,7 @@ class TradeController extends Controller
      
             //只能看自己的业务
             if(!Admin::user()->isAdministrator()){
-                $grid->model()->where('leader', Admin::user()->username);
+                $grid->model()->where('leader', Admin::user()->name);
             }
             
            // $grid->trade_id('ID')->sortable();
@@ -430,7 +438,7 @@ class TradeController extends Controller
             $form->date('trade_ts','交易时间')->format('YYYY-MM-DD');
             if(!Admin::user()->isAdministrator()){
                 $form->hidden('leader','负责人')->default(function($user){
-                    return $user= Admin::user()->username;
+                    return $user= Admin::user()->name;
                 });
             }else{
                 $form->text('leader','负责人');

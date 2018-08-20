@@ -64,14 +64,14 @@ class ImportExcelController extends Controller
                     
                     //客户
                     $result[$key]['customer_name']=$val[1];
-                    $customer = Base::getCustomer($val[1]);
-                    if(!empty($customer)){
-                        $result[$key]['customer_id']=$customer['customer_id'];
-                    }else{
-                        $flag=1;
-                        $result[$key]['customer_id']=0;
-                        array_push( $result[$key]['error'],1002);
-                    }
+//                    $customer = Base::getCustomer($val[1]);
+//                    if(!empty($customer)){
+//                        $result[$key]['customer_id']=$customer['customer_id'];
+//                    }else{
+//                        $flag=1;
+//                        $result[$key]['customer_id']=0;
+//                        array_push( $result[$key]['error'],1002);
+//                    }
                     
                     //媒体
                     $result[$key]['media_name']=$val[2];
@@ -157,7 +157,7 @@ class ImportExcelController extends Controller
                     $rows[$key]['is_paid']=0;
                 }
                 $rows[$key]['trade_ts']=strtotime($value['trade_ts']);
-                $rows[$key]['leader']=Admin::user()->username;
+                $rows[$key]['leader']=Admin::user()->name;
             }
         
             //保存数据   

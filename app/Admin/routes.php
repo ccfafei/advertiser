@@ -47,7 +47,7 @@ Route::group([
     Route::get('trade', 'TradeController@index')->name('trade.index');
     Route::get('trade/create','TradeController@create')->name('trade.create');
     Route::get('trade/{id}/edit','TradeController@show')->name('trade.edit');
-    Route::get('trade/check','TradeController@check')->name('trade.check');
+    Route::any('trade/check','TradeController@check')->name('trade.check');
     Route::get('trade/check/{id}/edit','TradeController@show')->name('trade.checkedit');
     Route::any('trade/check/{id}','TradeController@update')->name('trade.update');
     Route::post('trade', 'TradeController@store')->name('trade.store');

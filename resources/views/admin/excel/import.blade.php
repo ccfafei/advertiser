@@ -18,6 +18,7 @@
 			<h4>
 			     4.上传成功后，如果没有任何问题，请保存数据.
 			</h4>
+			<h4>5.<a href="{!! APP_s !!}">模板下载</a></h4>
 			<div class="box-tools pull-right"></div>
 			<!-- /.box-tools -->
 		</div>

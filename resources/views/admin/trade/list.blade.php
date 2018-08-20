@@ -32,7 +32,7 @@
                 <div class="input-group  mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="contribution" id="contributionTitle" class="form-control mr_1"
-                           placeholder="请输入媒体名称       " value=""/>
+                           placeholder="稿件标题 " value=""/>
                 </div>
 
             </div>
@@ -52,6 +52,13 @@
                         <i class="fa fa-calendar"></i>
                     </div>
                     <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
+                </div>
+
+                <label for="contributionTitle" class="control-label">负责人: </label>
+                <div class="input-group  mr_2">
+                    <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+                    <input name="leader" id="contributionTitle" class="form-control mr_1"
+                           placeholder="请输入负责人  " value=""/>
                 </div>
 
             </div>
@@ -126,6 +133,7 @@
                     <td>{!! $items['is_received'] !!}</td>
                     <td>{!! $items['is_paid'] !!}</td>
                     <td>{!! $items['is_check'] !!}</td>
+                    <td>{!! $items['leader'] !!}</td>
                 </tr>
             @endforeach
 

@@ -55,6 +55,11 @@
                     </div>
                     <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
                 </div>
+                <div class="input-group  mr_2">
+                    <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+                    <input name="leader" id="contributionTitle" class="form-control mr_1"
+                           placeholder="请输入负责人  " value=""/>
+                </div>
 
             </div>
             <div class="clearfix mt_1"></div>
@@ -170,6 +175,7 @@
                             <td>{!! $items['is_received'] !!}</td>
                             <td>{!! $items['is_paid'] !!}</td>
                             <td>{!! $items['is_check'] !!}</td>
+                            <td>{!! $items['leader'] !!}</td>
                             <td><a href="{!! url('/admin/trade/check/'. $items['trade_id'].'/edit') !!}"><i
                                             class="fa fa-edit"></i></a></td>
                         </tr>
@@ -339,7 +345,7 @@
                 'ordering': true,
                 'info': true,
                 "lengthChange": true,
-                'autoWidth': true,
+                'autoWidth': false,
                 "columnDefs": [{
                     "targets": [0, 13],
                     "orderable": false

@@ -10,20 +10,19 @@ use Excel;
 use App\Admin\Controllers\Base;
 use App\Models\Trade;
 use Encore\Admin\Widgets\Alert;
-use Illuminate\Support\Facades\Storage;
-use  IlluminateIlluminate\Support\Facades\Session;
+
+
 class ImportExcelController extends Controller
 {
     //excel导入
     public function import(){
         return Admin::content(function (Content $content) {
-            $content->header('上传Excel报表');
-            $url = Storage::url('trade.xls');
-            $content->body(view('admin.excel.import',compact('url')));
+            $content->header('上传Excel报表');          
+            $content->body(view('admin.excel.import'));
         });
     }
-
-    //导入数据预览
+    
+    //导入数据预览    
     public function check(Request $request){
         if(!$request->hasFile('file')){
             admin_toastr('上传失败','error');

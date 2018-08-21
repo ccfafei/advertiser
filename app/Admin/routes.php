@@ -55,7 +55,8 @@ Route::group([
     Route::post('trade/checkupdate', 'TradeController@checkUpdate')->name('trade.checkupdate');
     Route::post('trade/receiveupdate','TradeController@receiveUpdate')->name('receive.update');
     Route::post('trade/paidupdate','TradeController@paidUpdate')->name('paid.update');
-    
+    Route::post('tradecheck/destory', 'TradeController@checkDestory')->name('trade.checkupdate');
+
   
     //excel导入
     $router->get('exceltrade/import', 'ImportExcelController@import')->name('excel.import');

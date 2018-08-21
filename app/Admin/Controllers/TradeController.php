@@ -271,9 +271,39 @@ class TradeController extends Controller
     protected function receiveUpdate(Request $request)
     {
         return $this->optionsCheck($request,'is_received');
-      
+
     }
-    
+ protected function checkDestory(Request $request){
+     if (! Permission::check('trade.check')) {
+         return $reponses = [
+             'status' => 1,
+             'msg' => '无权访问!',
+             'data' => []
+         ];
+     }
+     $trade_id = $request->input('trade_id');
+     if (empty($trade_id)){
+         return $reponses = [
+             'status' => 1,
+             'msg' => '参数不能为空!',
+             'data' => []
+         ];
+     }
+     try {
+     Trade::where('trade_id',$trade_id)->delete();
+         return $reponses = [
+             'status' => 0,
+             'msg' => '删除成功!',
+             'data' => []
+         ];
+     }catch (\Exception $e){
+         return $reponses = [
+             'status' => 1,
+             'msg' => '删除失败!',
+             'data' => []
+         ];
+     }
+ }
     /**
      * 更新数据公用方法
      * @param Request $request
@@ -322,8 +352,7 @@ class TradeController extends Controller
             'data' => []
         ];
     }
-     
-    
+
     /**
      * Make a grid builder.
      *

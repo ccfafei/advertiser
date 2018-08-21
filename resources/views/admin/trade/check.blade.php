@@ -444,9 +444,9 @@
                 function(){
                     $.ajax({
                         method: 'post',
-                        url: '/tradecheck/destory',
+                        url: '/admin/tradecheck/destory',
                         data: {
-                           trade_od:id,
+                           trade_id:id,
                             _token:LA.token,
                         },
                         success: function (data) {

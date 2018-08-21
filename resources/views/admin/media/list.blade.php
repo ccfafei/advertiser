@@ -128,7 +128,6 @@
                             $category_name = array_key_exists($row['category'], $category) ? $category[$row['category']] : null;
                             echo $category_name;
                         } else {
-
                         }?>
                     </td>
                     <td>
@@ -170,14 +169,10 @@
 <script>
     function LA() {
     }
-
     LA.token = "{{ csrf_token() }}";
 </script>
 <script type="text/javascript">
-
     $(function () {
-
-
         //datepicker
         var nowtime = getNow();
         $.fn.datepicker.dates['cn'] = {   //切换为中文显示
@@ -189,16 +184,12 @@
             today: "今天",
             clear: "清除"
         };
-
         $.fn.datepicker.defaults.language = 'cn';
         $.fn.datepicker.defaults.format = "yyyy-mm-dd";
         $.fn.datepicker.defaults.autoclose = 'true';
-
-
         //回款
         $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
         $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-
         $('#isReceived').on('ifChanged', function (event) {
             if (this.checked) {
                 $('#isReceived').val('1');
@@ -206,7 +197,6 @@
                 $('#isReceived').val('0');
             }
         });
-
         //出款
         $('#isPaid').on('ifChanged', function (event) {
             if (this.checked) {
@@ -215,8 +205,6 @@
                 $('#isPaid').val('0');
             }
         });
-
-
         //开始时间
         var starttime = $("#datepicker_start").val();
         if (starttime == "") {
@@ -232,22 +220,16 @@
         }
         //搜索提交
         $("#search").on('click', function () {
-
             $("#media_search").submit();
-
         });
-
         //导出
         // $("#export").on('click', function () {
         //
         //     window.open("/admin/media/?%5C_pjax=%23pjax-container&_export_=all");
         // });
-
     });
-
     //datatables
     $(function () {
-
         $('#example1').DataTable({
             'dom': 'lBtip',
             buttons: {
@@ -272,7 +254,6 @@
                 "targets": [6, 8],
                 "orderable": false
             }],
-
             'language': {
                 "sProcessing": "处理中...",
                 "sLengthMenu": "显示 _MENU_ 项结果",
@@ -297,9 +278,7 @@
                     "sSortDescending": ": 以降序排列此列"
                 }
             }
-
         });
     });
-
     //-->
 </script>

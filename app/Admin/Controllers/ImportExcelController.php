@@ -10,19 +10,20 @@ use Excel;
 use App\Admin\Controllers\Base;
 use App\Models\Trade;
 use Encore\Admin\Widgets\Alert;
-
-
+use Illuminate\Support\Facades\Storage;
+use  IlluminateIlluminate\Support\Facades\Session;
 class ImportExcelController extends Controller
 {
     //excel导入
     public function import(){
         return Admin::content(function (Content $content) {
-            $content->header('上传Excel报表');          
-            $content->body(view('admin.excel.import'));
+            $content->header('上传Excel报表');
+            $url = Storage::url('trade.xls');
+            $content->body(view('admin.excel.import',compact('url')));
         });
     }
-    
-    //导入数据预览    
+
+    //导入数据预览
     public function check(Request $request){
         if(!$request->hasFile('file')){
             admin_toastr('上传失败','error');
@@ -31,12 +32,12 @@ class ImportExcelController extends Controller
         }
         return Admin::content(function (Content $content) use($request) {
             $content->header('Excel数据确认');
-      
+
             $error=0;
             $file = $_FILES;
             $excel_file_path = $file['file']['tmp_name'];
             Excel::load($excel_file_path, function($reader) use(&$rows){
-                $reader = $reader->getSheet(0); 
+                $reader = $reader->getSheet(0);
                 $rows= $reader->toArray();
             });
             $flag =0;
@@ -44,7 +45,7 @@ class ImportExcelController extends Controller
             $headers=[];
             //处理相关数据
             foreach ($rows as $key=>$val){
-                
+
                 if($key==0){
                     $headers =array_merge(['是否错误','序号'],$val);
                 }else{
@@ -61,7 +62,7 @@ class ImportExcelController extends Controller
                         $flag=1;
                         array_push( $result[$key]['error'],1001);
                     }
-                    
+
                     //客户
                     $result[$key]['customer_name']=$val[1];
 //                    $customer = Base::getCustomer($val[1]);
@@ -72,7 +73,7 @@ class ImportExcelController extends Controller
 //                        $result[$key]['customer_id']=0;
 //                        array_push( $result[$key]['error'],1002);
 //                    }
-                    
+
                     //媒体
                     $result[$key]['media_name']=$val[2];
                     /*
@@ -85,23 +86,23 @@ class ImportExcelController extends Controller
                         array_push( $result[$key]['error'],1003);
                     }
                     */
-                   
+
                     //标题
                     $result[$key]['contribution']=$val[3];
-                   
+
                     if(empty($val[3])){
-                      $flag=1;           
+                      $flag=1;
                       array_push( $result[$key]['error'],1004);
                     }
                     //项目链接
                     $result[$key]['project']=$val[4];
-                    
+
                     //字数
                     $result[$key]['words']=$val[5];
-                    
+
                     //单价
                     $result[$key]['price']=$val[6];
-                    
+
                     //报价
                     $result[$key]['customer_price']=$val[7];
                     /*
@@ -110,7 +111,7 @@ class ImportExcelController extends Controller
                         array_push( $result[$key]['error'],1005);
                     }
                     */
-                    
+
                     //媒体款
                     $result[$key]['media_price']=$val[8];
                     /*
@@ -124,30 +125,30 @@ class ImportExcelController extends Controller
                         }
                     }
                   */
-                   
+
                     //利润
                     $result[$key]['profit']=$val[9];
                     if( $val[7]-$val[8] != $val[9] ){
                         $flag=1;
                         array_push( $result[$key]['error'],1008);
                     }
-                    
+
                     //是否回款
-                    $result[$key]['is_received']=$val[10];                    
+                    $result[$key]['is_received']=$val[10];
                     //是是否出款
                     $result[$key]['is_paid']=$val[11];
-                }                
-            }          
- 
+                }
+            }
+
             $excelView = view('admin.excel.read',compact('result','headers','flag'))
             ->render();
             $content->row($excelView);
-           
+
         });
-    
+
     }
     public function saveExcel(Request $request){
-     
+
             $excel_data = $request->input('exceldata');
             $rows = json_decode(base64_decode($excel_data),true);
             foreach ($rows as $key=>$value){
@@ -159,8 +160,8 @@ class ImportExcelController extends Controller
                 $rows[$key]['trade_ts']=strtotime($value['trade_ts']);
                 $rows[$key]['leader']=Admin::user()->name;
             }
-        
-            //保存数据   
+
+            //保存数据
             try{
                 $rs=Trade::insert($rows);
                 $data =['data'=>$rows,'status'=>1,'message'=>'保存成功'];

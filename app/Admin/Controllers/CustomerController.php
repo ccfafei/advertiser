@@ -91,7 +91,7 @@ class CustomerController extends Controller
                     return $is_cooperate ? '是' : '否';
             })->sortable();
             if(!Admin::user()->isAdministrator()){
-                $grid->model()->where('leader',Admin::user()->username);
+                $grid->model()->where('leader',Admin::user()->name);
             }else{
                 $grid->leader('负责人');
             }
@@ -132,7 +132,7 @@ class CustomerController extends Controller
                 $form->date('develop_ts','开发时间')->format("YYYY-MM-DD");
                 if(!Admin::user()->isAdministrator()){
                     $form->hidden('leader','负责人')->default(function($user){
-                        return $user= Admin::user()->username;
+                        return $user= Admin::user()->name;
                     });
                 }else{
                     $form->text('leader','负责人');

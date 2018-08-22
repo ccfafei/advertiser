@@ -274,7 +274,7 @@ class TradeController extends Controller
 
     }
  protected function checkDestory(Request $request){
-  
+
      $trade_id = $request->input('trade_id');
      if (empty($trade_id)){
          return $reponses = [

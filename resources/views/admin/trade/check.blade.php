@@ -453,10 +453,10 @@
                             $.pjax.reload('#pjax-container');
 
                             if (typeof data === 'object') {
-                                if (data.status) {
-                                    swal(data.message, '', 'success');
+                                if (data.status==0) {
+                                    swal(data.msg, '', 'success');
                                 } else {
-                                    swal(data.message, '', 'error');
+                                    swal(data.msg, '', 'error');
                                 }
                             }
                         }

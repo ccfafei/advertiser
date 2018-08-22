@@ -274,7 +274,13 @@ class TradeController extends Controller
 
     }
  protected function checkDestory(Request $request){
-
+     if (! Permission::check('trade.check')) {
+         return $reponses = [
+             'status' => 1,
+             'msg' => '无权访问!',
+             'data' => []
+         ];
+     }
      $trade_id = $request->input('trade_id');
      if (empty($trade_id)){
          return $reponses = [

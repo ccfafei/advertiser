@@ -180,10 +180,11 @@
                                 <a href="{!! url('/admin/trade/check/'. $items['trade_id'].'/edit') !!}">
                                     <i   class="fa fa-edit"></i>
                                 </a>
-&nbsp;
+<!--
                                 <a href="javascript:void(0);" data-id="{!! $items['trade_id'] !!}" class="grid-row-delete">
                                     <i class="fa fa-trash"></i>
                                 </a>
+                                --
                             </td>
 
 

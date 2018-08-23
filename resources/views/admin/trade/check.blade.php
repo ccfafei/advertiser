@@ -427,7 +427,7 @@
 
 
         }
-
+/*
         $('.grid-row-delete').unbind('click').click(function() {
 
             var id = $(this).data('id');
@@ -463,5 +463,6 @@
                     });
                 });
         });
+        */
     </script>
     

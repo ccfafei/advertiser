@@ -9,14 +9,14 @@
              <input name="customer_name" id="customerName" class="form-control mr_1" placeholder="请输入客户名称    " value="" />            
            </div>          
      
-                <label>开始时间: </label>
+                <label>月份: </label>
                 <div class="input-group date mr_2 mt_1">
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                  <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="">
+                  <input type="text" class="form-control mr_1" id="datepicker_start" name="month" value="">
                 </div>
-             
+             <!--
                <label>结束时间: </label>
                 <div class="input-group date mr_1">
                       <div class="input-group-addon">
@@ -24,6 +24,7 @@
                       </div>
                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
                 </div>
+                -->
                 <label>是否回款: </label>
                  <select name="is_received" class="form-control mr_2">
                   <option value ="all">请选择</option>
@@ -57,7 +58,7 @@
                 <th>客户名称 </th>
                 <th>金额</th>
                 <th>是否回款</th>
-                <th>交易明细</th>
+                <th>负责人</th>
             </tr>
           <thead>
           <tbody>
@@ -66,10 +67,13 @@
                 <td>{{ $key+1 }}</td>             
                 <td>{{ $items['trade_ts'] }}</td>
                 <td>{{ $items['customer_name']}}</td>              
-                <td>{{ $items['customer_price']}}</td>                                       
-                <td>{!! $items['is_received'] !!}</td>
+                <td>{{ $items['customer_price']}}</td>
+                <td>{!! $items['leader'] !!}</td>
+
+                <!--
                 <td><a href="javascript:void(0)" onClick="getTradeDetails([{!! $items['trade_ids'] !!}]);" 
                 class="btn btn-primary"  data-toggle="modal">查看明细</a></td>
+                -->
                
             </tr>            
             @endforeach
@@ -113,23 +117,28 @@ $(function () {
     }; 
 
     $.fn.datepicker.defaults.language = 'cn';
-    $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+    $.fn.datepicker.defaults.format = "yyyy-mm";
     $.fn.datepicker.defaults.autoclose = 'true';
     
 	 //开始时间
 	 var starttime=$("#datepicker_start").val();
      if(starttime == ""){
-         var lastday = getBeforeDate(-30);
-         $("#datepicker_start").val(lastday);    
+         //var lastday = getBeforeDate(-
+         var date=new Date;
+         var year=date.getFullYear();
+         var month=date.getMonth()+1;
+         month =(month<10 ? "0"+month:month);
+         var mydate = (year.toString()+"-"+month.toString());
+         $("#datepicker_start").val(mydate);
          $("#datepicker_start").datepicker("update", lastday);        
      }
      //结束时间
-     var endtime=$("#datepicker_end").val();
-     if(endtime == ""){
-         $("#datepicker_end").val(nowtime);    
-         $("#datepicker_end").datepicker("update", nowtime);        
-     }
-
+     // var endtime=$("#datepicker_end").val();
+     // if(endtime == ""){
+     //     $("#datepicker_end").val(nowtime);
+     //     $("#datepicker_end").datepicker("update", nowtime);
+     // }
+     //
 
      //搜索提交 
      $("#search").on('click',function(){

@@ -184,7 +184,7 @@
                                 <a href="javascript:void(0);" data-id="{!! $items['trade_id'] !!}" class="grid-row-delete">
                                     <i class="fa fa-trash"></i>
                                 </a>
-                                --
+                                -->
                             </td>
 
 
@@ -271,7 +271,7 @@
             //开始时间
             var starttime = $("#datepicker_start").val();
             if (starttime == "") {
-                var lastday = getBeforeDate(-30);
+                var lastday = getBeforeDate(-7);
                 $("#datepicker_start").val(lastday);
                 $("#datepicker_start").datepicker("update", lastday);
             }
@@ -428,7 +428,7 @@
 
 
         }
-/*
+
         $('.grid-row-delete').unbind('click').click(function() {
 
             var id = $(this).data('id');
@@ -464,6 +464,6 @@
                     });
                 });
         });
-        */
+
     </script>
     

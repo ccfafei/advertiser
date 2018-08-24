@@ -429,7 +429,7 @@
 
         $(function () {
 
-            $('.grid-row-delete').unbind('click').click(function () {
+            $('.grid-row-delete').click(function () {
 
                 var id = $(this).data('id');
 

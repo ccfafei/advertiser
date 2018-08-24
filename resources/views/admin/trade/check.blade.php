@@ -181,7 +181,7 @@
                                     <i   class="fa fa-edit"></i>
                                 </a>
 
-                                <a href="javascript:void(0);" data-id="{!! $items['trade_id'] !!}" class="grid-row-delete">
+                                <a href="javascript:void(0);" data-id="{!! $items['trade_id'] !!}" class="grid-row-delete" onClick="rowdelete();"
                                     <i class="fa fa-trash"></i>
                                 </a>
 
@@ -426,10 +426,8 @@
 
             });
         }
+function rowdelete(){
 
-        $(function () {
-
-            $('.grid-row-delete').click(function () {
                 alert('aaa');
 
                 var id = $(this).data('id');
@@ -464,9 +462,8 @@
                             }
                         });
                     });
-            });
-        });
 
+}
 
     </script>
     

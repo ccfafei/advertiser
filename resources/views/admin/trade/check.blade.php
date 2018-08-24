@@ -426,11 +426,10 @@
 
             });
         }
-function rowdelete(){
+function rowdelete(id){
+    
 
-                alert('aaa');
-
-                var id = $(this).data('id');
+                var id =id;
 
                 swal({
                         title: "确认删除?",

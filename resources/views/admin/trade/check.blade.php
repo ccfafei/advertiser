@@ -184,7 +184,7 @@
                                 <a href="javascript:void(0);" data-id="{!! $items['trade_id'] !!}" class="grid-row-delete">
                                     <i class="fa fa-trash"></i>
                                 </a>
-                             
+
                             </td>
 
 
@@ -425,45 +425,47 @@
                 });
 
             });
-
-
         }
 
-        $('.grid-row-delete').unbind('click').click(function() {
+        $(function () {
 
-            var id = $(this).data('id');
+            $('.grid-row-delete').unbind('click').click(function () {
 
-            swal({
-                    title: "确认删除?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "确认",
-                    closeOnConfirm: false,
-                    cancelButtonText: "取消"
-                },
-                function(){
-                    $.ajax({
-                        method: 'post',
-                        url: '/admin/tradecheck/destory',
-                        data: {
-                           trade_id:id,
-                            _token:LA.token,
-                        },
-                        success: function (data) {
-                            $.pjax.reload('#pjax-container');
+                var id = $(this).data('id');
 
-                            if (typeof data === 'object') {
-                                if (data.status==0) {
-                                    swal(data.msg, '', 'success');
-                                } else {
-                                    swal(data.msg, '', 'error');
+                swal({
+                        title: "确认删除?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确认",
+                        closeOnConfirm: false,
+                        cancelButtonText: "取消"
+                    },
+                    function () {
+                        $.ajax({
+                            method: 'post',
+                            url: '/admin/tradecheck/destory',
+                            data: {
+                                trade_id: id,
+                                _token: LA.token,
+                            },
+                            success: function (data) {
+                                $.pjax.reload('#pjax-container');
+
+                                if (typeof data === 'object') {
+                                    if (data.status == 0) {
+                                        swal(data.msg, '', 'success');
+                                    } else {
+                                        swal(data.msg, '', 'error');
+                                    }
                                 }
                             }
-                        }
+                        });
                     });
-                });
+            });
         });
+
 
     </script>
     

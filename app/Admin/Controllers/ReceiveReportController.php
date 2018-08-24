@@ -35,24 +35,27 @@ class ReceiveReportController extends Controller
           
           
           //注意时间判断，过滤临界值
-          if( $request->has('start_day')){
-             $start_day = strtotime($request->input('start_day'));
-             $start_day >time() && $start_day = strtotime(' 00:00:00');
-             $model = $model->where('trade_ts','>=',$start_day);
-             
-          }
-         
-          if( $request->has('end_day')){
-              $end_day = strtotime($request->input('end_day'));
-              $end_day > time() && $end_day = time();
-              if(!empty($start_day) && $end_day <$start_day ){
-                  $end_day = $start_day;
-              }
-              $model = $model->where('trade_ts','<=',$end_day);
-          }
-        
+//          if( $request->has('start_day')){
+//             $start_day = strtotime($request->input('start_day'));
+//             $start_day >time() && $start_day = strtotime(' 00:00:00');
+//             $model = $model->where('trade_ts','>=',$start_day);
+//
+//          }
+//
+//          if( $request->has('end_day')){
+//              $end_day = strtotime($request->input('end_day'));
+//              $end_day > time() && $end_day = time();
+//              if(!empty($start_day) && $end_day <$start_day ){
+//                  $end_day = $start_day;
+//              }
+//              $model = $model->where('trade_ts','<=',$end_day);
+//          }
 
-          
+          if( $request->has('month')){
+              $month_start = $request->input('month');
+              $model = $model->where('FROM_UNIXTIME(trade_ts,"%Y-%m")', $month_start);
+          }
+
            //状态选择
           if($request->has('is_received') && $request->input('is_received')!='all'){
               $is_received= $request->input('is_received');
@@ -62,15 +65,15 @@ class ReceiveReportController extends Controller
           
           //查询
           $model = $model->select( 
-              DB::raw('FROM_UNIXTIME(trade_ts,"%Y-%m-%d") AS trade_ts '),
+              DB::raw(' FROM_UNIXTIME(trade_ts,"%Y-%m") AS trade_month '),
               'customer_id',
               'customer_name',
               DB::raw('SUM(customer_price) AS customer_price '),
               'is_received', 
-              'created_at'         
+              'leader'
              
             )
-           ->groupBy('trade_ts','customer_name','is_received')
+           ->groupBy('trade_month','customer_name','is_received')
            ->orderBy('trade_ts','desc')
            ->get();
          
@@ -83,13 +86,13 @@ class ReceiveReportController extends Controller
            $prices = $customer_prices = $media_prices = $profits = 0;
            foreach ($rows as $key=>$items){
               //查询当前时间段内相关回款状态的交易id
-              $conditions =[
-                  'customer_id'=>$items['customer_id'],
-                  'trade_ts'=>strtotime($items['trade_ts']),
-                  'is_received'=>$items['is_received'],
-              ];
-              $trade_arr = $this->getTradeIds($conditions);
-              $rows[$key]['trade_ids'] = implode(',',$trade_arr);
+//              $conditions =[
+//                  'customer_id'=>$items['customer_id'],
+//                  'trade_month'=>strtotime($items['trade_month']),
+//                  'is_received'=>$items['is_received'],
+//              ];
+//              $trade_arr = $this->getTradeIds($conditions);
+//              $rows[$key]['trade_ids'] = implode(',',$trade_arr);
 
               
               //显示处理及汇总

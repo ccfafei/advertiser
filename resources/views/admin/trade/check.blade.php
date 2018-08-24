@@ -430,6 +430,7 @@
         $(function () {
 
             $('.grid-row-delete').click(function () {
+                alert('aaa');
 
                 var id = $(this).data('id');
 

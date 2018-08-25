@@ -51,7 +51,7 @@ class PaidReportController extends Controller
               'media_id',
               'media_name',
               DB::raw('if(is_paid=1, SUM(media_price),0) AS paid_prices '),
-              DB::raw('if(is_received=0, SUM(media_price),0) AS no_paid_prices '),
+              DB::raw('if(is_paid=0, SUM(media_price),0) AS no_paid_prices '),
               'is_paid', 
               'created_at'         
              
@@ -75,7 +75,7 @@ class PaidReportController extends Controller
                $paid_prices += $items['paid_prices'];
                $no_paid_prices += $items['no_paid_prices'];
            }
-           $arrsum =['paid_prices'=>$paid_prices];
+           $arrsum =['paid_prices'=>$paid_prices,'no_paid_prices'=>$no_paid_prices];
            $listview = view('admin.report.paid',compact('rows','url','arrsum'))->render();
            $content->row($listview);
       });

@@ -258,7 +258,8 @@
         });
     });
 
-    //-->  function rowdelete(id){
+    //-->
+    function rowdelete(id){
 
 
     var id =id;

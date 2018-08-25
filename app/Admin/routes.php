@@ -20,6 +20,7 @@ Route::group([
     //网络媒体
     $router->resource('media', MediaController::class);
     Route::post('media/index', 'MediaController@index')->name('media.search');
+    Route::post('media/destory', 'MediaController@destory')->name('media.destory');
     $router->resource('mediachannel', ChannelController::class);
     $router->resource('mediacategory',CategoryController::class);
     $router->resource('medialeader',LeaderController::class);

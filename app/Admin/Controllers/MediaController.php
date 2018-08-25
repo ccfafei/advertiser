@@ -171,8 +171,32 @@ class MediaController extends Controller
             $grid->remark('备注');
              
         });
-    }    
+    }
+    protected function destory(Request $request){
 
+        $media_id = $request->input('media_id');
+        if (empty($media_id)){
+            return $reponses = [
+                'status' => 1,
+                'msg' => '参数不能为空!',
+                'data' => []
+            ];
+        }
+        try {
+            Media::where('media_id',$media_id)->delete();
+            return $reponses = [
+                'status' => 0,
+                'msg' => '删除成功!',
+                'data' => []
+            ];
+        }catch (\Exception $e){
+            return $reponses = [
+                'status' => 1,
+                'msg' => '删除失败!',
+                'data' => []
+            ];
+        }
+    }
     
     /**
      * Make a form builder.

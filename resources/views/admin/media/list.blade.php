@@ -152,7 +152,9 @@
                         }?>
                     </td>
                     <td>{!! trim($row['remark']) !!}</td>
-                    <td><a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a>
+                    <td>
+                        <a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:void(0);" class="grid-row-delete" onClick="rowdelete('{!! $items['media_id'] !!}')">  <i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
             @endforeach
@@ -281,4 +283,42 @@
         });
     });
     //-->
+    function rowdelete(id){
+
+
+        var id =id;
+
+        swal({
+                title: "确认删除?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确认",
+                closeOnConfirm: false,
+                cancelButtonText: "取消"
+            },
+            function () {
+                $.ajax({
+                    method: 'post',
+                    url: '/admin/media/destory',
+                    data: {
+                       media_id: id,
+                        _token: LA.token,
+                    },
+                    success: function (data) {
+                        $.pjax.reload('#pjax-container');
+
+                        if (typeof data === 'object') {
+                            if (data.status == 0) {
+                                swal(data.msg, '', 'success');
+                            } else {
+                                swal(data.msg, '', 'error');
+                            }
+                        }
+                    }
+                });
+            });
+
+    }
+
 </script>

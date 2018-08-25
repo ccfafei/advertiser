@@ -56,8 +56,8 @@
                 <th>序号</th>
                 <th>月份 </th>
                 <th>客户名称 </th>
-                <th>金额</th>
-                <th>是否回款</th>
+                <th>已回款</th>
+                <th>未回款</th>
                 <th>负责人</th>
             </tr>
           <thead>
@@ -67,10 +67,11 @@
                 <td>{{ $key+1 }}</td>             
                 <td>{{ $items['trade_month'] }}</td>
                 <td>{{ $items['customer_name']}}</td>              
-                <td>{{ $items['customer_price']}}</td>
+                <td>{{ $items['received_prices']}}</td>
+                <td>{{ $items['no_received_prices']}}</td>
                 <td>{!! $items['leader'] !!}</td>
 
-     
+
                
             </tr>            
             @endforeach
@@ -80,8 +81,8 @@
             <td><b>合计</b></td>
             <td>-</td>
             <td></td>                 
-            <td><b>{{ $arrsum['customer_prices'] }}元</b></td>
-            <td></td>
+            <td><b>{{ $arrsum['received_prices'] }}元</b></td>
+            <td><b>{{ $arrsum['no_received_prices'] }}元</b</td>
              <td></td>
        
             </tr>

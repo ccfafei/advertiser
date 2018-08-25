@@ -294,8 +294,8 @@
             //     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');
             // });
 
-            //选择审核，回款,出款处理等
-            $('.grid-row-checkbox').iCheck({checkboxClass: 'icheckbox_minimal-blue'}).on('ifChanged', function () {
+            //选择审核，回款,出款处理等 icheckbox_minimal-blue
+            $('.grid-row-checkbox').iCheck({checkboxClass: 'icheckbox_minimal'}).on('ifChanged', function () {
                 if (this.checked) {
                     $(this).closest('tr').css('background-color', '#ffffd5');
                 } else {
@@ -312,7 +312,7 @@
                 return selected;
             }
 
-            $('.grid-select-all').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            $('.grid-select-all').iCheck({checkboxClass: 'icheckbox_minimal'});
             $('.grid-select-all').on('ifChanged', function (event) {
                 if (this.checked) {
                     $('.grid-row-checkbox').iCheck('check');

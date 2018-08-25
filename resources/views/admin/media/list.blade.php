@@ -154,7 +154,7 @@
                     <td>{!! trim($row['remark']) !!}</td>
                     <td>
                         <a href="{!! url('/admin/media/'.$row['media_id'].'/edit') !!}"><i class="fa fa-edit"></i></a>
-                        <a href="javascript:void(0);" class="grid-row-delete" onClick="rowdelete('{!! $items['media_id'] !!}')">  <i class="fa fa-trash"></i></a>
+                        <a href="javascript:void(0);" class="grid-row-delete" onClick="rowdelete('{!! $row['media_id'] !!}')">  <i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
             @endforeach

@@ -101,13 +101,8 @@ $(function () {
 
 	//datepicker
 	var nowtime = getNow();
-    $.fn.datepicker.dates['cn'] = {   //切换为中文显示
-                    months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-                    monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-                    clear: "清除"
-    };
-
-    $.fn.datepicker.defaults.language = 'cn';
+    $.fn.datepicker.defaults.language = 'zh-CN';
+    $.fn.datepicker.defaults.todayHighlight = 'true';
     $.fn.datepicker.defaults.format = "yyyy-mm";
     $.fn.datepicker.defaults.startView = 'months';
     $.fn.datepicker.defaults.maxViewMode = 'years';

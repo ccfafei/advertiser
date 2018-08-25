@@ -99,8 +99,8 @@ class ReceiveReportController extends Controller
               $rows[$key]['status'] = $items['is_received'];
               $rows[$key]['is_received'] = Base::dispayStyle('is_received',$items['is_received']);
               $customer_prices += $items['customer_price'];//报价
-              unset($conditions);
-              unset($trade_arr);
+//              unset($conditions);
+//              unset($trade_arr);
            }
            $arrsum =['customer_prices'=>$customer_prices];
            $listview = view('admin.report.receive',compact('rows','url','arrsum'))->render();

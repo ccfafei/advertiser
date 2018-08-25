@@ -70,10 +70,7 @@
                 <td>{{ $items['customer_price']}}</td>
                 <td>{!! $items['leader'] !!}</td>
 
-                <!--
-                <td><a href="javascript:void(0)" onClick="getTradeDetails([{!! $items['trade_ids'] !!}]);" 
-                class="btn btn-primary"  data-toggle="modal">查看明细</a></td>
-                -->
+     
                
             </tr>            
             @endforeach

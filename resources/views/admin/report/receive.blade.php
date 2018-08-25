@@ -70,10 +70,8 @@
                 <td>{{ $items['received_prices']}}</td>
                 <td>{{ $items['no_received_prices']}}</td>
                 <td>{!! $items['leader'] !!}</td>
-
-
-               
-            </tr>            
+                <td>{!! $items['leader'] !!}</td>
+            </tr>
             @endforeach
         
         </tbody>
@@ -128,7 +126,7 @@ $(function () {
          month =(month<10 ? "0"+month:month);
          var mydate = (year.toString()+"-"+month.toString());
          $("#datepicker_start").val(mydate);
-         $("#datepicker_start").datepicker("update", lastday);        
+         $("#datepicker_start").datepicker("update", mydate);
      }
      //结束时间
      // var endtime=$("#datepicker_end").val();

@@ -35,7 +35,7 @@ class ReceiveReportController extends Controller
             }
             if ($request->has('month')) {
                 $month_start = $request->input('month');
-                $model = $model->where('FROM_UNIXTIME(trade_ts,"%Y-%m")', $month_start);
+                $model = $model->where( DB::raw(' FROM_UNIXTIME(trade_ts,"%Y-%m")'), $month_start);
             }
 
             //状态选择

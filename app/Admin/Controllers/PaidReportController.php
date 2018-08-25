@@ -53,7 +53,7 @@ class PaidReportController extends Controller
               DB::raw('if(is_paid=1, SUM(media_price),0) AS paid_prices '),
               DB::raw('if(is_paid=0, SUM(media_price),0) AS no_paid_prices '),
               'is_paid', 
-              'created_at'         
+              'leader'
              
             )
            ->groupBy('trade_month','media_name')

@@ -9,21 +9,15 @@
                            value=""/>
                 </div>
 
-                <label>开始时间: </label>
+            <label>月份: </label>
                 <div class="input-group date mr_2 mt_1">
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="">
+                    <input type="text" class="form-control mr_1" id="datepicker_start" name="month" value="">
                 </div>
 
-                <label>结束时间: </label>
-                <div class="input-group date mr_1">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
-                </div>
+
                 <label>是否出款: </label>
                 <select name="is_paid" class="form-control mr_2">
                     <option value="all">请选择</option>
@@ -55,7 +49,7 @@
             @foreach($rows as $key=>$items)
                 <tr>
                     <td>{{ $key+1 }}</td>
-                    <td>{{ $items['trade_ts'] }}</td>
+                    <td>{{ $items['trade_month'] }}</td>
                     <td>{{ $items['media_name']}}</td>
                     <td>{{ $items['paid_prices']}}</td>
                     <td>{!! $items['no_paid_prices'] !!}</td>

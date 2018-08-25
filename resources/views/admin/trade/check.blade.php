@@ -247,8 +247,12 @@
 
 
             //回款
-            $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-            $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            // $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            //$('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            $('input[type="checkbox"]').iCheck({
+                handle : 'checkbox',
+                checkboxClass : 'icheckbox_minimal-blue',
+            });
 
             $('#isReceived').on('ifChanged', function (event) {
                 if (this.checked) {
@@ -295,7 +299,7 @@
             // });
 
             //选择审核，回款,出款处理等 icheckbox_minimal-blue
-            $('.grid-row-checkbox').iCheck({checkboxClass: 'icheckbox_minimal-blue'}).on('ifChanged', function () {
+            $('.grid-row-checkbox').on('ifChanged', function () {
                 if (this.checked) {
                     $(this).closest('tr').css('background-color', '#ffffd5');
                 } else {
@@ -312,7 +316,7 @@
                 return selected;
             }
 
-            $('.grid-select-all').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+           // $('.grid-select-all').iCheck({checkboxClass: 'icheckbox'});
             $('.grid-select-all').on('ifChanged', function (event) {
                 if (this.checked) {
                     $('.grid-row-checkbox').iCheck('check');

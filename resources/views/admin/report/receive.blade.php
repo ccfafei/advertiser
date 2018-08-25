@@ -1,3 +1,15 @@
+<style>
+    .dataTables_wrapper .dataTables_length {
+        display: inline-block;
+        float: left;
+        margin-bottom: 5px;
+    }
+
+    .dataTables_wrapper .dt-button {
+        display: inline-block;
+        float: right;
+    }
+</style>
 
 <div class="box">
     <div class="box-header">
@@ -162,7 +174,7 @@ $(function () {
                     extend: 'excel',
                     className: 'excelbutton dt-button btn btn-warning',
                     'text': 'Excel导出',
-                    'title': '业务流量列表',
+                    'title': '回款列表',
                 }
             ]
         },

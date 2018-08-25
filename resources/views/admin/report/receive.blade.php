@@ -54,7 +54,7 @@
          <thead>
             <tr>
                 <th>序号</th>
-                <th>日期 </th>
+                <th>月份 </th>
                 <th>客户名称 </th>
                 <th>金额</th>
                 <th>是否回款</th>
@@ -65,7 +65,7 @@
              @foreach($rows as $key=>$items)
             <tr>
                 <td>{{ $key+1 }}</td>             
-                <td>{{ $items['trade_ts'] }}</td>
+                <td>{{ $items['trade_month'] }}</td>
                 <td>{{ $items['customer_name']}}</td>              
                 <td>{{ $items['customer_price']}}</td>
                 <td>{!! $items['leader'] !!}</td>

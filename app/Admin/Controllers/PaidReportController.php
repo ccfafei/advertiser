@@ -32,27 +32,12 @@ class PaidReportController extends Controller
               $media_name = $request->input('media_name');
               $model = $model->where('media_name','like','%'.$media_name.'%');
           }
-          
-          
-          //注意时间判断，过滤临界值
-          if( $request->has('start_day')){
-             $start_day = strtotime($request->input('start_day'));
-             $start_day >time() && $start_day = strtotime(' 00:00:00');
-             $model = $model->where('trade_ts','>=',$start_day);
-             
-          }
-         
-          if( $request->has('end_day')){
-              $end_day = strtotime($request->input('end_day'));
-              $end_day > time() && $end_day = time();
-              if(!empty($start_day) && $end_day <$start_day ){
-                  $end_day = $start_day;
-              }
-              $model = $model->where('trade_ts','<=',$end_day);
-          }
-        
 
-          
+          if ($request->has('month')) {
+              $month_start = $request->input('month');
+              $model = $model->where( DB::raw(' FROM_UNIXTIME(trade_ts,"%Y-%m")'), $month_start);
+          }
+
            //状态选择
           if($request->has('is_paid') && $request->input('is_paid')!='all'){
               $is_paid= $request->input('is_paid');
@@ -61,17 +46,18 @@ class PaidReportController extends Controller
         
           
           //查询
-          $model = $model->select( 
-              DB::raw('FROM_UNIXTIME(trade_ts,"%Y-%m-%d") AS trade_ts '),
+          $model = $model->select(
+              DB::raw(' FROM_UNIXTIME(trade_ts,"%Y-%m") AS trade_month '),
               'media_id',
               'media_name',
-              DB::raw('SUM(media_price) AS media_price '),
+              DB::raw('if(is_paid=1, SUM(media_price),0) AS paid_prices '),
+              DB::raw('if(is_received=0, SUM(media_price),0) AS no_paid_prices '),
               'is_paid', 
               'created_at'         
              
             )
-           ->groupBy('trade_ts','media_name','is_received')
-           ->orderBy('trade_ts','desc')
+           ->groupBy('trade_month','media_name')
+           ->orderBy('trade_month','desc')
            ->get();
          
            $rows =[];
@@ -80,26 +66,16 @@ class PaidReportController extends Controller
            }
          
           
-           $prices = $customer_prices = $media_prices = $profits = 0;
+           $prices = $paid_prices = $no_paid_prices = $profits = 0;
            foreach ($rows as $key=>$items){
-              //查询当前时间段内相关回款状态的交易id
-              $conditions =[
-                  'media_id'=>$items['media_id'],
-                  'trade_ts'=>strtotime($items['trade_ts']),
-                  'is_paid'=>$items['is_paid'],
-              ];
-              $trade_arr = $this->getTradeIds($conditions);
-              $rows[$key]['trade_ids'] = implode(',',$trade_arr);
 
-              
               //显示处理及汇总
               $rows[$key]['status'] = $items['is_paid'];
               $rows[$key]['is_paid'] = Base::dispayStyle('is_paid',$items['is_paid']);
-              $media_prices += $items['media_price'];//报价
-              unset($conditions);
-              unset($trade_arr);
+               $paid_prices += $items['paid_prices'];
+               $no_paid_prices += $items['no_paid_prices'];
            }
-           $arrsum =['media_prices'=>$media_prices];
+           $arrsum =['paid_prices'=>$paid_prices];
            $listview = view('admin.report.paid',compact('rows','url','arrsum'))->render();
            $content->row($listview);
       });

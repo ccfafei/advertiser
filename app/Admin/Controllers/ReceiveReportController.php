@@ -57,7 +57,7 @@ class ReceiveReportController extends Controller
 
             )
                 ->groupBy('trade_month', 'customer_name')
-                ->orderBy('trade_ts', 'desc')
+                ->orderBy('trade_month', 'desc')
                 ->get();
 
             $rows = [];

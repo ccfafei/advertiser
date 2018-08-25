@@ -214,7 +214,7 @@
         //开始时间
         var starttime = $("#datepicker_start").val();
         if (starttime == "") {
-            var lastday = getBeforeDate(-30);
+            var lastday = getBeforeDate(-7);
             $("#datepicker_start").val(lastday);
             $("#datepicker_start").datepicker("update", lastday);
         }
@@ -231,11 +231,11 @@
 
         });
 
-        //导出
-        $("#export").on('click', function () {
-
-            window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');
-        });
+        // //导出
+        // $("#export").on('click', function () {
+        //
+        //     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');
+        // });
 
     });
 

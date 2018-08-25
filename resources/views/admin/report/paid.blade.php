@@ -156,10 +156,10 @@
         });
 
         //导出
-        $("#export").on('click', function () {
-
-            window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');
-        });
+        // $("#export").on('click', function () {
+        //
+        //     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');
+        // });
 
     });
 
@@ -167,6 +167,17 @@
     $(function () {
 
         $('#example1').DataTable({
+            'dom': 'lBtip',
+            buttons: {
+                buttons: [
+                    {
+                        extend: 'excel',
+                        className: 'excelbutton dt-button btn btn-warning',
+                        'text': 'Excel导出',
+                        'title': '业务流量列表',
+                    }
+                ]
+            },
             'paging': true,
             'lengthChange': true,
             'searching': false,

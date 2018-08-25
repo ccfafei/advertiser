@@ -111,6 +111,32 @@ class WeiboController extends Controller
             $content->body($this->form());
         });
     }
+
+    protected function destory(Request $request){
+
+        $weibo_id = $request->input('weibo_id');
+        if (empty($weibo_id)){
+            return $reponses = [
+                'status' => 1,
+                'msg' => '参数不能为空!',
+                'data' => []
+            ];
+        }
+        try {
+            Weibo::where('weibo_id',$weibo_id)->delete();
+            return $reponses = [
+                'status' => 0,
+                'msg' => '删除成功!',
+                'data' => []
+            ];
+        }catch (\Exception $e){
+            return $reponses = [
+                'status' => 1,
+                'msg' => '删除失败!',
+                'data' => []
+            ];
+        }
+    }
     
     /**
      * Make a grid builder.

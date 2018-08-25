@@ -30,6 +30,7 @@ Route::group([
     //微博
     Route::post('weibo/index', 'WeiboController@index')->name('weibo.search');
     $router->resource('weibo', WeiboController::class);
+    Route::post('weibo/destory', 'WeiboController@destory')->name('weibo.destory');
     $router->resource('weibocategory', CategoryWeiboController::class);
     $router->resource('weiboleader', LeaderWeiboController::class);
     $router->get('excelweibo/import', 'ImportWeiboExcelController@import')->name('excel.weibo.import');
@@ -39,6 +40,7 @@ Route::group([
     //微信
     Route::post('weixin/index', 'WeixinController@index')->name('weixin.search');
     $router->resource('weixin', WeixinController::class);
+    Route::post('weixin/destory', 'WeixinController@destory')->name('weixin.destory');
     $router->resource('weixincategory', CategoryWeixinController::class);
     $router->resource('weixinleader', LeaderWeixinController::class);
     $router->get('excelweixin/import', 'ImportWeixinExcelController@import')->name('excel.weixin.import');

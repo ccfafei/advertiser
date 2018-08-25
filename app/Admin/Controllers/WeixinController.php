@@ -109,6 +109,32 @@ class WeixinController extends Controller
             $content->body($this->form());
         });
     }
+
+    protected function destory(Request $request){
+
+        $weixin_id = $request->input('weixin_id');
+        if (empty($weixin_id)){
+            return $reponses = [
+                'status' => 1,
+                'msg' => '参数不能为空!',
+                'data' => []
+            ];
+        }
+        try {
+            Weixin::where('weixin_id',$weixin_id)->delete();
+            return $reponses = [
+                'status' => 0,
+                'msg' => '删除成功!',
+                'data' => []
+            ];
+        }catch (\Exception $e){
+            return $reponses = [
+                'status' => 1,
+                'msg' => '删除失败!',
+                'data' => []
+            ];
+        }
+    }
     
     /**
      * Make a grid builder.

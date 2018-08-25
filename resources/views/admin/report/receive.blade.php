@@ -39,9 +39,7 @@
               <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search" ></i>搜索</button>
            </label>  
           &nbsp;&nbsp;
-           <label  class="mt_1">
-              <button type="button" class="btn btn-primary"  id="export"><i class="fa  fa-download"></i>导出</button>
-           </label>
+
         </div>
           
     </form>

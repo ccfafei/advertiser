@@ -25,7 +25,15 @@
                     <option value="1">是</option>
                 </select>
             </div>
-            <div class="clearfix mt_1"></div>
+            <div class="clearfix mt_1" ></div>
+            <div class="form-group">
+
+                <label class="mt_1 mr_2">
+                    <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search" ></i>搜索</button>
+                </label>
+                &nbsp;&nbsp;
+
+            </div>
 
 
         </form>

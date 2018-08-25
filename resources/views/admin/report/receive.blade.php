@@ -70,7 +70,6 @@
                 <td>{{ $items['received_prices']}}</td>
                 <td>{{ $items['no_received_prices']}}</td>
                 <td>{!! $items['leader'] !!}</td>
-                <td>{!! $items['leader'] !!}</td>
             </tr>
             @endforeach
         

@@ -98,7 +98,11 @@
 
                     <td>{!! $row['weibo_ts'] !!}</td>
                     <td>{!! $row['weibo_name'] !!}</td>
-                    <td>{!! $category[$row['weibo_category']] !!}</td>
+                    <td>
+                        @if(key_exists($row['weibo_category'],$category))
+                            {!! $category[$row['weibo_category']] !!}
+                        @endif
+                      </td>
                     <td>{!! $row['fans'] !!}</td>
                     <td>{!! $row['direct_price'] !!}</td>
                     <td>{!! $row['forward_price'] !!}</td>
@@ -110,7 +114,10 @@
                     </td>
                     <td>{!! $row['direct_microtask'] !!}</td>
                     <td>{!! $row['forward_microtask'] !!}</td>
-                    <td>{!! $leader[$row['leader']] !!}</td>
+                    <td>
+                        @if(key_exists($row['leader'],$leader))
+                            {!! $leader[$row['leader']] !!}
+                        @endif</td>
                     <td>{!! $row['remark'] !!}</td>
                     <td>
                         <a href="{!! url('/admin/weibo/'.$row['weibo_id'].'/edit') !!}"><i class="fa fa-edit"></i></a>

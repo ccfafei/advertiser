@@ -99,13 +99,9 @@
                     <td>{!! $row['weixin_ts'] !!}</td>
                     <td>{!! $row['weixin_name'] !!}</td>
                     <td>
-                        <?php
-                        if(!empty($row['weixin_category'])&&in_array($row['weixin_category'],$category)){
-                            echo  $category[$row['weixin_category']];
-                        }else{
-                            echo "无";
-                        }
-                        ?>
+                        @if(key_exists($row['weixin_category'],$category))
+                            {!! $category[$row['weixin_category']] !!}
+                        @endif
                     </td>
                     <td>{!! $row['ID'] !!}</td>
                     <td>{!! $row['fans'] !!}</td>
@@ -121,13 +117,9 @@
                     </td>
 
                     <td>
-                     <?php
-                            if(!empty($row['leader'])&&in_array($row['leader'],$leader)){
-                               echo  $leader[$row['leader']];
-                            }else{
-                                echo "无";
-                            }
-                     ?>
+                        @if(key_exists($row['leader'],$leader))
+                            {!! $leader[$row['leader']] !!}
+                        @endif
                     </td>
                     <td>{!! $row['remark'] !!}</td>
                     <td>

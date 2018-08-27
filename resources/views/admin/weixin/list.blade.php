@@ -119,7 +119,7 @@
                     <td>
                         @if(in_array($row['leader'],$leader))
                             {!! $leader[$row['leader']] !!}
-                        @if
+                        @endif
 
 
                     </td>

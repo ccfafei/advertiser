@@ -98,7 +98,11 @@
 
                     <td>{!! $row['weixin_ts'] !!}</td>
                     <td>{!! $row['weixin_name'] !!}</td>
-                    <td>{!! $category[$row['weixin_category']] !!}</td>
+                    <td>
+                        @if(in_array($row['weixin_category'],$category))
+                            {!!$category[$row['weixin_category']] !!}
+                        @endif
+                    </td>
                     <td>{!! $row['ID'] !!}</td>
                     <td>{!! $row['fans'] !!}</td>
                     <td>{!! $row['headline'] !!}</td>
@@ -112,12 +116,19 @@
                         ?>
                     </td>
 
-                    <td>{!! $leader[$row['leader']] !!}</td>
+                    <td>
+                        @if(in_array($row['leader'],$leader))
+                            {!! $leader[$row['leader']] !!}
+                        @if
+
+
+                    </td>
                     <td>{!! $row['remark'] !!}</td>
                     <td>
                         <a href="{!! url('/admin/weixin/'.$row['weixin_id'].'/edit') !!}"><i class="fa fa-edit"></i></a>
 
-                        <a href="javascript:void(0);" class="grid-row-delete" onClick="rowdelete('{!! $row['weixin_id'] !!}')">  <i class="fa fa-trash"></i></a>
+                        <a href="javascript:void(0);" class="grid-row-delete"
+                           onClick="rowdelete('{!! $row['weixin_id'] !!}')"> <i class="fa fa-trash"></i></a>
 
                     </td>
                 </tr>
@@ -242,10 +253,10 @@
 
     //-->
 
-    function rowdelete(id){
+    function rowdelete(id) {
 
 
-        var id =id;
+        var id = id;
 
         swal({
                 title: "确认删除?",

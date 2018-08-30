@@ -172,7 +172,7 @@
         //开始时间
         var starttime = $("#datepicker_start").val();
         if (starttime == "") {
-            var lastday = getBeforeDate(-7);
+            var lastday = getBeforeDate(-30);
             $("#datepicker_start").val(lastday);
             $("#datepicker_start").datepicker("update", lastday);
         }

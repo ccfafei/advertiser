@@ -160,6 +160,7 @@ class ImportExcelController extends Controller
                 $rows[$key]['leader']=Admin::user()->name;
             }
 
+
             //保存数据
             try{
                 $rs=Trade::insert($rows);

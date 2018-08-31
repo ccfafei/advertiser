@@ -110,10 +110,12 @@
         	type:"POST",
         	success: function(ok){
        		 console.log(ok);
-       		 ajaxalert("保存提示:",ok.message,"关闭");
+
               	  if(ok.status == 1){
+                        ajaxalert("保存提示:",ok.message,"关闭");
                 		location.href="{{url('admin/trade')}}";
                	  }else{
+                      ajaxalert("保存提示:",ok.message,"关闭");
                  		history.back(-1);
                   }
             },

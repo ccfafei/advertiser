@@ -183,12 +183,12 @@
 
         var channel = "{!! $search_arr['channel'] !!}";
         if(channel != ''){
-            $('#category').val(channel);
+            $('#channel').val(channel);
         }
 
         var leader = "{!! $search_arr['leader'] !!}";
         if(leader != ''){
-            $('#category').val(leader);
+            $('#leader').val(leader);
         }
     });
 </script>

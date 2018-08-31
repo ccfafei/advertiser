@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\Media;
 use App\Models\Weibo;

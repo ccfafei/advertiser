@@ -89,7 +89,7 @@
                 </label>
                 &nbsp;&nbsp;
                 <label class="mt_1">
-                    <button type="reset" class="btn btn-warning pull-right">重置</button>
+                    <button type="reset" class="btn btn-warning">重置</button>
                 </label>
                 &nbsp;&nbsp;
              <label class="mt_1">

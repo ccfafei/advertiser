@@ -174,4 +174,18 @@ class Base{
         }
         return $arr;
     }
+    //格式化搜索条件
+   public static  function getSearchs(Request $request,$serach){
+        $search_arr =[];
+        $request_all = $request->all();
+        foreach ($serach as $items) {
+            if(key_exists($items,$request->all())){
+                $search_arr[$items] = $request->input($items);
+            }else{
+                $search_arr[$items] = '';
+            }
+        }
+        return $search_arr;
+   }
+
 }

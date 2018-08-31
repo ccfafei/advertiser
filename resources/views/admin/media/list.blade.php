@@ -18,7 +18,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="">
+                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="{!! $search_arr['start_day'] !!}">
                 </div>
 
                 <label>~ </label>
@@ -26,7 +26,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
+                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="{!! $search_arr['end_day'] !!}">
                 </div>
 
 
@@ -34,12 +34,12 @@
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="media_name" id="mediaName" class="form-control mr_1" placeholder="请输入媒体名称       "
-                           value=""/>
+                           value="{!! $search_arr['media_name'] !!}"/>
                 </div>
                 <label for="contributionTitle" class="control-label">媒体分类: </label>
                 <div class="input-group  mr_2">
 
-                    <select name="category" class="form-control mr_2">
+                    <select name="category" class="form-control mr_2" id="category">
                         <option value="all">请选择</option>
                         @foreach($category as $k=>$v)
                             <option value="{!! $k !!}">{!! $v !!}</option>
@@ -54,7 +54,7 @@
 
                 <label for="" class="control-label">频道: </label>
                 <div class="input-group  mr_2">
-                    <select name="channel" class="form-control mr_2">
+                    <select name="channel" class="form-control mr_2"  id="channel">
                         <option value="all">请选择</option>
                         @foreach($channel as $ck=>$cv)
                             <option value="{!! $ck !!}">{!! $cv !!}</option>
@@ -64,7 +64,7 @@
 
                 <label for="" class="control-label">负责人: </label>
                 <div class="input-group  mr_2">
-                    <select name="leader" class="form-control mr_2">
+                    <select name="leader" class="form-control mr_2"  id="leader">
                         <option value="all">请选择</option>
                         @foreach($leader as $lk=>$lv)
                             <option value="{!! $lk !!}">{!! $lv !!}</option>
@@ -74,12 +74,12 @@
                 <label class="control-label">区域: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                    <input name="area" id="mediaArea" class="form-control mr_1" placeholder="请输入区域" value=""/>
+                    <input name="area" id="mediaArea" class="form-control mr_1" placeholder="请输入区域" value="{!! $search_arr['area'] !!}"/>
                 </div>
                 <label for="" class="control-label">收录: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                    <input name="collection" id="collection" class="form-control mr_1" placeholder="请输入收录" value=""/>
+                    <input name="collection" id="collection" class="form-control mr_1" placeholder="请输入收录" value="{!! $search_arr['collection'] !!}"/>
                 </div>
             </div>
             <div class="clearfix mt_2"></div>
@@ -173,6 +173,26 @@
     }
     LA.token = "{{ csrf_token() }}";
 </script>
+
+<script type="text/javascript">
+    $(function () {
+        var category = "{!! $search_arr['category'] !!}";
+        if(category != ''){
+            $('#category').val(category);
+        }
+
+        var channel = "{!! $search_arr['channel'] !!}";
+        if(channel != ''){
+            $('#category').val(channel);
+        }
+
+        var leader = "{!! $search_arr['leader'] !!}";
+        if(leader != ''){
+            $('#category').val(leader);
+        }
+    });
+</script>
+
 <script type="text/javascript">
     $(function () {
         //datepicker

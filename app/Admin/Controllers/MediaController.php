@@ -77,10 +77,12 @@ class MediaController extends Controller
             if(collect($rows)->isNotEmpty()){
                 $rows=$rows->toArray();
             }
+            $serach=['start_day','end_day','media_name','category','channel','leader','area','collection'];
+            $search_arr =Base::getSearchs($request,$serach);
 
            $exporturl = $this->grid()->exportUrl('all');
             $listview = view('admin.media.list',
-                compact('rows','headers','arrsum','category','channel','leader'))
+                compact('rows','headers','arrsum','category','channel','leader','search_arr'))
             ->render();
             $content->row($listview);
         });

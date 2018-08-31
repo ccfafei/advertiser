@@ -18,7 +18,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="{!! $search_arr['start_day'] !!}">
+                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="">
                 </div>
 
                 <label>~ </label>
@@ -26,7 +26,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="{!! $search_arr['end_day'] !!}">
+                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
                 </div>
 
 
@@ -231,21 +231,27 @@
             }
         });
         //开始时间
+        var start_ts = "{!! $search_arr['start_day'] !!}";
         var starttime = $("#datepicker_start").val();
         if (starttime == "") {
             var lastday = getBeforeDate(-30);
             $("#datepicker_start").val(lastday);
             $("#datepicker_start").datepicker("update", lastday);
-        }else{
-            $("#datepicker_start").datepicker("update", starttime);
         }
-        //结束时间
+        if (start_ts != "") {
+            $("#datepicker_start").val(start_ts);
+            $("#datepicker_start").datepicker("update", start_ts);
+        }
+        //
+        var end_ts = "{!! $search_arr['end_day'] !!}";
         var endtime = $("#datepicker_end").val();
         if (endtime == "") {
             $("#datepicker_end").val(nowtime);
             $("#datepicker_end").datepicker("update", nowtime);
-        }else{
-            $("#datepicker_end").datepicker("update", endtime);
+        }
+        if(end_ts != "")
+            $("#datepicker_end").val(end_ts);
+            $("#datepicker_end").datepicker("update", end_ts);
         }
         //搜索提交
         $("#search").on('click', function () {

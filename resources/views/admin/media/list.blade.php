@@ -232,27 +232,25 @@
         });
         //开始时间
         var start_ts = "{!! $search_arr['start_day'] !!}";
-        var starttime = $("#datepicker_start").val();
-        if (starttime == "") {
+        if (start_ts == "") {
             var lastday = getBeforeDate(-30);
             $("#datepicker_start").val(lastday);
             $("#datepicker_start").datepicker("update", lastday);
-        }
-        if (start_ts != "") {
+        }else{
             $("#datepicker_start").val(start_ts);
             $("#datepicker_start").datepicker("update", start_ts);
         }
+
         //
         var end_ts = "{!! $search_arr['end_day'] !!}";
-        var endtime = $("#datepicker_end").val();
-        if (endtime == "") {
+        if (end_ts == "") {
             $("#datepicker_end").val(nowtime);
             $("#datepicker_end").datepicker("update", nowtime);
-        }
-        if(end_ts != "")
+        }else{
             $("#datepicker_end").val(end_ts);
             $("#datepicker_end").datepicker("update", end_ts);
         }
+      
         //搜索提交
         $("#search").on('click', function () {
             $("#media_search").submit();

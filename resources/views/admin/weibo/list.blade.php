@@ -66,10 +66,7 @@
                     <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
                 </label>
                 &nbsp;&nbsp;
-                <label class="mt_1">
-                    <button type="reset" class="btn btn-warning"><i class="fa  fa-undo">重置</i></button>
-                </label>
-                &nbsp;&nbsp;
+
                 <label class="mt_1">
                     <a href="/admin/weibo/create" class="btn  btn-success">
                         <i class="fa fa-save"></i>&nbsp;&nbsp;新增

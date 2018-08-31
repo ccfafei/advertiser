@@ -89,7 +89,7 @@
                 </label>
                 &nbsp;&nbsp;
                 <label class="mt_1">
-                    <button type="reset" class="btn btn-warning">重置</button>
+                    <button type="reset" class="btn btn-warning"><i class="fa  fa-undo">重置</i></button>
                 </label>
                 &nbsp;&nbsp;
              <label class="mt_1">

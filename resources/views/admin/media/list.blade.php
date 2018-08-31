@@ -233,12 +233,16 @@
             var lastday = getBeforeDate(-30);
             $("#datepicker_start").val(lastday);
             $("#datepicker_start").datepicker("update", lastday);
+        }else{
+            $("#datepicker_start").datepicker("update", starttime);
         }
         //结束时间
         var endtime = $("#datepicker_end").val();
         if (endtime == "") {
             $("#datepicker_end").val(nowtime);
             $("#datepicker_end").datepicker("update", nowtime);
+        }else{
+            $("#datepicker_end").datepicker("update", endtime);
         }
         //搜索提交
         $("#search").on('click', function () {

@@ -33,7 +33,7 @@
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="weixin_name" id="weixinName" class="form-control mr_1" placeholder="请输入微信名称       "
-                           value=""/>
+                           value="{!! $search_arr['weixin_name'] !!}"/>
                 </div>
 
 
@@ -44,7 +44,7 @@
                 <label for="contributionTitle" class="control-label">行业分类: </label>
                 <div class="input-group  mr_2">
 
-                    <select name="weixin_category" class="form-control mr_2">
+                    <select name="weixin_category" class="form-control mr_2" id="weixin_category">
                         <option value="all">请选择</option>
                         @foreach($category as $k=>$v)
                             <option value="{!! $k !!}">{!! $v !!}</option>
@@ -53,7 +53,7 @@
                 </div>
                 <label for="" class="control-label">负责人: </label>
                 <div class="input-group  mr_2">
-                    <select name="leader" class="form-control mr_2">
+                    <select name="leader" class="form-control mr_2" id="leader">
                         <option value="all">请选择</option>
                         @foreach($leader as $lk=>$lv)
                             <option value="{!! $lk !!}">{!! $lv !!}</option>
@@ -148,6 +148,19 @@
     LA.token = "{{ csrf_token() }}";
 </script>
 <script type="text/javascript">
+    $(function () {
+        var category = "{!! $search_arr['weixin_category'] !!}";
+        if(category != ''){
+            $('#weixin_category').val(category);
+        }
+
+        var leader = "{!! $search_arr['leader'] !!}";
+        if(leader != ''){
+            $('#leader').val(leader);
+        }
+    });
+</script>
+<script type="text/javascript">
 
     $(function () {
 
@@ -170,17 +183,24 @@
 
 
         //开始时间
-        var starttime = $("#datepicker_start").val();
-        if (starttime == "") {
+        var start_ts = "{!! $search_arr['start_day'] !!}";
+        if (start_ts == "") {
             var lastday = getBeforeDate(-30);
             $("#datepicker_start").val(lastday);
             $("#datepicker_start").datepicker("update", lastday);
+        }else{
+            $("#datepicker_start").val(start_ts);
+            $("#datepicker_start").datepicker("update", start_ts);
         }
+
         //结束时间
-        var endtime = $("#datepicker_end").val();
-        if (endtime == "") {
+        var end_ts = "{!! $search_arr['end_day'] !!}";
+        if (end_ts == "") {
             $("#datepicker_end").val(nowtime);
             $("#datepicker_end").datepicker("update", nowtime);
+        }else{
+            $("#datepicker_end").val(end_ts);
+            $("#datepicker_end").datepicker("update", end_ts);
         }
         //搜索提交
         $("#search").on('click', function () {

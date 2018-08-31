@@ -88,7 +88,7 @@
                     <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
                 </label>
                 &nbsp;&nbsp;
-               
+
                 &nbsp;&nbsp;
              <label class="mt_1">
                  <a href="/admin/media/create" class="btn  btn-success">

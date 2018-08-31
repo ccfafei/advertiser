@@ -241,7 +241,7 @@
             $("#datepicker_start").datepicker("update", start_ts);
         }
 
-        //
+        //结束时间
         var end_ts = "{!! $search_arr['end_day'] !!}";
         if (end_ts == "") {
             $("#datepicker_end").val(nowtime);
@@ -250,7 +250,7 @@
             $("#datepicker_end").val(end_ts);
             $("#datepicker_end").datepicker("update", end_ts);
         }
-      
+
         //搜索提交
         $("#search").on('click', function () {
             $("#media_search").submit();

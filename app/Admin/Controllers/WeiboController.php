@@ -74,7 +74,7 @@ class WeiboController extends Controller
             $exporturl = urlencode($this->grid()->exportUrl('all'));
             
             $listview = view('admin.weibo.list',
-                compact('rows','headers','arrsum','category','channel','leader','exporturl','$search_arr'))
+                compact('rows','headers','arrsum','category','channel','leader','exporturl','search_arr'))
             ->render();
             $content->row($listview);
         });

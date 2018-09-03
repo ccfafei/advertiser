@@ -117,9 +117,11 @@ class TradeController extends Controller
                 'media_prices' => $media_prices,
                 'profits' => $profits
             ];
+            $serach=['start_day','end_day','customer_name','media_name','contribution','leader','is_received','is_paid','is_check'];
+            $search_arr =Base::getSearchs($request,$serach);
             $exporturl = $this->grid()->exportUrl('all');
             $url = $exporturl;
-            $listview = view('admin.trade.list', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum'))->render();
+            $listview = view('admin.trade.list', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum','search_arr'))->render();
             $content->row($listview);
         });
     }
@@ -200,7 +202,7 @@ class TradeController extends Controller
             }
             $start_ts = $request->input('start_day');
             $end_ts = $request->input('end_day');
-            $search_start_day = $start_ts ? strtotime($start_ts) : strtotime('-10 day 00:00:00');
+            $search_start_day = $start_ts ? strtotime($start_ts) : strtotime('-3 day 00:00:00');
             $search_end_day = $end_ts ? strtotime($end_ts) : time();
             if ($search_end_day < $search_start_day && $search_start_day <= time()) {
                 $search_end_day = $search_start_day;
@@ -238,8 +240,9 @@ class TradeController extends Controller
                 'media_prices' => $media_prices,
                 'profits' => $profits
             ];
-            
-            $listview = view('admin.trade.check', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum'))->render();
+            $serach=['start_day','end_day','customer_name','media_name','contribution','leader','is_received','is_paid','is_check'];
+            $search_arr =Base::getSearchs($request,$serach);
+            $listview = view('admin.trade.check', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum','search_arr'))->render();
             $content->row($listview);
         });
     }

@@ -20,21 +20,21 @@
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="customer_name" id="customerName" class="form-control mr_1" placeholder="请输入客户名称    "
-                           value=""/>
+                           value="{!! $search_arr['customer_name'] !!}"/>
                 </div>
 
                 <label for="mediaName" class="control-label">媒体名称: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="media_name" id="mediaName" class="form-control mr_1" placeholder="请输入媒体名称       "
-                           value=""/>
+                           value="{!! $search_arr['media_name'] !!}"/>
                 </div>
 
                 <label for="contributionTitle" class="control-label">稿件标题: </label>
                 <div class="input-group  mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="contribution" id="contributionTitle" class="form-control mr_1"
-                           placeholder="请输入媒体名称       " value=""/>
+                           placeholder="请输入媒体名称       " value="{!! $search_arr['contribution'] !!}"/>
                 </div>
 
             </div>
@@ -55,10 +55,11 @@
                     </div>
                     <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
                 </div>
+                <label>负责人:</label>
                 <div class="input-group  mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="leader" id="contributionTitle" class="form-control mr_1"
-                           placeholder="请输入负责人  " value=""/>
+                           placeholder="请输入负责人  " value="{!! $search_arr['leader'] !!}"/>
                 </div>
 
             </div>
@@ -66,7 +67,7 @@
             <div class="form-group mt_1">
 
                 <label>是否审核: </label>
-                <select name="is_check" class="form-control mr_2">
+                <select name="is_check" class="form-control mr_2" id="is_check">
                     <option value="">请选择</option>
                     @foreach($checks as $ck=>$cv)
                         <option value="{{$ck}}">
@@ -224,6 +225,25 @@
 
         LA.token = "{{ csrf_token() }}";
     </script>
+<script type="text/javascript">
+    $(function () {
+        var is_check = "{!! $search_arr['is_check'] !!}";
+        if(is_check != ''){
+            $('#is_check').val(is_check);
+        }
+        var is_received = "{!! $search_arr['is_received'] !!}"
+        if(is_received == 1){
+            $('#isReceived').val(1);
+            $('#isReceived').attr('checked',true);
+
+        }
+        var is_paid = "{!! $search_arr['is_paid'] !!}"
+        if(is_paid == 1){
+            $('#isPaid').val(1);
+            $('#isPaid').attr('checked',true);
+        }
+    });
+</script>
     <script type="text/javascript">
 
         $(function () {
@@ -273,17 +293,24 @@
 
 
             //开始时间
-            var starttime = $("#datepicker_start").val();
-            if (starttime == "") {
-                var lastday = getBeforeDate(-10);
+            var start_ts = "{!! $search_arr['start_day'] !!}";
+            if (start_ts == "") {
+                var lastday = getBeforeDate(-3);
                 $("#datepicker_start").val(lastday);
                 $("#datepicker_start").datepicker("update", lastday);
+            }else{
+                $("#datepicker_start").val(start_ts);
+                $("#datepicker_start").datepicker("update", start_ts);
             }
+
             //结束时间
-            var endtime = $("#datepicker_end").val();
-            if (endtime == "") {
+            var end_ts = "{!! $search_arr['end_day'] !!}";
+            if (end_ts == "") {
                 $("#datepicker_end").val(nowtime);
                 $("#datepicker_end").datepicker("update", nowtime);
+            }else{
+                $("#datepicker_end").val(end_ts);
+                $("#datepicker_end").datepicker("update", end_ts);
             }
             //搜索提交
             $("#search").on('click', function () {

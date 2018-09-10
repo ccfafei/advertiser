@@ -295,7 +295,7 @@
             //开始时间
             var start_ts = "{!! $search_arr['start_day'] !!}";
             if (start_ts == "") {
-                var lastday = getBeforeDate(-3);
+                var lastday = getBeforeDate(-1);
                 $("#datepicker_start").val(lastday);
                 $("#datepicker_start").datepicker("update", lastday);
             }else{
@@ -377,6 +377,21 @@
                             className: 'excelbutton dt-button btn btn-warning',
                             'text': 'Excel导出',
                             'title': '业务流量列表',
+                            exportOptions: {
+                                format: {
+                                    body: function (data, row, column ) {
+
+                                        if (column ==6)
+                                        {
+                                            var dt = httpString(dt);
+                                        }else{
+                                            var dt =  strip( data);
+                                        }
+
+                                        return dt;
+                                    }
+                                }
+                            }
                         }
                     ]
                 },

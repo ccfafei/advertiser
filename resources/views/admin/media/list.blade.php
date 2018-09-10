@@ -270,6 +270,22 @@
                         className: 'excelbutton dt-button btn btn-warning',
                         'text': 'Excel导出',
                         'title': '网络媒体列表',
+                        exportOptions: {
+                            format: {
+                                body: function (data, row, column ) {
+                                    var dt = data;
+                                    if (column ==7)
+                                    {
+                                        var dt = httpString(dt);
+                                    }
+                                    if (column ==10)
+                                    {
+                                        var dt = '';
+                                    }
+                                    return dt;
+                                }
+                            }
+                        }
                     }
                 ]
             },

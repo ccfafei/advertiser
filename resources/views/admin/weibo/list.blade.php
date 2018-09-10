@@ -247,6 +247,22 @@
                         className: 'excelbutton dt-button btn btn-warning',
                         'text': 'Excel导出',
                         'title': '微博列表',
+                        exportOptions: {
+                            format: {
+                                body: function (data, row, column ) {
+                                    var dt = data;
+                                    if (column ==6)
+                                    {
+                                        var dt = httpString(dt);
+                                    }
+                                    if (column ==11)
+                                    {
+                                        var dt = '';
+                                    }
+                                    return dt;
+                                }
+                            }
+                        }
                     }
                 ]
             },

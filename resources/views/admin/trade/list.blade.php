@@ -277,6 +277,20 @@
                         className: 'excelbutton dt-button btn btn-warning',
                         'text': 'Excel导出',
                         'title': '业务流量列表',
+                        exportOptions: {
+                            format: {
+                                body: function (data, row, column ) {
+
+                                    if (column ==6)
+                                    {
+                                        var dt = httpString(dt);
+                                    }else{
+                                        var dt =  strip(data);
+                                    }
+                                    return dt;
+                                }
+                            }
+                        }
                     }
                 ]
             },

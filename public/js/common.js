@@ -42,3 +42,25 @@ function getBeforeDate(n) {   var n = n;
    s = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
    return s;
 }
+
+   function httpString(str){
+        var objStr=new String(str);
+        var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+
+        newstr = objStr.match(reg);
+        console.log(newstr)
+		if (newstr == null)
+		{
+			s = str;
+		}else{
+			s = newstr;
+		}
+        return(s)
+    }
+
+function strip(html)
+{
+    var tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText;
+}

@@ -281,7 +281,7 @@
                             format: {
                                 body: function (data, row, column ) {
 
-                                    if (column ==6)
+                                    if (column ==5)
                                     {
                                         var dt = httpString(dt);
                                     }else{

@@ -48,7 +48,7 @@ function getBeforeDate(n) {   var n = n;
         var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
 
         newstr = objStr.match(reg);
-        console.log(newstr)
+        //console.log(newstr)
 		if (newstr == null)
 		{
 			s = str;

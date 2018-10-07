@@ -51,7 +51,7 @@ function getBeforeDate(n) {   var n = n;
         //console.log(newstr)
 		if (newstr == null)
 		{
-			s = str;
+			s = '';
 		}else{
 			s = newstr;
 		}

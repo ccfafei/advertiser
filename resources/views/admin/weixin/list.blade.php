@@ -185,7 +185,7 @@
         //开始时间
         var start_ts = "{!! $search_arr['start_day'] !!}";
         if (start_ts == "") {
-            var lastday = getBeforeDate(-30);
+            var lastday = "2000-01-01";
             $("#datepicker_start").val(lastday);
             $("#datepicker_start").datepicker("update", lastday);
         }else{

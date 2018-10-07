@@ -283,7 +283,9 @@
 
                                     if (column ==5)
                                     {
-                                        var dt = httpString(dt);
+                                        var dt = httpString(data)
+                                        console.log(dt)
+
                                     }else{
                                         var dt =  strip(data);
                                     }

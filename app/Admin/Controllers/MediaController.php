@@ -44,7 +44,7 @@ class MediaController extends Controller
            // DB::connection()->enableQueryLog();
             $start_ts = $request->input('start_day');
             $end_ts = $request->input('end_day');
-            $search_start_day= $start_ts?strtotime($start_ts):strtotime('-30 day 00:00:00');
+            $search_start_day= $start_ts?strtotime($start_ts):strtotime('2000-01-01 00:00:00');
             $search_end_day= $end_ts?strtotime($end_ts):time();
             if($search_end_day < $search_start_day&&$search_start_day<=time()){
                 $search_end_day = $search_start_day;

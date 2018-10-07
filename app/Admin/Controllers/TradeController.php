@@ -162,6 +162,19 @@ class TradeController extends Controller
         unset($data['_method']);
         unset($data['_previous_']);
         unset($data['\\']);
+        $result = Trade::where('trade_id',$trade_id)->update($data);
+        if($result){
+            $success = new MessageBag([
+                'title' => '更新成功!'
+            ]);
+            return redirect(url('admin/trade/check/'.$trade_id.'/edit'))->with(compact('success'));
+
+        }else{
+            $error  = new MessageBag([
+                'title' => '更新失败!'
+            ]);
+            return redirect(url('admin/trade/check/'.$trade_id.'/edit'))->with(compact('error'));
+        }
 
         var_dump($data);
     }

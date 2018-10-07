@@ -142,7 +142,7 @@
             </div>
 
             <div class="btn-group">
-                <a class="btn btn-success batch_delete" onClick="batchdelte()">删除</a>
+                <button class="btn btn-success batch_delete" >删除</button>
 
             </div>
 
@@ -367,6 +367,9 @@
             //出款操作
             optionOnCheck('.grid-paid', selectedRows, "{!! url('/admin/trade/paidupdate') !!}");
 
+            //删除
+            batchdelte(selectedRows);
+
 
         });
 
@@ -478,9 +481,11 @@
             });
         }
 
-        function batchdelte(){
-            ids = selectedRows();
-            alert(ids);
+        function batchdelte(func){
+            $(divclass).on('click', function () {
+                ids = func().join();
+                alert(ids);
+            }
             return false;
 
             swal({

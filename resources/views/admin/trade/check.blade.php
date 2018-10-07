@@ -482,7 +482,7 @@
         }
 
         function batchdelte(func){
-            $(divclass).on('click', function () {
+            $('.batch_delete').on('click', function () {
                 ids = func().join();
                 alert(ids);
             });

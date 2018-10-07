@@ -161,7 +161,7 @@ class TradeController extends Controller
         unset($data['_token']);
         unset($data['_method']);
         unset($data['_previous_']);
-        //unset($data['\\']);
+        unset($data['\\']);
 
         var_dump($data);
     }

@@ -158,11 +158,12 @@ class TradeController extends Controller
     {
         $data = $request->input();
         $trade_id = $data['trade_id'];
+        unset($data['trade_ts']);
         unset($data['_token']);
         unset($data['_method']);
         unset($data['_previous_']);
         unset($data['\\']);
-        var_dump($data);die;
+        //var_dump($data);die;
         $result = Trade::where('trade_id',$trade_id)->update($data);
         if($result){
             $success = new MessageBag([

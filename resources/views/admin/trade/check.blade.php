@@ -141,6 +141,11 @@
 
             </div>
 
+            <div class="btn-group">
+                <a class="btn btn-success batch_delete" onClick="batchdelte()">删除</a>
+
+            </div>
+
             <div>
 
                 <table id="dataTables" class="table table-bordered table-hover display nowrap" style="width:100%">
@@ -383,7 +388,7 @@
 
                                         if (column ==6)
                                         {
-                                            var dt = httpString(dt);
+                                            var dt = httpString(data);
                                         }else{
                                             var dt =  strip( data);
                                         }
@@ -472,7 +477,45 @@
 
             });
         }
-function rowdelete(id){
+
+        function batchdelte(){
+            ids = selectedRows().join();
+            alert(ids);
+            return false;
+
+            swal({
+                    title: "确认删除?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确认",
+                    closeOnConfirm: false,
+                    cancelButtonText: "取消"
+                },
+                function () {
+                    $.ajax({
+                        method: 'post',
+                        url: '/admin/tradecheck/destory',
+                        data: {
+                            trade_id: ids,
+                            _token: LA.token,
+                        },
+                        success: function (data) {
+                            $.pjax.reload('#pjax-container');
+
+                            if (typeof data === 'object') {
+                                if (data.status == 0) {
+                                    swal(data.msg, '', 'success');
+                                } else {
+                                    swal(data.msg, '', 'error');
+                                }
+                            }
+                        }
+                    });
+                });
+        }
+
+      function rowdelete(id){
     
 
                 var id =id;

@@ -154,9 +154,15 @@ class TradeController extends Controller
      *            $id
      * @return Content
      */
-    public function updatetrade()
+    public function updatetrade(Request $request)
     {
-       var_dump($_POST);
+        $data = $request->all();
+        $trade_id = $data['trade_id'];
+        unset($data['_token']);
+        unset($data['_method']);
+        unset($data['_previous_']);
+
+        var_dump($data);
     }
 
 

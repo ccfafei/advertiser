@@ -156,12 +156,12 @@ class TradeController extends Controller
      */
     public function updatetrade(Request $request)
     {
-        $data = $request->all();
+        $data = $request->input();
         $trade_id = $data['trade_id'];
         unset($data['_token']);
         unset($data['_method']);
         unset($data['_previous_']);
-        unset($data["\"]);
+        //unset($data['\\']);
 
         var_dump($data);
     }

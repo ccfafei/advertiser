@@ -162,6 +162,7 @@ class TradeController extends Controller
         unset($data['_method']);
         unset($data['_previous_']);
         unset($data['\\']);
+        var_dump($data);die;
         $result = Trade::where('trade_id',$trade_id)->update($data);
         if($result){
             $success = new MessageBag([
@@ -176,7 +177,7 @@ class TradeController extends Controller
             return redirect(url('admin/trade/check/'.$trade_id.'/edit'))->with(compact('error'));
         }
 
-        var_dump($data);
+
     }
 
 

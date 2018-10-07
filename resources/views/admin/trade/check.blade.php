@@ -485,7 +485,7 @@
             $(divclass).on('click', function () {
                 ids = func().join();
                 alert(ids);
-            }
+            });
             return false;
 
             swal({

@@ -479,8 +479,8 @@
         }
 
         function batchdelte(){
-            ids = selectedRows().join();
-            alert(ids);
+            //ids = selectedRows().join();
+            alert("aaa");
             return false;
 
             swal({

@@ -328,7 +328,7 @@ class TradeController extends Controller
          ];
      }
      try {
-     Trade::where('trade_id',$trade_id)->delete();
+         Trade::destroy($trade_id);
          return $reponses = [
              'status' => 0,
              'msg' => '删除成功!',
@@ -342,6 +342,8 @@ class TradeController extends Controller
          ];
      }
  }
+
+
     /**
      * 更新数据公用方法
      * @param Request $request

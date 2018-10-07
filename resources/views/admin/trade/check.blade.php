@@ -142,7 +142,7 @@
             </div>
 
             <div class="btn-group">
-                <button class="btn btn-success batch_delete" >删除</button>
+                <button class="btn btn-warning batch_delete" >删除</button>
 
             </div>
 

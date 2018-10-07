@@ -484,40 +484,40 @@
         function batchdelte(func){
             $('.batch_delete').on('click', function () {
                 ids = func().join();
-                alert(ids);
-            });
-            return false;
 
-            swal({
-                    title: "确认删除?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "确认",
-                    closeOnConfirm: false,
-                    cancelButtonText: "取消"
-                },
-                function () {
-                    $.ajax({
-                        method: 'post',
-                        url: '/admin/tradecheck/destory',
-                        data: {
-                            trade_id: ids,
-                            _token: LA.token,
-                        },
-                        success: function (data) {
-                            $.pjax.reload('#pjax-container');
+                swal({
+                        title: "确认删除?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确认",
+                        closeOnConfirm: false,
+                        cancelButtonText: "取消"
+                    },
+                    function () {
+                        $.ajax({
+                            method: 'post',
+                            url: '/admin/tradecheck/destory',
+                            data: {
+                                trade_id: ids,
+                                _token: LA.token,
+                            },
+                            success: function (data) {
+                                $.pjax.reload('#pjax-container');
 
-                            if (typeof data === 'object') {
-                                if (data.status == 0) {
-                                    swal(data.msg, '', 'success');
-                                } else {
-                                    swal(data.msg, '', 'error');
+                                if (typeof data === 'object') {
+                                    if (data.status == 0) {
+                                        swal(data.msg, '', 'success');
+                                    } else {
+                                        swal(data.msg, '', 'error');
+                                    }
                                 }
                             }
-                        }
+                        });
                     });
-                });
+
+            });
+
         }
 
       function rowdelete(id){

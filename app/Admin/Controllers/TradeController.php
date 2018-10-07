@@ -148,6 +148,19 @@ class TradeController extends Controller
     }
 
     /**
+     * Edit interface.
+     *
+     * @param
+     *            $id
+     * @return Content
+     */
+    public function updatetrade()
+    {
+       var_dump($_POST);
+    }
+
+
+    /**
      * Create interface.
      *
      * @return Content

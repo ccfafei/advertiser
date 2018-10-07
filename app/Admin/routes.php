@@ -52,7 +52,7 @@ Route::group([
     Route::get('trade/{id}/edit','TradeController@show')->name('trade.edit');
     Route::any('trade/check','TradeController@check')->name('trade.check');
     Route::get('trade/check/{id}/edit','TradeController@show')->name('trade.checkedit');
-    Route::any('trade/check/{id}','TradeController@update')->name('trade.update');
+    Route::any('trade/check/{id}','TradeController@updatetrade')->name('trade.update');
     Route::post('trade', 'TradeController@store')->name('trade.store');
     Route::post('trade/index', 'TradeController@index')->name('trade.search');
     Route::post('trade/checkupdate', 'TradeController@checkUpdate')->name('trade.checkupdate');

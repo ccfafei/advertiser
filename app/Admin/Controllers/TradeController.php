@@ -320,7 +320,7 @@ class TradeController extends Controller
          ];
      }
      $trade_id = $request->input('trade_id');
-     dd($trade_id);
+     $trade_id = explode(',',$trade_id);
      if (empty($trade_id)){
          return $reponses = [
              'status' => 1,

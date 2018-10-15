@@ -103,7 +103,7 @@
     <div style="width:100%;height:2px; background:#E0E0E0;"></div>
     <div class="box-body ">
         <div class="form-inline">
-            <input type="checkbox" class="grid-select-all"/>&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" class="grid-select-all" />&nbsp;&nbsp;&nbsp;
             <div class="btn-group">
                 <a class="btn btn-warning">审核</a>
                 <button type="button" class="btn btn-warning dropdown-toggle mr_2" data-toggle="dropdown">
@@ -272,12 +272,13 @@
 
 
             //回款
-            // $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-            //$('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-            $('input[type="checkbox"]').iCheck({
-                handle : 'checkbox',
-                checkboxClass : 'icheckbox_minimal-blue',
-            });
+            $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            $('.grid-select-all').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            // $('input[type="checkbox"]').iCheck({
+            //     handle : 'checkbox',
+            //     checkboxClass : 'icheckbox_minimal-blue',
+            // });
 
             $('#isReceived').on('ifChanged', function (event) {
                 if (this.checked) {
@@ -351,9 +352,12 @@
            // $('.grid-select-all').iCheck({checkboxClass: 'icheckbox'});
             $('.grid-select-all').on('ifChanged', function (event) {
                 if (this.checked) {
-                    $('.grid-row-checkbox').iCheck('check');
+                    //$('.grid-row-checkbox').iCheck('check');
+                    $('.grid-row-checkbox').prop("checked",true);
+
                 } else {
-                    $('.grid-row-checkbox').iCheck('uncheck');
+                    //$('.grid-row-checkbox').iCheck('uncheck');
+                    $('.grid-row-checkbox').prop("checked",false);
                 }
             });
 
@@ -448,6 +452,7 @@
             $(divclass).on('click', function () {
                 //func = function(){return e();}
                 ids = func().join();
+                //alert(ids);
                 if (ids === "") {
                     ajaxalert('错误!', '请选择数据!', '关闭');
                     return false;
@@ -484,6 +489,7 @@
         function batchdelte(func){
             $('.batch_delete').on('click', function () {
                 ids = func().join();
+                //alert(ids);
 
                 swal({
                         title: "确认删除?",

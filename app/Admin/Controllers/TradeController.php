@@ -157,8 +157,9 @@ class TradeController extends Controller
     public function updatetrade(Request $request)
     {
         $data = $request->input();
+        //dd($data);
         $trade_id = $data['trade_id'];
-        unset($data['trade_ts']);
+        $data['trade_ts'] = strtotime($data['trade_ts']);
         unset($data['_token']);
         unset($data['_method']);
         unset($data['_previous_']);
@@ -496,16 +497,16 @@ class TradeController extends Controller
         return Admin::form(Trade::class, function (Form $form) {
     
             $form->hidden('trade_id','交易ID');
-            $form->text('customer_name','客户名称');          
-            $form->text('media_name','媒体名称');           
-            $form->text('contribution','稿件名称');
-            $form->text('project','项目链接');
+            $form->text('customer_name','客户名称')->rules('required|min:1',['不能为空']);
+            $form->text('media_name','媒体名称')->rules('required|min:1',['不能为空']);
+            $form->text('contribution','稿件名称')->rules('required|min:1',['不能为空']);
+            $form->text('project','项目链接')->rules('required|min:1',['不能为空']);;
             $form->text('words','字数');
             $form->text('price','单价');
             $form->text('customer_price','报价');
             $form->text('media_price','媒体款');  
             $form->text('profit','利润');
-            $form->date('trade_ts','交易时间')->format('YYYY-MM-DD');
+            $form->date('trade_ts','交易时间')->format('YYYY-MM-DD')->rules('required|min:1',['不能为空']);;
             if(!Admin::user()->isAdministrator()){
                 $form->hidden('leader','负责人')->default(function($user){
                     return $user= Admin::user()->name;
@@ -521,6 +522,27 @@ class TradeController extends Controller
             
             //保存前检查
             $form->saving(function (Form $form) {
+                   $data =[
+                       'trade_ts'=>strtotime($form->trade_ts),
+                       'customer_name'=>$form->customer_name,
+                       'media_name'=>$form->media_name,
+                       'contribution'=>$form->contribution,
+
+                   ];
+                  // dd($data);
+
+                    if(empty($form->trade_id)){
+                        $reslut = Trade::where($data)->get();
+                        //dd(collect($reslut)->isNotEmpty());
+                        if(collect($reslut)->isNotEmpty()){
+                            $error = new MessageBag([
+                                    'title'   => '出错啦:',
+                                    'message' => '该记录已经录入过了!',
+                            ]);
+                            return back()->with(compact('error'));
+                        }
+                    }
+
                 
 //                $customers= Base::getCustomer($form->customer_name);
 //                if(!$customers){
@@ -531,16 +553,7 @@ class TradeController extends Controller
 //                    return back()->with(compact('error'));
 //                }
               
-                /*
-                $medias = Base::getMedia($form->media_name);
-                if(!$medias){
-                    $error = new MessageBag([
-                        'title'   => '出错啦:',
-                        'message' => '该媒体不存在,请先录入媒体资料!',
-                    ]);
-                    return back()->with(compact('error'));
-                }
-                */
+
             });
           
           //save...

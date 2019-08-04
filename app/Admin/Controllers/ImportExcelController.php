@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
-use Excel;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Admin\Controllers\Base;
 use App\Models\Trade;
 use Encore\Admin\Widgets\Alert;
@@ -33,12 +33,32 @@ class ImportExcelController extends Controller
             $content->header('Excel数据确认');
 
             $error=0;
-            $file = $_FILES;
-            $excel_file_path = $file['file']['tmp_name'];
+            $file = $request->file('file');
+
+            if (!$file->isValid()) {
+                admin_toastr('上传失败','error');
+                return redirect(url("/admin/exceltrade/import" ));
+
+            }
+
+            // 获取文件相关信息
+            $originalName = $file->getClientOriginalName(); // 文件原名
+            $ext = $file->getClientOriginalExtension();     // 扩展名
+            $realPath = $file->getRealPath();   //临时文件的绝对路径
+
+            // 上传文件
+            $filename = time(). '-' . uniqid() . '.' . $ext;
+            // 使用我们新建的uploads本地存储空间（目录）
+            $filename = iconv('UTF-8', 'GBK', $filename);
+            $excel_file_path = $file->move(base_path().'/uploads',$filename);
+
+
+
             Excel::load($excel_file_path, function($reader) use(&$rows){
                 $reader = $reader->getSheet(0);
                 $rows= $reader->toArray();
             });
+
             $flag =0;
             $result =[];
             $headers=[];
@@ -51,16 +71,21 @@ class ImportExcelController extends Controller
                     $result[$key]['error'] =[];
                     $result[$key]['num'] =$key;
                     //时间
-                    if (preg_match('/^(\[\$[A-Z]*-[0-9A-F]*\])*[hmsdy]/i', $val[0])) {
-                        $date=gmdate("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($val[0]));
+                    if(strtotime($val[0])){
+                        $result[$key]['trade_ts']=date('Y-m-d',strtotime($val[0]));
                     }else{
-                        $date=\PHPExcel_Style_NumberFormat::toFormattedString($val[0],\PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2	);
+                        if (preg_match('/^(\[\$[A-Z]*-[0-9A-F]*\])*[hmsdy]/i', $val[0])) {
+                            $date=gmdate("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($val[0]));
+                        }else{
+                            $date=\PHPExcel_Style_NumberFormat::toFormattedString($val[0],\PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2	);
+                        }
+                        $result[$key]['trade_ts']=$date;
+                        if(strtotime($date)==false){
+                            $flag=1;
+                            array_push( $result[$key]['error'],1001);
+                        }
                     }
-                    $result[$key]['trade_ts']=$date;
-                    if(strtotime($date)==false){
-                        $flag=1;
-                        array_push( $result[$key]['error'],1001);
-                    }
+
 
                     //客户
                     $result[$key]['customer_name']=$val[1];
@@ -126,16 +151,23 @@ class ImportExcelController extends Controller
                   */
 
                     //利润
-                    $result[$key]['profit']=$val[9];
-                    if( $val[7]-$val[8] != $val[9] ){
-                        $flag=1;
-                        array_push( $result[$key]['error'],1008);
+                    if(isset($val[9])){
+                        $result[$key]['profit']=$val[9];
+                    }else{
+                        $result[$key]['profit']= (int)$val[7]-(int)$val[8];
                     }
 
+//                    if( $val[7]-$val[8] != $val[9] ){
+//                        $flag=1;
+//                        array_push( $result[$key]['error'],1008);
+//                    }
+
                     //是否回款
-                    $result[$key]['is_received']=$val[10];
+                    $result[$key]['is_received'] = 0;
+                    isset($val[10])&&$result[$key]['is_received']=$val[10];
                     //是是否出款
-                    $result[$key]['is_paid']=$val[11];
+                    $result[$key]['is_paid'] = 0;
+                    isset($val[11])&&$result[$key]['is_paid']=$val[11];
                 }
             }
 

@@ -274,9 +274,9 @@ class TradeController extends Controller
                 'profits' => $profits
             ];
             $request_params = $request;
-            $serach=['start_day','end_day','customer_name','media_name','contribution','leader','is_received','is_paid','is_check'];
-            $search_arr =Base::getSearchs($request,$serach);
-            $listview = view('admin.trade.check', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum','search_arr','request_params'))->render();
+//            $serach=['start_day','end_day','customer_name','media_name','contribution','leader','is_received','is_paid','is_check'];
+//            $search_arr =Base::getSearchs($request,$serach);
+            $listview = view('admin.trade.check', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum','request_params'))->render();
             $content->row($listview);
         });
     }

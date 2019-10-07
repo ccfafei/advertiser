@@ -20,21 +20,21 @@
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="customer_name" id="customerName" class="form-control mr_1" placeholder="请输入客户名称    "
-                           value="{!! $search_arr['customer_name'] !!}"/>
+                           value="{!! $request_params->customer_name !!}"/>
                 </div>
 
                 <label for="mediaName" class="control-label">媒体名称: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="media_name" id="mediaName" class="form-control mr_1" placeholder="请输入媒体名称       "
-                           value="{!! $search_arr['media_name'] !!}"/>
+                           value="{!!  $request_params->media_name !!}"/>
                 </div>
 
                 <label for="contributionTitle" class="control-label">稿件标题: </label>
                 <div class="input-group  mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="contribution" id="contributionTitle" class="form-control mr_1"
-                           placeholder="请输入媒体名称       " value="{!! $search_arr['contribution'] !!}"/>
+                           placeholder="请输入媒体名称       " value="{!!  $request_params->contribution !!}"/>
                 </div>
 
             </div>
@@ -45,7 +45,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="{!! $search_arr['start_day'] !!}">
+                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="{!! $request_params->start_day !!}">
                 </div>
 
                 <label>结束时间: </label>
@@ -53,13 +53,13 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="{!! $search_arr['start_day'] !!}">
+                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="{!!  $request_params->start_day !!}">
                 </div>
                 <label>负责人:</label>
                 <div class="input-group  mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="leader" id="contributionTitle" class="form-control mr_1"
-                           placeholder="请输入负责人  " value="{!! $search_arr['leader'] !!}"/>
+                           placeholder="请输入负责人  " value="{!!  $request_params->leader !!}"/>
                 </div>
 
             </div>
@@ -233,17 +233,17 @@
     </script>
 <script type="text/javascript">
     $(function () {
-        var is_check = "{!! $search_arr['is_check'] !!}";
+        var is_check = "{!!  $request_params->is_check !!}";
         if(is_check != ''){
             $('#is_check').val(is_check);
         }
-        var is_received = "{!! $search_arr['is_received'] !!}"
+        var is_received = "{!! $request_params->is_received !!}"
         if(is_received == 1){
             $('#isReceived').val(1);
             $('#isReceived').attr('checked',true);
 
         }
-        var is_paid = "{!! $search_arr['is_paid'] !!}"
+        var is_paid = "{!!  $request_params->is_paid !!}"
         if(is_paid == 1){
             $('#isPaid').val(1);
             $('#isPaid').attr('checked',true);
@@ -300,7 +300,7 @@
 
 
             //开始时间
-            var start_ts = "{!! $search_arr['start_day'] !!}";
+            var start_ts = "{!!  $request_params->start_day !!}";
             if (start_ts == "") {
                 var lastday = getBeforeDate(-1);
                 $("#datepicker_start").val(lastday);
@@ -311,7 +311,7 @@
             }
 
             //结束时间
-            var end_ts = "{!! $search_arr['end_day'] !!}";
+            var end_ts = "{!!  $request_params->end_day  !!}";
             if (end_ts == "") {
                 $("#datepicker_end").val(nowtime);
                 $("#datepicker_end").datepicker("update", nowtime);

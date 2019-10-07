@@ -238,17 +238,17 @@ class TradeController extends Controller
             }
             $start_ts = $request->input('start_day');
             $end_ts = $request->input('end_day');
-            $search_start_day = $start_ts ? strtotime($start_ts) : strtotime('-1 day 00:00:00');
-            $search_end_day = $end_ts ? strtotime($end_ts) : time();
-            if ($search_end_day < $search_start_day && $search_start_day <= time()) {
-                $search_end_day = $search_start_day;
-            }
-            $inputs['start_day'] = date('Y-m-d', $search_start_day);
-            $inputs['end_day'] = date('Y-m-d', $search_end_day);
+//            $search_start_day = $start_ts ? strtotime($start_ts) : strtotime('-1 day 00:00:00');
+//            $search_end_day = $end_ts ? strtotime($end_ts) : time();
+//            if ($search_end_day < $search_start_day && $search_start_day <= time()) {
+//                $search_end_day = $search_start_day;
+//            }
+//            $inputs['start_day'] = date('Y-m-d', $search_start_day);
+//            $inputs['end_day'] = date('Y-m-d', $search_end_day);
             
             $mode = $mode->whereBetween('trade_ts', [
-                $search_start_day,
-                $search_end_day
+                $start_ts,
+                $end_ts
             ]);
             ! empty($where) && $mode = $mode->where($where);
 
@@ -276,7 +276,7 @@ class TradeController extends Controller
             $request_params = $request;
 //            $serach=['start_day','end_day','customer_name','media_name','contribution','leader','is_received','is_paid','is_check'];
 //            $search_arr =Base::getSearchs($request,$serach);
-            $listview = view('admin.trade.check', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum','request_params'))->render();
+            $listview = view('admin.trade.check', compact('rows', 'headers', 'checks', 'url',  'arrsum','request_params'))->render();
             $content->row($listview);
         });
     }

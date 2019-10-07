@@ -202,6 +202,7 @@ class TradeController extends Controller
 
     public function check(Request $request)
     {
+
         return Admin::content(function (Content $content) use($request)
         {
             $content->header('业务审核及修改');
@@ -212,45 +213,51 @@ class TradeController extends Controller
             array_unshift($headers,'选择');
             array_push($headers,'操作');
             $rows = [];
-            $where = [];
             $mode = new Trade();
-            $request->has('customer_name') &&!empty($request->input('customer_name'))&&
-            $mode = $mode->where('customer_name', 'like', '%' . $request->input('customer_name') . '%');
-            
-            $request->has('media_name') && !empty($request->input('media_name'))&&
-            $mode = $mode->where('media_name', 'like', '%' . $request->input('media_name') . '%');
-            
-            $request->has('contribution') &&!empty($request->input('contribution'))&&
-            $mode = $mode->where('contribution', 'like', '%' . $request->input('contribution') . '%');
-
-            $request->has('leader') &&!empty($request->input('leader'))&&
-            $mode = $mode->where('leader', 'like', '%' . $request->input('leader') . '%');
-
-
-            $inputs = $request->only([
-                'is_received',
-                'is_paid',
-                'is_check'
-            ]);
-            foreach ($inputs as $k => $v) {
-                if (! empty($v))
-                    $where[$k] = $v;
+            $customer_name = $request->input('customer_name');
+            if(!empty($customer_name)){
+                $mode = $mode->where('customer_name', 'like', '%' . $customer_name . '%');
             }
+            $media_name = $request->input('media_name');
+            if(!empty($media_name)){
+                $mode = $mode->where('media_name', 'like', '%' . $media_name . '%');
+            }
+            $contribution = $request->input('contribution');
+            if(!empty($contribution)){
+                $mode = $mode->where('contribution', 'like', '%' . $contribution . '%');
+            }
+            $leader = $request->input('leader');
+            if(!empty($leader)){
+                $mode = $mode->where('leader', 'like', '%' . $leader . '%');
+            }
+            $is_received = $request->input('is_received');
+            if(isset($is_received)){
+                $mode = $mode->where('is_received', $is_received);
+            }
+
+            $is_paid = $request->input('is_paid');
+            if(isset($is_paid)){
+                $mode = $mode->where('is_paid', $is_paid);
+            }
+
+            $is_check = $request->input('is_check');
+            if(isset($is_check)){
+                $mode = $mode->where('is_check', $is_check);
+            }
+//            dd($mode->get());
+
             $start_ts = $request->input('start_day');
+            if(!empty($start_ts)){
+                $mode =  $mode->where('trade_ts','>=',strtotime($start_ts));
+            }else{
+                $mode =  $mode->where('trade_ts','>=',strtotime('-1 day'));
+            }
             $end_ts = $request->input('end_day');
-//            $search_start_day = $start_ts ? strtotime($start_ts) : strtotime('-1 day 00:00:00');
-//            $search_end_day = $end_ts ? strtotime($end_ts) : time();
-//            if ($search_end_day < $search_start_day && $search_start_day <= time()) {
-//                $search_end_day = $search_start_day;
-//            }
-//            $inputs['start_day'] = date('Y-m-d', $search_start_day);
-//            $inputs['end_day'] = date('Y-m-d', $search_end_day);
-            
-            $mode = $mode->whereBetween('trade_ts', [
-                $start_ts,
-                $end_ts
-            ]);
-            ! empty($where) && $mode = $mode->where($where);
+            if(!empty($start_ts)){
+                $mode =  $mode->where('trade_ts','<=',strtotime($end_ts.'23:59:59'));
+            }else{
+                $mode =  $mode->where('trade_ts','<=',time());
+            }
 
             $rows = $mode->orderBy('trade_id','desc')->paginate(config('trade')['pageSize']);
             $prices = $customer_prices = $media_prices = $profits = 0;

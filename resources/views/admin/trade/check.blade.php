@@ -15,26 +15,27 @@
 <div class="box">
     <div class="box-header">
         <form action="{{ url('/admin/trade/check') }}"  id="formsearch" class="form-inline">
+            <input type="hidden" name="ver" value="1">
             <div class="form-group">
                 <label for="customerName" class="control-label">客户名称: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="customer_name" id="customerName" class="form-control mr_1" placeholder="请输入客户名称    "
-                           value="{!! $request_params->customer_name !!}"/>
+                           value="{{$request_params->customer_name}}"/>
                 </div>
 
                 <label for="mediaName" class="control-label">媒体名称: </label>
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="media_name" id="mediaName" class="form-control mr_1" placeholder="请输入媒体名称       "
-                           value="{!!  $request_params->media_name !!}"/>
+                           value="{{$request_params->media_name}}"/>
                 </div>
 
                 <label for="contributionTitle" class="control-label">稿件标题: </label>
                 <div class="input-group  mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="contribution" id="contributionTitle" class="form-control mr_1"
-                           placeholder="请输入媒体名称       " value="{!!  $request_params->contribution !!}"/>
+                           placeholder="请输入媒体名称       " value="{{$request_params->contribution}}"/>
                 </div>
 
             </div>
@@ -59,7 +60,7 @@
                 <div class="input-group  mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="leader" id="contributionTitle" class="form-control mr_1"
-                           placeholder="请输入负责人  " value="{!!  $request_params->leader !!}"/>
+                           placeholder="请输入负责人  " value="{{$request_params->leader}}"/>
                 </div>
 
             </div>
@@ -233,17 +234,17 @@
     </script>
 <script type="text/javascript">
     $(function () {
-        var is_check = "{!!  $request_params->is_check !!}";
+        var is_check = "{{ $request_params->is_check }}";
         if(is_check != ''){
             $('#is_check').val(is_check);
         }
-        var is_received = "{!! $request_params->is_received !!}"
+        var is_received = "{{  $request_params->is_received }}"
         if(is_received == 1){
             $('#isReceived').val(1);
             $('#isReceived').attr('checked',true);
 
         }
-        var is_paid = "{!!  $request_params->is_paid !!}"
+        var is_paid = "{{  $request_params->is_paid }}"
         if(is_paid == 1){
             $('#isPaid').val(1);
             $('#isPaid').attr('checked',true);
@@ -300,12 +301,12 @@
 
 
             //开始时间
-            var start_ts = "{!!  $request_params->start_day !!}" || getBeforeDate(-1);
+            var start_ts = "{{ $request_params->start_day }}" || getBeforeDate(-1);
             $("#datepicker_start").val(start_ts);
             $("#datepicker_start").datepicker("update", start_ts);
 
             //结束时间
-            var end_ts = "{!!  $request_params->end_day  !!}" || nowtime;
+            var end_ts = "{{ $request_params->end_day }}" || nowtime;
             $("#datepicker_end").val(end_ts);
             $("#datepicker_end").datepicker("update", end_ts);
             //搜索提交

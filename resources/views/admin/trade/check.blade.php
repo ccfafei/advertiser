@@ -14,7 +14,7 @@
 </style>
 <div class="box">
     <div class="box-header">
-        <form action="{{ url('/admin/trade/check') }}" method="post" id="formsearch" class="form-inline">
+        <form action="{{ url('/admin/trade/check') }}"  id="formsearch" class="form-inline">
             <div class="form-group">
                 <label for="customerName" class="control-label">客户名称: </label>
                 <div class="input-group mr_2">

@@ -45,7 +45,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="">
+                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="{!! $search_arr['start_day'] !!}">
                 </div>
 
                 <label>结束时间: </label>
@@ -53,7 +53,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="">
+                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="{!! $search_arr['start_day'] !!}">
                 </div>
                 <label>负责人:</label>
                 <div class="input-group  mr_2">
@@ -408,7 +408,7 @@
                     ]
                 },
                 "scrollX": true,
-                "paging": true,//开启表格分页
+                "paging": false,//开启表格分页
                 'searching': false,
                 'ordering': true,
                 'info': true,

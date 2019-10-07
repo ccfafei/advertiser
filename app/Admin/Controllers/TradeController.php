@@ -251,24 +251,21 @@ class TradeController extends Controller
                 $search_end_day
             ]);
             ! empty($where) && $mode = $mode->where($where);
-            
-            $results = $mode->get();
-            
-            if ($results->isNotEmpty()) {
-                $rows = $results->toArray();
-            }
-            
+
+            $rows = $mode->orderBy('id','desc')->paginate(config('trade')['pageSize']);
             $prices = $customer_prices = $media_prices = $profits = 0;
             $checks = config('trade.is_check');
-            foreach ($rows as $key => $items) {
-                $rows[$key]['trade_ts'] = $items['trade_ts'];
-                $rows[$key]['is_received'] = Base::dispayStyle('is_received', $items['is_received']);
-                $rows[$key]['is_paid'] = Base::dispayStyle('is_paid', $items['is_paid']);
-                $rows[$key]['is_check'] = Base::dispayStyle('is_check', $items['is_check']);
-                $prices += $items['price']; // 报价合计
-                $customer_prices += $items['customer_price']; // 报价
-                $media_prices += $items['media_price']; // 媒体款
-                $profits += $items['profit']; // 利润
+            if(collect($rows)->isNotEmpty()){
+                foreach($rows -> items()  as &$item){
+                    $item['trade_ts'] = $item['trade_ts'];
+                    $item['is_received'] = Base::dispayStyle('is_received', $item['is_received']);
+                    $item['is_paid'] = Base::dispayStyle('is_paid', $item['is_paid']);
+                    $item['is_check'] = Base::dispayStyle('is_check', $item['is_check']);
+                    $prices += $item['price']; // 报价合计
+                    $customer_prices += $item['customer_price']; // 报价
+                    $media_prices += $item['media_price']; // 媒体款
+                    $profits += $item['profit']; // 利润
+                }
             }
             $arrsum = [
                 'prices' => $prices,

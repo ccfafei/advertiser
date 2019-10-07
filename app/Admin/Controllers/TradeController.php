@@ -252,7 +252,7 @@ class TradeController extends Controller
             ]);
             ! empty($where) && $mode = $mode->where($where);
 
-            $rows = $mode->orderBy('id','desc')->paginate(config('trade')['pageSize']);
+            $rows = $mode->orderBy('trade_id','desc')->paginate(config('trade')['pageSize']);
             $prices = $customer_prices = $media_prices = $profits = 0;
             $checks = config('trade.is_check');
             if(collect($rows)->isNotEmpty()){

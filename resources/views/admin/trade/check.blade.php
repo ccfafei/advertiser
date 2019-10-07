@@ -218,6 +218,7 @@
                     </tr>
 
                 </table>
+                {{$rows->appends($request_params->all())->render()}}
             </div>
         </div>
 

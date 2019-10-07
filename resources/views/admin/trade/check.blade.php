@@ -411,8 +411,8 @@
                 "paging": false,//开启表格分页
                 'searching': false,
                 'ordering': true,
-                'info': true,
-                "lengthChange": true,
+                'info': false,
+                "lengthChange": false,
                 'autoWidth': false,
                 "columnDefs": [{
                     "targets": [0, 13],

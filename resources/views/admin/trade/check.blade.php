@@ -45,7 +45,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="{!! $request_params->start_day !!}">
+                    <input type="text" class="form-control mr_1" id="datepicker_start" name="start_day" value="{{$request_params->start_day}}">
                 </div>
 
                 <label>结束时间: </label>
@@ -53,7 +53,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="{!!  $request_params->start_day !!}">
+                    <input type="text" class="form-control" id="datepicker_end" name="end_day" value="{{ $request_params->end_day}}">
                 </div>
                 <label>负责人:</label>
                 <div class="input-group  mr_2">
@@ -300,25 +300,14 @@
 
 
             //开始时间
-            var start_ts = "{!!  $request_params->start_day !!}";
-            if (start_ts == "") {
-                var lastday = getBeforeDate(-1);
-                $("#datepicker_start").val(lastday);
-                $("#datepicker_start").datepicker("update", lastday);
-            }else{
-                $("#datepicker_start").val(start_ts);
-                $("#datepicker_start").datepicker("update", start_ts);
-            }
+            var start_ts = "{!!  $request_params->start_day !!}" || getBeforeDate(-1);
+            $("#datepicker_start").val(start_ts);
+            $("#datepicker_start").datepicker("update", start_ts);
 
             //结束时间
-            var end_ts = "{!!  $request_params->end_day  !!}";
-            if (end_ts == "") {
-                $("#datepicker_end").val(nowtime);
-                $("#datepicker_end").datepicker("update", nowtime);
-            }else{
-                $("#datepicker_end").val(end_ts);
-                $("#datepicker_end").datepicker("update", end_ts);
-            }
+            var end_ts = "{!!  $request_params->end_day  !!}" || nowtime;
+            $("#datepicker_end").val(end_ts);
+            $("#datepicker_end").datepicker("update", end_ts);
             //搜索提交
             $("#search").on('click', function () {
 

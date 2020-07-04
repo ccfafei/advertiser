@@ -74,13 +74,21 @@
                         </option>
                     @endforeach
                 </select>
-                <label class="mt_1 mr_2">
-                    <input type="checkbox" name="is_received" id="isReceived" class="minimal" value="">&nbsp;是否回款 &nbsp;&nbsp;
-                </label>
 
-                <label class="mt_1 mr_2">
-                    <input type="checkbox" name="is_paid" id="isPaid" class="minimal" value="{!! $search_arr['is_paid'] !!}">&nbsp;是否出款
-                </label>
+                <label>是否回款: </label>
+                <select name="is_received" class="form-control mr_2" id="isReceived">
+                    <option value="">请选择</option>
+                    <option value="0">未回款</option>
+                    <option value="1">已回款</option>
+                </select>
+
+                <label>是否出款: </label>
+                <select name="is_paid" class="form-control mr_2" id="isPaid">
+                    <option value="">请选择</option>
+                    <option value="0">未出款</option>
+                    <option value="1">已出款</option>
+                </select>
+
 
             </div>
             <div class="form-group">
@@ -174,16 +182,15 @@
         if(is_check != ''){
             $('#is_check').val(is_check);
         }
-        var is_received = "{!! $search_arr['is_received'] !!}"
-        if(is_received == 1){
-            $('#isReceived').val(1);
-            $('#isReceived').attr('checked',true);
 
+        var is_received = "{!! $search_arr['is_received'] !!}";
+        if(is_received != ''){
+            $('#isReceived').val(is_received);
         }
-        var is_paid = "{!! $search_arr['is_paid'] !!}"
-        if(is_paid == 1){
-            $('#isPaid').val(1);
-            $('#isPaid').attr('checked',true);
+
+        var is_paid = "{!! $search_arr['is_paid'] !!}";
+        if(is_paid !=''){
+            $('#isPaid').val(is_paid);
         }
     });
 </script>
@@ -210,24 +217,24 @@
 
 
         //回款
-        $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-        $('#isReceived').on('ifChanged', function (event) {
-            if (this.checked) {
-                $('#isReceived').val('1');
-            } else {
-                $('#isReceived').val('0');
-            }
-        });
+        // $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+        // $('#isReceived').on('ifChanged', function (event) {
+        //     if (this.checked) {
+        //         $('#isReceived').val('1');
+        //     } else {
+        //         $('#isReceived').val('0');
+        //     }
+        // });
 
         //出款
-        $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-        $('#isPaid').on('ifChanged', function (event) {
-            if (this.checked) {
-                $('#isPaid').val('1');
-            } else {
-                $('#isPaid').val('0');
-            }
-        });
+        // $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+        // $('#isPaid').on('ifChanged', function (event) {
+        //     if (this.checked) {
+        //         $('#isPaid').val('1');
+        //     } else {
+        //         $('#isPaid').val('0');
+        //     }
+        // });
 
 
         //开始时间

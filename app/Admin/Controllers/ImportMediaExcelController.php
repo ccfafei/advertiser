@@ -126,7 +126,7 @@ class ImportMediaExcelController extends Controller
             $result[$key]['leader'] = $leaders[$leader_name];
 
             //备注
-            $result[$key]['remark'] = $val[9];
+            $result[$key]['remark'] = $val[9]??'';
             
             //结束验证
         }

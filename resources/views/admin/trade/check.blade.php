@@ -76,13 +76,21 @@
                         </option>
                     @endforeach
                 </select>
-                <label class="mt_1 mr_2">
-                    <input type="checkbox" name="is_received" id="isReceived" class="minimal" value="">&nbsp;是否回款 &nbsp;&nbsp;
-                </label>
 
-                <label class="mt_1 mr_2">
-                    <input type="checkbox" name="is_paid" id="isPaid" class="minimal" value="">&nbsp;是否出款
-                </label>
+                <label>是否回款: </label>
+                <select name="is_received" class="form-control mr_2" id="isReceived">
+                    <option value="">请选择</option>
+                    <option value="0">未回款</option>
+                    <option value="1">已回款</option>
+                </select>
+
+                <label>是否出款: </label>
+                <select name="is_paid" class="form-control mr_2" id="isPaid">
+                    <option value="">请选择</option>
+                    <option value="0">未出款</option>
+                    <option value="1">已出款</option>
+                </select>
+
 
             </div>
             <div class="form-group">
@@ -106,7 +114,7 @@
         <div class="form-inline">
             <input type="checkbox" class="grid-select-all" />&nbsp;&nbsp;&nbsp;
             <div class="btn-group">
-                <a class="btn btn-warning">审核</a>
+                <a class="btn btn-warning">通过审核</a>
                 <button type="button" class="btn btn-warning dropdown-toggle mr_2" data-toggle="dropdown">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
@@ -117,7 +125,7 @@
                 </ul>
             </div>
             <div class="btn-group">
-                <a class="btn btn-info ml_1"> 回款</a>
+                <a class="btn btn-info ml_1"> 回款审核</a>
                 <button type="button" class="btn btn-info dropdown-toggle mr_2" data-toggle="dropdown">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
@@ -129,7 +137,7 @@
                 </ul>
             </div>
             <div class="btn-group">
-                <a class="btn btn-success">出款</a>
+                <a class="btn btn-success">出款审核</a>
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
@@ -238,16 +246,13 @@
         if(is_check != ''){
             $('#is_check').val(is_check);
         }
-        var is_received = "{{  $request_params->is_received }}"
-        if(is_received == 1){
-            $('#isReceived').val(1);
-            $('#isReceived').attr('checked',true);
-
+        var is_received = "{{  $request_params->is_received }}";
+        if(is_received != ''){
+            $('#isReceived').val(is_received);
         }
-        var is_paid = "{{  $request_params->is_paid }}"
-        if(is_paid == 1){
-            $('#isPaid').val(1);
-            $('#isPaid').attr('checked',true);
+        var is_paid = "{{  $request_params->is_paid }}";
+        if(is_paid !=''){
+            $('#isPaid').val(is_paid);
         }
     });
 </script>
@@ -274,30 +279,30 @@
 
 
             //回款
-            $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-            $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            // $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+            // $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
             $('.grid-select-all').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
             // $('input[type="checkbox"]').iCheck({
             //     handle : 'checkbox',
             //     checkboxClass : 'icheckbox_minimal-blue',
             // });
 
-            $('#isReceived').on('ifChanged', function (event) {
-                if (this.checked) {
-                    $('#isReceived').val('1');
-                } else {
-                    $('#isReceived').val('0');
-                }
-            });
+            // $('#isReceived').on('ifChanged', function (event) {
+            //     if (this.checked) {
+            //         $('#isReceived').val('1');
+            //     } else {
+            //         $('#isReceived').val('0');
+            //     }
+            // });
 
             //出款
-            $('#isPaid').on('ifChanged', function (event) {
-                if (this.checked) {
-                    $('#isPaid').val('1');
-                } else {
-                    $('#isPaid').val('0');
-                }
-            });
+            // $('#isPaid').on('ifChanged', function (event) {
+            //     if (this.checked) {
+            //         $('#isPaid').val('1');
+            //     } else {
+            //         $('#isPaid').val('0');
+            //     }
+            // });
 
 
             //开始时间
@@ -322,7 +327,7 @@
             //     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');
             // });
 
-            //选择审核，回款,出款处理等 icheckbox_minimal-blue
+            //选择等 icheckbox_minimal-blue
             $('.grid-row-checkbox').on('ifChanged', function () {
                 if (this.checked) {
                     $(this).closest('tr').css('background-color', '#ffffd5');

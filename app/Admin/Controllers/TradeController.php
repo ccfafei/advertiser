@@ -264,7 +264,9 @@ class TradeController extends Controller
             $media_prices = $mode->sum('media_price'); // 媒体款
             $profits =  $mode->sum('profit'); // 利润
 
-            $rows = $mode->orderBy('trade_id','desc')->paginate(config('trade')['pageSize']);
+            $pageSize = $request->input('pageSize')??config('trade')['pageSize'];
+
+            $rows = $mode->orderBy('trade_id','desc')->paginate($pageSize);
 
             $checks = config('trade.is_check');
             if(collect($rows)->isNotEmpty()){

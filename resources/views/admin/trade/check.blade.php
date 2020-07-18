@@ -97,12 +97,7 @@
                 <label class="mt_1 mr_2">
                     <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
                 </label>
-                &nbsp;
-                <!--
-                <label class="mt_1">
-                    <button type="button" class="btn btn-primary" id="export"><i class="fa  fa-download"></i>导出</button>
-                </label>
-                -->
+                &nbsp;<input id="tradePageSize" type="hidden" name="pageSize" value="100" />
             </div>
 
         </form>
@@ -152,6 +147,22 @@
 
             <div class="btn-group">
                 <button class="btn btn-warning batch_delete ml_1" >删除</button>
+
+            </div>
+
+            <div class="clearfix mt_1"></div>
+            <div class="form-group" style="margin-top: 15px;">
+
+                <label class="text-center no-padding no-margin">显示:</label>
+                <select id="perPage" class="form-control input-sm" name='perPage' form="perPage">
+                    <option  {{ $rows->perPage() == 100 ? 'selected': ''}} value="100">100</option>
+                    <option {{ $rows->perPage() == 50 ? 'selected': ''}} value="50">50</option>
+                    <option {{ $rows->perPage() == 30 ? 'selected': ''}} value="30">30</option>
+                    <option {{ $rows->perPage() == 10 ? 'selected': ''}} value="10">10</option>
+
+                </select>
+                <label class="text-center no-padding no-margin">项结果</label>
+
 
             </div>
 
@@ -256,7 +267,7 @@
         }
     });
 </script>
-    <script type="text/javascript">
+<script type="text/javascript">
 
         $(function () {
 
@@ -560,5 +571,17 @@
 
 }
 
-    </script>
+ </script>
+
+<script type="text/javascript">
+    $(function(){
+        // 每页显示条数
+        $('#perPage').change(function(){
+            var per_page = $(this).val();
+            console.log(per_page);
+            $("#tradePageSize").val(per_page);
+            $('#formsearch').submit();
+        })
+    });
+</script>
     

@@ -95,9 +95,10 @@
             </div>
             <div class="form-group">
                 <label class="mt_1 mr_2">
+                    <input id="tradePageSize" type="hidden" name="pageSize" value="50" />
                     <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
                 </label>
-                &nbsp;<input id="tradePageSize" type="hidden" name="pageSize" value="100" />
+                &nbsp;
             </div>
 
         </form>
@@ -162,7 +163,6 @@
 
                 </select>
                 <label class="text-center no-padding no-margin">项结果</label>
-
 
             </div>
 

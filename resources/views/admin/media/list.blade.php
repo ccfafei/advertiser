@@ -85,6 +85,7 @@
             <div class="clearfix mt_2"></div>
             <div class="form-group">
                 <label class="mt_1">
+                    <input id="mediaPageSize" type="hidden" name="pageSize" value="100" />
                     <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
                 </label>
                 &nbsp;&nbsp;
@@ -102,7 +103,27 @@
                              </label>
                              -->
             </div>
+
         </form>
+
+    </div>
+
+    <div class="box-body ">
+        <div class="form-inline">
+            <div class="form-group">
+
+                <label class="text-center no-padding no-margin">显示:</label>
+                <select id="perPage" class="form-control input-sm" name='perPage' form="perPage">
+                    <option {{ $rows->perPage() == 15 ? 'selected': ''}} value="15">15</option>
+                    <option {{ $rows->perPage() == 30 ? 'selected': ''}} value="30">30</option>
+                    <option {{ $rows->perPage() == 50 ? 'selected': ''}} value="50">50</option>
+                    <option  {{ $rows->perPage() == 100 ? 'selected': ''}} value="100">100</option>
+
+                </select>
+                <label class="text-center no-padding no-margin">项结果</label>
+
+            </div>
+        </div>
     </div>
 
 
@@ -162,6 +183,8 @@
             </tbody>
 
         </table>
+        {{--采用后台分页，将js分页设置为false --}}
+        {{$rows->appends($request_params->all())->render()}}
     </div>
     <div class="box-footer clearfix">
 
@@ -251,6 +274,8 @@
 
         //搜索提交
         $("#search").on('click', function () {
+            var per_page = $("#perPage").val();
+            $("#mediaPageSize").val(per_page);
             $("#media_search").submit();
         });
         //导出
@@ -290,7 +315,7 @@
                 ]
             },
             "scrollX": true,
-            'paging': true,
+            'paging': false, //后台分页的话为false,前台为true
             'extend':true,
             'lengthChange': true,
             'searching': false,
@@ -351,8 +376,7 @@
                         _token: LA.token,
                     },
                     success: function (data) {
-                        $.pjax.reload('#pjax-container');
-
+                        //$.pjax.reload('#pjax-container');
                         if (typeof data === 'object') {
                             if (data.status == 0) {
                                 swal(data.msg, '', 'success');
@@ -360,10 +384,24 @@
                                 swal(data.msg, '', 'error');
                             }
                         }
+                        window.location.href ="/admin/media"
                     }
                 });
             });
 
     }
 
+</script>
+
+{{--分页跳转--}}
+<script type="text/javascript">
+    $(function(){
+        // 每页显示条数
+        $('#perPage').change(function(){
+            var per_page = $(this).val();
+            console.log(per_page);
+            $("#mediaPageSize").val(per_page);
+            $("#media_search").submit();
+        })
+    });
 </script>

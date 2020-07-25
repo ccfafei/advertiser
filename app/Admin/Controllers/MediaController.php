@@ -72,17 +72,24 @@ class MediaController extends Controller
             $request->has('collection')&&$request->input('collection')&&
             $mode = $mode->where('collection','like','%'.$request->input('collection').'%');
 
-            $rows = $mode->get();
-           // dump(DB::getQueryLog());
-            if(collect($rows)->isNotEmpty()){
-                $rows=$rows->toArray();
-            }
+            $pageSize = $request->input('pageSize')??config('trade')['pageSize'];
+
+            $rows = $mode->orderBy('media_id','desc')->paginate($pageSize);
+
+//            $rows = $mode->get();
+//           // dump(DB::getQueryLog());
+//            if(collect($rows)->isNotEmpty()){
+//                $rows=$rows->toArray();
+//            }
             $serach=['start_day','end_day','media_name','category','channel','leader','area','collection'];
             $search_arr =Base::getSearchs($request,$serach);
 
+            $request_params = $request;
+
            $exporturl = $this->grid()->exportUrl('all');
             $listview = view('admin.media.list',
-                compact('rows','headers','arrsum','category','channel','leader','search_arr'))
+                compact('rows','headers','arrsum','category','channel','leader',
+                    'search_arr','request_params'))
             ->render();
             $content->row($listview);
         });
@@ -174,7 +181,7 @@ class MediaController extends Controller
              
         });
     }
-    protected function destory(Request $request){
+    public function destory(Request $request){
 
         $media_id = $request->input('media_id');
         if (empty($media_id)){

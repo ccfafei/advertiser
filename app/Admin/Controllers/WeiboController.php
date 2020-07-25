@@ -31,7 +31,7 @@ class WeiboController extends Controller
             $content->header('微博媒体');
             $content->description('列表'); 
             $headers = ['开发日期','微博名称','微博分类','粉丝数','直发价','转发价','案例','微任务直发','微任务转发','负责人','备注','操作'];
-          
+            $channel = "";
             //获取各个分类
             $category=Base::getWeiboCategory();
          
@@ -72,7 +72,6 @@ class WeiboController extends Controller
             $serach=['start_day','end_day','weibo_name','weibo_category','leader'];
             $search_arr =Base::getSearchs($request,$serach);
             $exporturl = urlencode($this->grid()->exportUrl('all'));
-            $channel = "";
             $listview = view('admin.weibo.list',
                 compact('rows','headers','arrsum','category','channel','leader','exporturl','search_arr'))
             ->render();

@@ -94,11 +94,11 @@ class TradeController extends Controller
             if (! Admin::user()->isAdministrator()) {
                 $mode = $mode->where('leader', Admin::user()->name);
             }
-            
-            $results = $mode->get();
-            if ($results->isNotEmpty()) {
-                $rows = $results->toArray();
-            }
+
+            $pageSize = $request->input('pageSize')??config('trade')['pageSize'];
+
+            $rows = $mode->orderBy('trade_id','desc')->paginate($pageSize);
+
             $prices = $customer_prices = $media_prices = $profits = 0;
             $checks = config('trade.is_check');
             foreach ($rows as $key => $items) {
@@ -121,7 +121,8 @@ class TradeController extends Controller
             $search_arr =Base::getSearchs($request,$serach);
             $exporturl = $this->grid()->exportUrl('all');
             $url = $exporturl;
-            $listview = view('admin.trade.list', compact('rows', 'headers', 'checks', 'url', 'inputs', 'arrsum','search_arr'))->render();
+            $listview = view('admin.trade.list', compact('rows', 'headers', 'checks', 'url',
+                'inputs', 'arrsum','search_arr','request'))->render();
             $content->row($listview);
         });
     }

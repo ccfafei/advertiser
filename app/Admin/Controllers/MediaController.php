@@ -107,8 +107,6 @@ class MediaController extends Controller
             $content->header('媒体信息');
             $content->description('编辑');
 
-//            dump($this->form()->edit($id));die;
-
             $content->body($this->form()->edit($id));
         });
     }
@@ -154,7 +152,6 @@ class MediaController extends Controller
             $grid->media_name('媒体名称')->sortable();
             
             $grid->leader('负责人')->display(function($id) use($leaders){
-                $id = intval($id);
                 $name ='';
                 if($leaders){
                     $name =$leaders[$id];
@@ -183,9 +180,13 @@ class MediaController extends Controller
              
         });
     }
+
     public function destory(Request $request){
 
         $media_id = $request->input('media_id');
+        if(strstr($media_id,",")){
+            $media_id = explode(',',$media_id);
+        }
         if (empty($media_id)){
             return $reponses = [
                 'status' => 1,
@@ -194,7 +195,7 @@ class MediaController extends Controller
             ];
         }
         try {
-            Media::where('media_id',$media_id)->delete();
+            Media::destroy($media_id);
             return $reponses = [
                 'status' => 0,
                 'msg' => '删除成功!',
@@ -262,14 +263,14 @@ class MediaController extends Controller
         $model = $this->mediaSearchModel($request);
 
         // 获取关联数据
-        $data = $model->with(['category','channel','leader'])
+        $data = $model->with(['categoryRelation','channelRelation','leaderRelation'])
             ->get($fields)
             ->toArray();
 
         foreach ($data as $key => &$value) {
-            $value['category'] = $value['category']['category_name']??'';
-            $value['channel'] = $value['channel']['channel_name']??'';
-            $value['leader'] = $value['leader']['leader_name']??'';
+            $value['category'] = $value['categoryRelation']['category_name']??'';
+            $value['channel'] = $value['channelRelation']['channel_name']??'';
+            $value['leader'] = $value['leaderRelation']['leader_name']??'';
         }
 
         // excel导出

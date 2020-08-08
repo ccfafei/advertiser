@@ -100,6 +100,10 @@
     <div class="box-body ">
         <div class="form-inline">
             <div class="form-group">
+                <input type="checkbox" class="grid-select-all ml_l" />&nbsp;
+                <button class="btn btn-warning batch_delete ml_1" >删除</button>
+            </div>
+            <div class="form-group" style="margin-left: 1em;">
                 <label class="text-center no-padding no-margin">显示:</label>
                 <select id="perPage" class="form-control input-sm" name='perPage' form="perPage">
                     <option {{ $rows->perPage() == 15 ? 'selected': ''}} value="15">15</option>
@@ -124,6 +128,7 @@
         <table id="example1" class="table table-bordered table-hover display nowrap">
             <thead>
             <tr>
+                <th class="thfirst" width="28">选择</th>
                 @foreach($headers as $header)
                     <th>{!!  $header !!} </th>
                 @endforeach
@@ -132,7 +137,7 @@
             <tbody>
             @foreach($rows as $row)
                 <tr>
-
+                    <td><input type="checkbox" class="grid-row-checkbox" data-id="{{$row['media_id']}}"/></td>
                     <td>{!! $row['media_ts'] !!}</td>
                     <td>{!! $row['area'] !!}</td>
                     <td>{!! $row['media_name'] !!}</td>
@@ -235,24 +240,9 @@
         $.fn.datepicker.defaults.language = 'cn';
         $.fn.datepicker.defaults.format = "yyyy-mm-dd";
         $.fn.datepicker.defaults.autoclose = 'true';
-        //回款
-        $('#isReceived').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-        $('#isPaid').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
-        $('#isReceived').on('ifChanged', function (event) {
-            if (this.checked) {
-                $('#isReceived').val('1');
-            } else {
-                $('#isReceived').val('0');
-            }
-        });
-        //出款
-        $('#isPaid').on('ifChanged', function (event) {
-            if (this.checked) {
-                $('#isPaid').val('1');
-            } else {
-                $('#isPaid').val('0');
-            }
-        });
+
+        $('.grid-select-all').iCheck({checkboxClass: 'icheckbox_minimal-blue'});
+
         //开始时间
         var start_ts = "{!! $search_arr['start_day'] !!}";
         if (start_ts == "") {
@@ -274,6 +264,8 @@
             $("#datepicker_end").datepicker("update", end_ts);
         }
 
+
+
         //搜索提交
         $("#search").on('click', function () {
             var per_page = $("#perPage").val();
@@ -284,6 +276,31 @@
         $("#addMedia").on('click', function () {
             window.location.href="{!! url('/admin/media/create')!!}"
         });
+
+        var selectedRows = function () {
+            var selected = [];
+            $('.grid-row-checkbox:checked').each(function () {
+                selected.push($(this).data('id'));
+            });
+
+            return selected;
+        }
+
+        // $('.grid-select-all').iCheck({checkboxClass: 'icheckbox'});
+        $('.grid-select-all').on('ifChanged', function (event) {
+            if (this.checked) {
+                //$('.grid-row-checkbox').iCheck('check');
+                $('.grid-row-checkbox').prop("checked",true);
+
+            } else {
+                //$('.grid-row-checkbox').iCheck('uncheck');
+                $('.grid-row-checkbox').prop("checked",false);
+            }
+        });
+
+        //删除
+        batchdelte(selectedRows);
+
 
         $("#export-excel").on('click', function () {
             var params = "{!! http_build_query($request_params->except('s','pageSize')) !!}"
@@ -308,10 +325,10 @@
             'lengthChange': true,
             'searching': false,
             'ordering': true,
-            'info': true,
+            'info': false,
             'autoWidth': true,
             'columnDefs': [{
-                "targets": [6, 8],
+                "targets": [0,7,8, 9],
                 "orderable": false
             }],
             'language': {
@@ -337,10 +354,22 @@
                     "sSortAscending": ": 以升序排列此列",
                     "sSortDescending": ": 以降序排列此列"
                 }
-            }
+            },
+            "fnDrawCallback": function( oSettings ) {
+                $(".thfirst").removeClass("sorting_asc");//移除checkbox列的排序箭头
+            },
         });
     });
     //-->
+
+    function batchdelte(func){
+        $('.batch_delete').on('click', function () {
+            ids = func().join();
+            rowdelete(ids)
+        });
+    }
+
+
     function rowdelete(id){
 
 
@@ -364,7 +393,7 @@
                         _token: LA.token,
                     },
                     success: function (data) {
-                        //$.pjax.reload('#pjax-container');
+                        $.pjax.reload('#pjax-container');
                         if (typeof data === 'object') {
                             if (data.status == 0) {
                                 swal(data.msg, '', 'success');
@@ -372,7 +401,6 @@
                                 swal(data.msg, '', 'error');
                             }
                         }
-                        window.location.href ="{!! url('/admin/media')!!}"
                     }
                 });
             });

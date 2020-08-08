@@ -91,7 +91,6 @@ class WeiboController extends Controller
     
             $content->header('微博信息');
             $content->description('编辑');
-    
             $content->body($this->form()->edit($id));
         });
     }

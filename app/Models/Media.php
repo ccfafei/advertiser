@@ -12,19 +12,19 @@ class Media extends Model
     public $timestamps = true;
 
     // 媒体分类
-    public function category(){
+    public function categoryRelation(){
         return $this->hasOne('App\Models\MediaCategory','category_id','category');
     }
 
 
     // 频道
-    public function channel(){
+    public function channelRelation(){
         return $this->hasOne('App\Models\MediaChannel','channel_id','channel');
     }
 
 
     //  负责人
-    public function leader(){
+    public function leaderRelation(){
         return $this->hasOne('App\Models\MediaLeader','leader_id','leader');
     }
     

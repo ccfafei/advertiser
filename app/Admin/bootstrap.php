@@ -32,6 +32,7 @@ Admin::js('/vendor/datatable/jquery.dataTables.min.js');
 Admin::js('/vendor/datatable/dataTables.sort.plungin.js');
 Admin::js('/vendor/datatable/dataTables.bootstrap.min.js');
 Admin::js('/vendor/datatable/dataTables.buttons.min.js');
+Admin::js('/vendor/datatable/buttons.print.min.js');
 Admin::js('/vendor/datatable/jszip.min.js');
 Admin::js('/vendor/datatable/buttons.html5.min.js');
 

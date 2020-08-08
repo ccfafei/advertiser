@@ -76,7 +76,7 @@ class PaidReportController extends Controller
                $no_paid_prices += $items['no_paid_prices'];
            }
            $arrsum =['paid_prices'=>$paid_prices,'no_paid_prices'=>$no_paid_prices];
-           $listview = view('admin.report.paid',compact('rows','url','arrsum'))->render();
+           $listview = view('admin.report.paid',compact('rows','arrsum'))->render();
            $content->row($listview);
       });
    }

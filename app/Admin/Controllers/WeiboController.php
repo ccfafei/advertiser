@@ -71,14 +71,14 @@ class WeiboController extends Controller
             if(collect($rows)->isNotEmpty()){$rows=$rows->toArray();}
             $serach=['start_day','end_day','weibo_name','weibo_category','leader'];
             $search_arr =Base::getSearchs($request,$serach);
-            $exporturl = urlencode($this->grid()->exportUrl('all'));
+//            $exporturl = urlencode($this->grid()->exportUrl('all'));
             $listview = view('admin.weibo.list',
-                compact('rows','headers','arrsum','category','channel','leader','exporturl','search_arr'))
+                compact('rows','headers','arrsum','category','channel','leader','search_arr'))
             ->render();
             $content->row($listview);
         });
     }
-    
+
     /**
      * Edit interface.
      *
@@ -213,8 +213,5 @@ class WeiboController extends Controller
             $form->display('updated_at', '修改时间');
         });
     }
-    
- 
-    
-   
+
 }

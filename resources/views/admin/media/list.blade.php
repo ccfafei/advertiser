@@ -1,4 +1,4 @@
-<style>
+<style xmlns="http://www.w3.org/1999/html">
     .dataTables_wrapper .dataTables_length{
         display:inline-block;
         float:left;
@@ -11,7 +11,7 @@
 </style>
 <div class="box">
     <div class="box-header">
-        <form action="{{ url('/admin/media/index')}}" method="post" id="media_search" class="form-inline">
+        <form action="{{ url('/admin/media')}}" method="get" id="media_search" class="form-inline">
             <div class="form-group">
                 <label>开发日期: </label>
                 <div class="input-group date">
@@ -80,38 +80,26 @@
                 <div class="input-group mr_2">
                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                     <input name="collection" id="collection" class="form-control mr_1" placeholder="请输入收录" value="{!! $search_arr['collection'] !!}"/>
-                </div>
-            </div>
-            <div class="clearfix mt_2"></div>
-            <div class="form-group">
-                <label class="mt_1">
                     <input id="mediaPageSize" type="hidden" name="pageSize" value="100" />
-                    <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
-                </label>
-                &nbsp;&nbsp;
-
-                &nbsp;&nbsp;
-             <label class="mt_1">
-                 <a href="/admin/media/create" class="btn  btn-success">
-                     <i class="fa fa-save"></i>&nbsp;&nbsp;新增
-                 </a>
-             </label>
-             &nbsp;&nbsp;
-                <!--
-                             <label class="mt_1">
-                                 <button type="button" class="btn btn-warning excel-export" id="export"><i class="fa  fa-download"></i>导出</button>
-                             </label>
-                             -->
+                </div>
             </div>
 
         </form>
 
+        <div class="form-group">
+            <label class="mt_1">
+                <button type="button" class="btn btn-primary" id="search"><i class="fa  fa-search"></i>搜索</button>
+            </label>
+            <label class="mt_1" style="margin-left: 20px;">
+                <button id="addMedia" class="btn  btn-success">
+                    <i class="fa fa-save"></i>&nbsp;&nbsp;新增
+                </button>
+            </label>
+        </div>
     </div>
-
     <div class="box-body ">
         <div class="form-inline">
             <div class="form-group">
-
                 <label class="text-center no-padding no-margin">显示:</label>
                 <select id="perPage" class="form-control input-sm" name='perPage' form="perPage">
                     <option {{ $rows->perPage() == 15 ? 'selected': ''}} value="15">15</option>
@@ -121,7 +109,11 @@
 
                 </select>
                 <label class="text-center no-padding no-margin">项结果</label>
-
+            </div>
+            <div class="form-group" style="float:right">
+               <button id="export-excel"  class="btn btn-warning" type="button">
+                   <span>Excel导出</span>
+               </button>
             </div>
         </div>
     </div>
@@ -196,6 +188,16 @@
     function LA() {
     }
     LA.token = "{{ csrf_token() }}";
+
+    function GetUrlPara()
+    {
+        var url = document.location.toString();
+        var arrUrl = url.split("?");
+        var para = arrUrl[1];
+        return para;
+
+    }
+
 </script>
 
 <script type="text/javascript">
@@ -278,41 +280,27 @@
             $("#mediaPageSize").val(per_page);
             $("#media_search").submit();
         });
-        //导出
-        // $("#export").on('click', function () {
-        //
-        //     window.open("/admin/media/?%5C_pjax=%23pjax-container&_export_=all");
-        // });
+
+        $("#addMedia").on('click', function () {
+            window.location.href="{!! url('/admin/media/create')!!}"
+        });
+
+        $("#export-excel").on('click', function () {
+            var params = "{!! http_build_query($request_params->except('s','pageSize')) !!}"
+            var url = "{!! url('/admin/excelmedia/export')!!}";
+            var fullUrl = params == ""?url:url+"?"+params;
+            console.log(fullUrl)
+            window.location.href = fullUrl;
+        });
+
+
     });
     //datatables
     $(function () {
         $('#example1').DataTable({
             'dom': 'lBtip',
             buttons: {
-                buttons: [
-                    {
-                        extend: 'excel',
-                        className: 'excelbutton dt-button btn btn-warning',
-                        'text': 'Excel导出',
-                        'title': '网络媒体列表',
-                        exportOptions: {
-                            format: {
-                                body: function (data, row, column ) {
-                                    var dt = data;
-                                    if (column ==7)
-                                    {
-                                        var dt = httpString(dt);
-                                    }
-                                    if (column ==10)
-                                    {
-                                        var dt = '';
-                                    }
-                                    return dt;
-                                }
-                            }
-                        }
-                    }
-                ]
+                buttons: [ ]
             },
             "scrollX": true,
             'paging': false, //后台分页的话为false,前台为true
@@ -384,7 +372,7 @@
                                 swal(data.msg, '', 'error');
                             }
                         }
-                        window.location.href ="/admin/media"
+                        window.location.href ="{!! url('/admin/media')!!}"
                     }
                 });
             });
@@ -403,5 +391,6 @@
             $("#mediaPageSize").val(per_page);
             $("#media_search").submit();
         })
+
     });
 </script>

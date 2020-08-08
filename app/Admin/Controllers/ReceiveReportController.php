@@ -76,7 +76,7 @@ class ReceiveReportController extends Controller
                 $no_received_prices += $items['no_received_prices'];//报价
             }
             $arrsum = ['received_prices' => $received_prices, 'no_received_prices' => $no_received_prices];
-            $listview = view('admin.report.receive', compact('rows', 'url', 'arrsum'))->render();
+            $listview = view('admin.report.receive', compact('rows', 'arrsum'))->render();
             $content->row($listview);
         });
     }

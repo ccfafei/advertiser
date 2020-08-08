@@ -15,27 +15,30 @@ use App\Admin\Extensions\Tools\TradeCheck;
 use App\Admin\Extensions\Tools\TradeSearch;
 use Illuminate\Support\Facades\Input;
 use Encore\Admin\Auth\Permission;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TradeController extends Controller
 {
     use ModelForm;
-    private $trade_header =[
-                '序号',
-                '日期',
-                '客户名称',
-                '媒体名称',
-                '稿件标题',
-                '链接',
-                '字数',
-                '单价',
-                '报价',
-                '媒体款',
-                '利润',
-                '是否回款',
-                '是否出款',
-                '审核',
-                '负责人',
-            ];
+
+
+    private $trade_header = [
+            'trade_id'=>'序号',
+            'trade_ts'=>'日期',
+            'customer_name'=>'客户名称',
+            'media_name'=>'媒体名称',
+            'contribution'=>'稿件标题',
+            'project'=>'链接',
+            'words'=>'字数',
+            'price'=>'单价',
+            'customer_price'=>'报价',
+            'media_price'=> '媒体款',
+            'profit'=>'利润',
+            'is_received'=>'是否回款',
+            'is_paid'=>'是否出款',
+            'is_check'=>'审核',
+            'leader'=>'负责人',
+    ];
 
     /**
      * Index interface.
@@ -50,7 +53,7 @@ class TradeController extends Controller
             
             $content->header('业务流量');
             $content->description('列表');
-            $headers = $this->trade_header;
+            $headers = array_values($this->trade_header);
             $rows = [];
             $where = [];
             $mode = new Trade();
@@ -97,7 +100,8 @@ class TradeController extends Controller
 
             $pageSize = $request->input('pageSize')??config('trade')['pageSize'];
 
-            $rows = $mode->orderBy('trade_id','desc')->paginate($pageSize);
+            //$rows = $mode->orderBy('trade_id','desc')->paginate($pageSize);
+			$rows = $mode->orderBy('trade_id','desc')->get();
 
             $prices = $customer_prices = $media_prices = $profits = 0;
             $checks = config('trade.is_check');
@@ -161,6 +165,7 @@ class TradeController extends Controller
         //dd($data);
         $trade_id = $data['trade_id'];
         $data['trade_ts'] = strtotime($data['trade_ts']);
+        unset($data['s']);
         unset($data['_token']);
         unset($data['_method']);
         unset($data['_previous_']);
@@ -210,55 +215,11 @@ class TradeController extends Controller
             $content->description('审核');
             Permission::check('trade.edit');
             Permission::check('trade.check');
-            $headers =$this->trade_header;
+            $headers = array_values($this->trade_header);
             array_unshift($headers,'选择');
             array_push($headers,'操作');
             $rows = [];
-            $mode = new Trade();
-            $customer_name = $request->input('customer_name');
-            if(!empty($customer_name)){
-                $mode = $mode->where('customer_name', 'like', '%' . $customer_name . '%');
-            }
-            $media_name = $request->input('media_name');
-            if(!empty($media_name)){
-                $mode = $mode->where('media_name', 'like', '%' . $media_name . '%');
-            }
-            $contribution = $request->input('contribution');
-            if(!empty($contribution)){
-                $mode = $mode->where('contribution', 'like', '%' . $contribution . '%');
-            }
-            $leader = $request->input('leader');
-            if(!empty($leader)){
-                $mode = $mode->where('leader', 'like', '%' . $leader . '%');
-            }
-            $is_received = $request->input('is_received');
-            if(isset($is_received)){
-                $mode = $mode->where('is_received', $is_received);
-            }
-
-            $is_paid = $request->input('is_paid');
-            if(isset($is_paid)){
-                $mode = $mode->where('is_paid', $is_paid);
-            }
-
-            $is_check = $request->input('is_check');
-            if(isset($is_check)){
-                $mode = $mode->where('is_check', $is_check);
-            }
-//            dd($mode->get());
-
-            $start_ts = $request->input('start_day');
-            if(!empty($start_ts)){
-                $mode =  $mode->where('trade_ts','>=',strtotime($start_ts));
-            }else{
-                $mode =  $mode->where('trade_ts','>=',strtotime('-1 day'));
-            }
-            $end_ts = $request->input('end_day');
-            if(!empty($start_ts)){
-                $mode =  $mode->where('trade_ts','<=',strtotime($end_ts.'23:59:59'));
-            }else{
-                $mode =  $mode->where('trade_ts','<=',time());
-            }
+            $mode = $this->tradeCheckSearchModel($request);
             $prices = $customer_prices = $media_prices = $profits = 0;
             $prices = $mode->sum('price'); // 报价合计
             $customer_prices = $mode->sum('customer_price'); // 报价
@@ -290,6 +251,56 @@ class TradeController extends Controller
             $listview = view('admin.trade.check', compact('rows', 'headers', 'checks',  'arrsum','request_params'))->render();
             $content->row($listview);
         });
+    }
+
+    // 搜索
+    protected function tradeCheckSearchModel(Request $request){
+        $mode = new Trade();
+        $customer_name = $request->input('customer_name');
+        if(!empty($customer_name)){
+            $mode = $mode->where('customer_name', 'like', '%' . $customer_name . '%');
+        }
+        $media_name = $request->input('media_name');
+        if(!empty($media_name)){
+            $mode = $mode->where('media_name', 'like', '%' . $media_name . '%');
+        }
+        $contribution = $request->input('contribution');
+        if(!empty($contribution)){
+            $mode = $mode->where('contribution', 'like', '%' . $contribution . '%');
+        }
+        $leader = $request->input('leader');
+        if(!empty($leader)){
+            $mode = $mode->where('leader', 'like', '%' . $leader . '%');
+        }
+        $is_received = $request->input('is_received');
+        if(isset($is_received)){
+            $mode = $mode->where('is_received', $is_received);
+        }
+
+        $is_paid = $request->input('is_paid');
+        if(isset($is_paid)){
+            $mode = $mode->where('is_paid', $is_paid);
+        }
+
+        $is_check = $request->input('is_check');
+        if(isset($is_check)){
+            $mode = $mode->where('is_check', $is_check);
+        }
+//            dd($mode->get());
+
+        $start_ts = $request->input('start_day');
+        if(!empty($start_ts)){
+            $mode =  $mode->where('trade_ts','>=',strtotime($start_ts));
+        }else{
+            $mode =  $mode->where('trade_ts','>=',strtotime('-1 day'));
+        }
+        $end_ts = $request->input('end_day');
+        if(!empty($start_ts)){
+            $mode =  $mode->where('trade_ts','<=',strtotime($end_ts.'23:59:59'));
+        }else{
+            $mode =  $mode->where('trade_ts','<=',time());
+        }
+        return $mode;
     }
 
     /**
@@ -569,6 +580,50 @@ class TradeController extends Controller
     });
 }
 
+
+    /**
+     * 媒体导出
+     * @param Request $request
+     */
+    public function export(Request $request){
+
+        // 设置表头
+        $header = $this->trade_header;
+//        unset($header['trade_id']);
+        $fileName = "业务流量列表";
+        $suffix ="xlsx";
+        $fields = array_keys($header);
+        $model = $this->tradeCheckSearchModel($request);
+
+        // 获取关联数据
+        $lists = $model->get($fields)->toArray();
+        $cfg = config("trade");
+
+        $data =[];
+        foreach ($lists as $key => $value) {
+            if(empty($value)){
+                unset($lists[$key]);
+                continue;
+            }
+            $value['is_received'] = $cfg['is_received'][$value['is_received']];
+            $value['is_paid'] = $cfg['is_paid'][$value['is_paid']];
+            $value['is_check'] = $cfg['is_check'][$value['is_check']];
+            $data[] = $value;
+
+        }
+
+//      dd($lists);die;
+        // excel导出
+        Excel::create($fileName, function($excel) use ($data,$fileName,$header) {
+            $excel->sheet($fileName, function($sheet) use ($data,$header) {
+                $sheet->fromArray($data ,null, 'A1', true, false);
+                $sheet->prependRow(1,array_values($header));
+            });
+        })->export($suffix);
+
+        return ;
+
+    }
 
 }
 

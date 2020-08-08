@@ -18,13 +18,14 @@ Route::group([
     $router->resource('customer', CustomerController::class);
 
     //网络媒体
-    $router->resource('media', MediaController::class);
     Route::post('media/index', 'MediaController@index')->name('media.search');
+    $router->resource('media', MediaController::class);
     Route::post('media/destory', 'MediaController@destory')->name('media.destory');
     $router->resource('mediachannel', ChannelController::class);
     $router->resource('mediacategory',CategoryController::class);
     $router->resource('medialeader',LeaderController::class);
     $router->get('excelmedia/import', 'ImportMediaExcelController@import')->name('excel.media.import');
+    $router->get('excelmedia/export', 'MediaController@export')->name('excel.media.export');
     $router->post('excelmedia/save', 'ImportMediaExcelController@save')->name('excel.media.save');
     
     //微博
@@ -59,6 +60,7 @@ Route::group([
     Route::post('trade/receiveupdate','TradeController@receiveUpdate')->name('receive.update');
     Route::post('trade/paidupdate','TradeController@paidUpdate')->name('paid.update');
     Route::post('tradecheck/destory', 'TradeController@checkDestory')->name('trade.destory');
+    $router->get('exceltrade/export', 'TradeController@export')->name('trade.export');
 
   
     //excel导入

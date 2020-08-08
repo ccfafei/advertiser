@@ -164,6 +164,11 @@
                 </select>
                 <label class="text-center no-padding no-margin">项结果</label>
 
+
+            </div>
+
+            <div class="form-group" style="float:right">
+                <input id="trade_export"  class="btn btn-warning" type="button" value="Excel导出"/>
             </div>
 
             <div>
@@ -332,11 +337,13 @@
 
             });
 
-            //导出
-            // $("#export").on('click', function () {
-            //
-            //     window.open('/admin/trade/index?%5C_pjax=%23pjax-container&_export_=all');
-            // });
+            $("#trade_export").on('click', function () {
+                var params = "{!! http_build_query($request_params->except('s','ver','pageSize','_pjax')) !!}"
+                var url = "{!! url('/admin/exceltrade/export')!!}";
+                var fullUrl = params == ""?url:url+"?"+params;
+                console.log(fullUrl)
+                window.location.href = fullUrl;
+            });
 
             //选择等 icheckbox_minimal-blue
             $('.grid-row-checkbox').on('ifChanged', function () {
@@ -389,30 +396,33 @@
 
             $('#dataTables').DataTable({
                 'dom': 'lBtip',
+                // buttons: {
+                //     buttons: [
+                //         {
+                //             extend: 'excel',
+                //             className: 'excelbutton dt-button btn btn-warning',
+                //             'text': 'Excel导出',
+                //             'title': '业务流量列表',
+                //             exportOptions: {
+                //                 format: {
+                //                     body: function (data, row, column ) {
+                //
+                //                         if (column ==6)
+                //                         {
+                //                             var dt = httpString(data);
+                //                         }else{
+                //                             var dt =  strip( data);
+                //                         }
+                //
+                //                         return dt;
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     ]
+                // },
                 buttons: {
-                    buttons: [
-                        {
-                            extend: 'excel',
-                            className: 'excelbutton dt-button btn btn-warning',
-                            'text': 'Excel导出',
-                            'title': '业务流量列表',
-                            exportOptions: {
-                                format: {
-                                    body: function (data, row, column ) {
-
-                                        if (column ==6)
-                                        {
-                                            var dt = httpString(data);
-                                        }else{
-                                            var dt =  strip( data);
-                                        }
-
-                                        return dt;
-                                    }
-                                }
-                            }
-                        }
-                    ]
+                    buttons: [ ]
                 },
                 "scrollX": true,
                 "paging": false,//开启表格分页
@@ -582,6 +592,7 @@
             $("#tradePageSize").val(per_page);
             $('#formsearch').submit();
         })
+
     });
 </script>
     

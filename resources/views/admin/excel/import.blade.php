@@ -36,7 +36,7 @@
 						<div class="col-sm-8">
 
 
-							<input type="file" class="file" name="file" />
+							<input type="file" class="file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" />
 
 
 						</div>

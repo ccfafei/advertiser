@@ -12,6 +12,7 @@ use Encore\Admin\Controllers\ModelForm;
 use App\Admin\Controllers\Base;
 use App\Models\Media;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class MediaController extends Controller
@@ -38,55 +39,17 @@ class MediaController extends Controller
             $leader = Base::getLeader();
             
             //搜索结果
-            $rows =[];
-            $arrsum =[];
-            $mode= new Media();
-           // DB::connection()->enableQueryLog();
-            $start_ts = $request->input('start_day');
-            $end_ts = $request->input('end_day');
-            $search_start_day= $start_ts?strtotime($start_ts):strtotime('2000-01-01 00:00:00');
-            $search_end_day= $end_ts?strtotime($end_ts):time();
-            if($search_end_day < $search_start_day&&$search_start_day<=time()){
-                $search_end_day = $search_start_day;
-            } 
-            $mode = $mode->where(DB::RAW('UNIX_TIMESTAMP(media_ts)'),'>=',$search_start_day);
-           
-            $mode = $mode->where(DB::RAW('UNIX_TIMESTAMP(media_ts)'),'<=',$search_end_day);
-            
-            $request->has('media_name')&&!empty($request->input('media_name'))&&
-            $mode = $mode->where('media_name','like','%'.$request->input('media_name').'%');
-
-
-            $request->has('category')&&$request->input('category')!='all'&&
-            $mode = $mode->where('category',trim($request->input('category')));
-
-            $request->has('channel')&&$request->input('channel')!='all'&&
-            $mode = $mode->where('channel',$request->input('channel'));
-            
-            $request->has('leader')&&$request->input('leader')!='all'&&
-            $mode = $mode->where('leader',$request->input('leader'));
-
-            $request->has('area')&&$request->input('area')&&
-            $mode = $mode->where('area','like','%'.$request->input('area').'%');
-
-            $request->has('collection')&&$request->input('collection')&&
-            $mode = $mode->where('collection','like','%'.$request->input('collection').'%');
+            $model = $this->mediaSearchModel($request);
 
             $pageSize = $request->input('pageSize')??config('trade')['pageSize'];
 
-            $rows = $mode->orderBy('media_id','desc')->paginate($pageSize);
+            $rows = $model->orderBy('media_id','desc')->paginate($pageSize);
 
-//            $rows = $mode->get();
-//           // dump(DB::getQueryLog());
-//            if(collect($rows)->isNotEmpty()){
-//                $rows=$rows->toArray();
-//            }
             $serach=['start_day','end_day','media_name','category','channel','leader','area','collection'];
             $search_arr =Base::getSearchs($request,$serach);
 
             $request_params = $request;
-
-           $exporturl = $this->grid()->exportUrl('all');
+            $arrsum =[];
             $listview = view('admin.media.list',
                 compact('rows','headers','arrsum','category','channel','leader',
                     'search_arr','request_params'))
@@ -94,7 +57,43 @@ class MediaController extends Controller
             $content->row($listview);
         });
     }
-    
+
+    // 搜索
+    protected function mediaSearchModel(Request $request){
+        $mode= new Media();
+        // DB::connection()->enableQueryLog();
+        $start_ts = $request->input('start_day');
+        $end_ts = $request->input('end_day');
+        $search_start_day= $start_ts?strtotime($start_ts):strtotime('2000-01-01 00:00:00');
+        $search_end_day= $end_ts?strtotime($end_ts):time();
+        if($search_end_day < $search_start_day&&$search_start_day<=time()){
+            $search_end_day = $search_start_day;
+        }
+        $mode = $mode->where(DB::RAW('UNIX_TIMESTAMP(media_ts)'),'>=',$search_start_day);
+
+        $mode = $mode->where(DB::RAW('UNIX_TIMESTAMP(media_ts)'),'<=',$search_end_day);
+
+        $request->has('media_name')&&!empty($request->input('media_name'))&&
+        $mode = $mode->where('media_name','like','%'.$request->input('media_name').'%');
+
+
+        $request->has('category')&&$request->input('category')!='all'&&
+        $mode = $mode->where('category',trim($request->input('category')));
+
+        $request->has('channel')&&$request->input('channel')!='all'&&
+        $mode = $mode->where('channel',$request->input('channel'));
+
+        $request->has('leader')&&$request->input('leader')!='all'&&
+        $mode = $mode->where('leader',$request->input('leader'));
+
+        $request->has('area')&&$request->input('area')&&
+        $mode = $mode->where('area','like','%'.$request->input('area').'%');
+
+        $request->has('collection')&&$request->input('collection')&&
+        $mode = $mode->where('collection','like','%'.$request->input('collection').'%');
+        return $mode;
+    }
+
     /**
      * Edit interface.
      *
@@ -107,7 +106,9 @@ class MediaController extends Controller
     
             $content->header('媒体信息');
             $content->description('编辑');
-    
+
+//            dump($this->form()->edit($id));die;
+
             $content->body($this->form()->edit($id));
         });
     }
@@ -153,10 +154,11 @@ class MediaController extends Controller
             $grid->media_name('媒体名称')->sortable();
             
             $grid->leader('负责人')->display(function($id) use($leaders){
+                $id = intval($id);
                 $name ='';
                 if($leaders){
                     $name =$leaders[$id];
-                }              
+                }
                 return $name;
             })->sortable();
             
@@ -232,8 +234,55 @@ class MediaController extends Controller
             $form->display('updated_at', '修改时间');
         });
     }
-    
- 
-    
-   
+
+
+    /**
+     * 媒体导出
+     * @param Request $request
+     */
+    public function export(Request $request){
+
+        // 设置表头
+        $header = [
+            "media_ts"=>'开发日期',
+            "area"=>'区域',
+            "media_name"=>'媒体名称',
+            "category"=>'媒体分类',
+            "channel"=>'频道',
+            "price"=>'单价',
+            "collection"=>'收录',
+            "cases"=>'案例',
+            "leader"=>'负责人',
+            "remark"=>'媒体备注'
+        ];
+
+        $fileName = "媒体列表";
+        $suffix ="xlsx";
+        $fields = array_keys($header);
+        $model = $this->mediaSearchModel($request);
+
+        // 获取关联数据
+        $data = $model->with(['category','channel','leader'])
+            ->get($fields)
+            ->toArray();
+
+        foreach ($data as $key => &$value) {
+            $value['category'] = $value['category']['category_name']??'';
+            $value['channel'] = $value['channel']['channel_name']??'';
+            $value['leader'] = $value['leader']['leader_name']??'';
+        }
+
+        // excel导出
+        Excel::create($fileName, function($excel) use ($data,$fileName,$header) {
+            $excel->sheet($fileName, function($sheet) use ($data,$header) {
+                $sheet->fromArray($data ,null, 'A1', true, false);
+                $sheet->prependRow(1,array_values($header));
+            });
+        })->export($suffix);
+
+        return ;
+
+    }
+
+
 }

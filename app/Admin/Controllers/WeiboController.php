@@ -78,7 +78,7 @@ class WeiboController extends Controller
             $content->row($listview);
         });
     }
-
+    
     /**
      * Edit interface.
      *
@@ -91,6 +91,7 @@ class WeiboController extends Controller
     
             $content->header('微博信息');
             $content->description('编辑');
+    
             $content->body($this->form()->edit($id));
         });
     }
@@ -212,5 +213,8 @@ class WeiboController extends Controller
             $form->display('updated_at', '修改时间');
         });
     }
-
+    
+ 
+    
+   
 }

@@ -47,9 +47,9 @@ class ImportExcelController extends Controller
             $realPath = $file->getRealPath();   //临时文件的绝对路径
 
             // 上传文件
-            $filename = time(). '-' . uniqid() . '.' . $ext;
+            $filename = time(). '_' . uniqid() . '.' . $ext;
             // 使用我们新建的uploads本地存储空间（目录）
-            $filename = iconv('UTF-8', 'GBK', $filename);
+            //$filename = iconv('UTF-8', 'GBK', $filename);
             $excel_file_path = $file->move(base_path().'/uploads',$filename);
 
 

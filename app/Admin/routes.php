@@ -18,7 +18,6 @@ Route::group([
     $router->resource('customer', CustomerController::class);
 
     //网络媒体
-    Route::post('media/index', 'MediaController@index')->name('media.search');
     $router->resource('media', MediaController::class);
     Route::post('media/destory', 'MediaController@destory')->name('media.destory');
     $router->resource('mediachannel', ChannelController::class);

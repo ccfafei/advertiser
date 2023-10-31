@@ -44,7 +44,6 @@ class Base{
         $arr=[];
         if($categorys){
             foreach($categorys as $category){
-                $category->category_id = intval($category->category_id);
                 $arr[$category->category_id] = $category->category_name;
             }
         }
@@ -57,7 +56,6 @@ class Base{
         $arr=[];
         if($leaders){
             foreach($leaders as $leader){
-                $leader->leader_id = intval($leader->leader_id);
                 $arr[$leader->leader_id] = $leader->leader_name;
             }
         }
@@ -70,7 +68,6 @@ class Base{
         $arr=[];
         if($channels){
             foreach($channels as $channel){
-                $channel->channel_id = intval($channel->channel_id);
                 $arr[$channel->channel_id] = $channel->channel_name;
             }
         }

@@ -1,58 +1,112 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+## <p align="center">自媒体业务管理系统</p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+### 系统介绍
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+该系统主要采用Laravel-admin开发的多媒体业务管理系统，有以下功能：
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+- 客户管理： 主要是录入自己的客户资料.
+- 网络/微信/微博 媒体管理: 主要包括媒体录入、导出、查询等.
+- 业务流量表: 主要是录入媒体报价、客户回款情况等.
+- 财务管理：分类统计入款、出款情况。
+- 权限管理: 后台用户使用的权限.
+- 日志查询： 查询操作日志
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+### 系统结构
+- Laravel-admin version :5.5
+- Mysql version: 5.7
+- PHP7.3
+- Linux系统
+- Nginx服务器
 
-## Laravel Sponsors
+### 安装步骤
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+1. 下载源码到网站目录/var/www
+```code
+  cd /var/www
+  git clone https://github.com/ccfafei/advertiser
+```
+2. 安装系统环境 php/mysql/nginx
+```code
+  cd ./advertiser
+  ./install-php.sh
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Pulse Storm](http://www.pulsestorm.net/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
+3. 配置nginx
+```code
+vim /etc/nginx/conf.d/advertiser.conf
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+server {
+    listen       8080;
+    server_name  localhost;
+    root   /var/www/advertiser/public;
+    index  index.php index.html index.htm;
+    #charset koi8-r;
+    
+    #access_log /dev/null;
+    access_log  /var/log/nginx/access.log  main;
+    error_log  /var/log/nginx/error.log  warn;
+    location / {
+       try_files $uri $uri/ /index.php?$query_string;
+    }   
+    #error_page  404              /404.html;
 
-## Security Vulnerabilities
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+   location ~ \.php(.*)$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_split_path_info  ^((?U).+\.php)(/?.+)$;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_param  PATH_INFO  $fastcgi_path_info;
+        fastcgi_param  PATH_TRANSLATED  $document_root$fastcgi_path_info;
+        include        fastcgi_params;
+   }
+
+}
+
+
+```
+
+5. 创建数据库
+````code
+  mysql -uroot -p
+  CREATE DATABASE `advertiser` CHARACTER SET utf8;  
+````
+
+6. 迁移数据
+```code
+ cd /var/www/advertiser
+ php artisan migrate
+ php artisan db:seed
+```
+7. 启动服务
+```code
+systemctl restart mysqld
+systemctl restart nginx
+```
+8. 访问网站
+```
+http://localhost:8080
+用户名:admin
+密码:123456
+```
+
